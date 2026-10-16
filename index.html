@@ -2,281 +2,294 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mening Maktabim</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f5ff;color:#20264a;font-family:Arial,sans-serif}
-header{padding:28px 7%;background:linear-gradient(120deg,#171c4b,#5145e5);color:white}
-header h1{margin:0;font-size:30px}
-header p{opacity:.85}
-main{max-width:1000px;margin:28px auto;padding:0 16px}
-.card{background:white;padding:24px;border-radius:20px;box-shadow:0 8px 30px #20264a0d;margin-bottom:20px}
-input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:11px;font:inherit}
-input,select{border:1px solid #dfe3f2}
-button{border:0;background:#5145e5;color:white;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
-.secondary{background:#eceeff;color:#4338ca}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.subject{padding:20px;border:1px solid #e3e6f4;border-radius:16px;background:linear-gradient(145deg,#fff,#f1f0ff)}
-.subject .icon{font-size:32px}
-.hidden{display:none}
-.msg{padding:12px;border-radius:10px;background:#eef0ff;line-height:1.5;overflow-wrap:anywhere}
-.error{background:#fff0f0;color:#b42318}
-h2{margin-top:0}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mening Maktabim</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
+    header{background:#1746a2;color:white;padding:22px;text-align:center}
+    header h1{margin:0 0 8px}
+    main{max-width:900px;margin:25px auto;padding:16px}
+    .card{background:white;padding:22px;border-radius:16px;margin-bottom:18px;box-shadow:0 5px 20px #152b4b12}
+    input,select,button{width:100%;padding:12px;margin:7px 0;border-radius:9px;border:1px solid #ccd5e1;font-size:16px}
+    button{background:#1746a2;color:white;border:0;cursor:pointer;font-weight:bold}
+    button:hover{background:#10377f}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+    .subject{min-height:65px}
+    .hidden{display:none}
+    #message{white-space:pre-wrap;overflow-wrap:anywhere}
+    .muted{color:#64748b;font-size:14px}
+  </style>
 </head>
 <body>
 <header>
-<h1>🎓 Mening Maktabim</h1>
-<p>Bilimingni sinab ko‘r. Kelajagingni yarat.</p>
+  <h1>🎓 Mening Maktabim</h1>
+  <p>Bilim ol — kelajagingni yarat!</p>
 </header>
+
 <main>
-<section class="card" id="auth">
-<h2 id="formTitle">Hisobga kirish</h2>
-<div id="msg" class="msg hidden"></div>
-<form id="loginForm">
-<input id="loginName" placeholder="Email yoki username" required>
-<input id="loginPass" type="password" placeholder="Parol" required>
-<button id="loginBtn">Kirish →</button>
-</form>
-<form id="registerForm" class="hidden">
-<input id="fullName" placeholder="Ism-familiya" required>
-<input id="newUsername" placeholder="Username (masalan ali_2011)" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+">
-<input id="newEmail" type="email" placeholder="Email manziling" required>
-<input id="newPass" type="password" placeholder="Parol (kamida 6 belgi)" required minlength="6">
-<input id="school" placeholder="Maktab nomi" required>
-<input id="schoolNo" placeholder="Maktab raqami">
-<select id="grade" required></select>
-<button id="registerBtn">Ro‘yxatdan o‘tish</button>
-</form>
-<button class="secondary" id="switchBtn" type="button" onclick="switchMode()">Ro‘yxatdan o‘tish</button>
-</section>
+  <div class="card">
+    <h2>Sayt sozlamasi</h2>
+    <p class="muted">Supabase loyihang URL manzili va publishable key qiymatini kiriting.</p>
+    <input id="projectUrl" placeholder="https://PROJECT_ID.supabase.co">
+    <input id="publicKey" placeholder="Supabase publishable key">
+    <button id="connectBtn">Supabase'ga ulanish</button>
+    <p id="message"></p>
+  </div>
 
-<section id="home" class="hidden">
-<div class="card">
-<button style="float:right;width:auto" onclick="logout()">Chiqish</button>
-<h2 id="welcome">Xush kelibsiz!</h2>
-<p>Sinflar va fanlarni tanlang.</p>
-<label for="classSelect">Sinf</label>
-<select id="classSelect"></select>
-</div>
-<div class="grid" id="subjects"></div>
-<div class="card hidden" id="testBox"></div>
-<div class="card" id="results"><h2>Natijalar</h2><p>Hali test ishlamadingiz.</p></div>
-</section>
+  <section id="auth" class="card">
+    <h2>Hisobga kirish</h2>
+    <input id="email" type="email" placeholder="Email manziling">
+    <input id="password" type="password" placeholder="Parol">
+    <button id="loginBtn">Kirish</button>
+    <hr>
+    <h3>Yangi hisob yaratish</h3>
+    <input id="fullName" placeholder="Ism va familiya">
+    <input id="school" placeholder="Maktab nomi">
+    <select id="grade">
+      <option value="">Sinfni tanlang</option>
+      <option>1</option><option>2</option><option>3</option>
+      <option>4</option><option>5</option><option>6</option>
+      <option>7</option><option>8</option><option>9</option>
+      <option>10</option><option>11</option>
+    </select>
+    <button id="signupBtn">Ro‘yxatdan o‘tish</button>
+    <button id="logoutBtn" class="hidden">Chiqish</button>
+  </section>
+
+  <section id="dashboard" class="card hidden">
+    <h2 id="welcome">Xush kelibsiz!</h2>
+    <p>Fanlardan birini tanlang:</p>
+    <div class="grid" id="subjects"></div>
+    <div id="quizArea"></div>
+  </section>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const URL="https://pkbhavmbudmyrmfhifmr.supabase.co";
-const KEY="sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
-const db=supabase.createClient(URL,KEY);
-const $=id=>document.getElementById(id);
+(() => {
+  const $ = id => document.getElementById(id);
+  let db = null;
+  let currentQuestions = [];
+  let currentIndex = 0;
+  let score = 0;
 
-for(let i=1;i<=11;i++){
- $("grade").add(new Option(i+"-sinf",i));
- $("classSelect").add(new Option(i+"-sinf",i));
-}
+  const subjects = [
+    "Kimyo","Fizika","Algebra","Informatika",
+    "Biologiya","Tarix","Rus tili","Ingliz tili"
+  ];
 
-let mode="login",activeUser=null,activeSubject="",qIndex=0,points=0,questions=[];
-const subjects=[
-["kimyo","🧪","Kimyo"],["fizika","⚡","Fizika"],
-["algebra","📐","Algebra"],["informatika","💻","Informatika"],
-["biologiya","🌱","Biologiya"],["tarix","🏛️","Tarix"],
-["rus","📘","Rus tili"],["ingliz","🌍","Ingliz tili"]
-];
+  // Namuna savollar. To‘liq 8 800 ta savol bu namunaga kiritilmagan.
+  const samples = {
+    "Algebra":[
+      {q:"2 + 3 = ?",a:["4","5","6","7"],correct:1},
+      {q:"5 × 4 = ?",a:["9","15","20","25"],correct:2}
+    ],
+    "Ingliz tili":[
+      {q:"'Kitob' ingliz tilida qanday?",a:["Pen","Book","Door","Desk"],correct:1},
+      {q:"'Apple' so‘zining tarjimasi?",a:["Olma","Nok","Uzum","Anor"],correct:0}
+    ],
+    "Kimyo":[
+      {q:"Suvning formulasi qaysi?",a:["CO₂","O₂","H₂O","NaCl"],correct:2}
+    ],
+    "Fizika":[
+      {q:"Kuchning SI birligi?",a:["Joul","Nyuton","Vatt","Metr"],correct:1}
+    ],
+    "Informatika":[
+      {q:"Kompyuterning asosiy hisoblash qurilmasi?",a:["Monitor","Sichqoncha","Protsessor","Printer"],correct:2}
+    ],
+    "Biologiya":[
+      {q:"O‘simliklar fotosintezda nimadan foydalanadi?",a:["Quyosh nuridan","Plastmassadan","Temirdan","Qumdan"],correct:0}
+    ],
+    "Tarix":[
+      {q:"O‘zbekiston mustaqilligi qaysi yilda e’lon qilingan?",a:["1989","1991","1995","2000"],correct:1}
+    ],
+    "Rus tili":[
+      {q:"'Книга' so‘zining o‘zbekcha ma’nosi?",a:["Daftar","Qalam","Kitob","Maktab"],correct:2}
+    ]
+  };
 
-function message(text,error=false){
- $("msg").textContent=text;
- $("msg").className="msg"+(error?" error":"");
- $("msg").classList.remove("hidden");
-}
-function switchMode(){
- mode=mode==="login"?"register":"login";
- $("loginForm").classList.toggle("hidden",mode!=="login");
- $("registerForm").classList.toggle("hidden",mode!=="register");
- $("formTitle").textContent=mode==="login"?"Hisobga kirish":"Yangi hisob yaratish";
- $("switchBtn").textContent=mode==="login"?"Ro‘yxatdan o‘tish":"Kirishga qaytish";
- $("msg").classList.add("hidden");
-}
-async function profileFor(user){
- const {data,error}=await db.from("profiles")
- .select("full_name,role,school_name,grade,username")
- .eq("id",user.id).maybeSingle();
- if(error)console.warn("Profil:",error.message);
- return data||{};
-}
-async function enter(user,profile={}){
- activeUser=user;
- $("auth").classList.add("hidden");
- $("home").classList.remove("hidden");
- $("welcome").textContent="Salom, "+(profile.full_name||user.user_metadata?.full_name||"o‘quvchi")+"!";
- renderSubjects();
- showResults();
-}
-$("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const btn=$("loginBtn");btn.disabled=true;
- message("Kirilmoqda...");
- try{
-   const name=$("loginName").value.trim();
-   const password=$("loginPass").value;
-   let data,error;
+  function showMessage(text, error = false) {
+    $("message").textContent = text;
+    $("message").style.color = error ? "#b91c1c" : "#166534";
+  }
 
-   if(name.includes("@")){
-     ({data,error}=await db.auth.signInWithPassword({email:name,password}));
-   }else{
-     const result=await db.functions.invoke("username-login",{
-       body:{username:name.toLowerCase(),password}
-     });
-     if(result.error)throw new Error(
-       "Username orqali kirish serveri ishlamayapti. Email bilan kirib ko‘ring."
-     );
-     if(result.data?.error)throw new Error(result.data.error);
-     if(!result.data?.access_token||!result.data?.refresh_token)
-       throw new Error("Server sessiya qaytarmadi. Edge Function sozlamasini tekshirish kerak.");
-     ({data,error}=await db.auth.setSession({
-       access_token:result.data.access_token,
-       refresh_token:result.data.refresh_token
-     }));
-   }
-   if(error)throw error;
-   const profile=await profileFor(data.user);
-   await enter(data.user,profile);
- }catch(err){
-   message("Kirish xatosi: "+(err.message||"Ma’lumotlarni tekshiring."),true);
- }finally{btn.disabled=false}
-});
-$("registerForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const btn=$("registerBtn");btn.disabled=true;
- try{
-   const username=$("newUsername").value.trim().toLowerCase();
-   if(!/^[a-z0-9_]{3,20}$/.test(username))
-     throw new Error("Username 3–20 belgi, faqat harf, raqam va _ bo‘lishi kerak.");
-   const {data,error}=await db.auth.signUp({
-     email:$("newEmail").value.trim(),
-     password:$("newPass").value,
-     options:{data:{
-       full_name:$("fullName").value.trim(),
-       username,
-       school_name:$("school").value.trim(),
-       school_number:$("schoolNo").value.trim(),
-       grade:$("grade").value,
-       requested_role:"student"
-     }}
-   });
-   if(error)throw error;
-   if(data.session){
-     await enter(data.user,await profileFor(data.user));
-   }else{
-     message("Hisob yaratildi! Email tasdiqlash talab qilinsa, pochtangni tekshir. Keyin email va parol bilan kir.");
-     switchMode();
-   }
- }catch(err){
-   message("Ro‘yxatdan o‘tish xatosi: "+err.message,true);
- }finally{btn.disabled=false}
-});
+  function getClient() {
+    const url = $("projectUrl").value.trim().replace(/\/+$/, "");
+    const key = $("publicKey").value.trim();
 
-function renderSubjects(){
- $("subjects").innerHTML=subjects.map(s=>`
- <div class="subject"><div class="icon">${s[1]}</div>
- <h2>${s[2]}</h2><p>${$("classSelect").value}-sinf</p>
- <button onclick="startTest('${s[0]}')">Testni boshlash</button></div>`).join("");
-}
-$("classSelect").addEventListener("change",renderSubjects);
+    if (!/^https:\/\/[a-zA-Z0-9-]+\.supabase\.co$/.test(url)) {
+      throw new Error("Supabase URL noto‘g‘ri. Masalan: https://abcdefgh.supabase.co");
+    }
+    if (!key) throw new Error("Supabase publishable key kiritilmagan.");
+    if (!window.supabase?.createClient) {
+      throw new Error("Supabase kutubxonasi yuklanmadi. Internetni tekshiring.");
+    }
+    return window.supabase.createClient(url, key);
+  }
 
-const bank={
-kimyo:[
-["Suv formulasi qaysi?",["H₂O","CO₂","O₂","NaCl"],0],
-["Kislorod belgisi qaysi?",["K","O","C","N"],1],
-["Osh tuzi formulasi?",["HCl","H₂O","NaCl","CO₂"],2],
-["Atom yadrosida nimalar bor?",["Elektronlar","Proton va neytronlar","Molekulalar","Faqat ionlar"],1],
-["pH=7 bo‘lgan eritma qanday?",["Kislotali","Ishqoriy","Neytral","Metall"],2]],
-fizika:[
-["Kuch birligi nima?",["Joul","Nyuton","Vatt","Paskal"],1],
-["Tezlik formulasi?",["s/t","s×t","t/s","s+t"],0],
-["Tok kuchi birligi?",["Volt","Om","Amper","Vatt"],2],
-["Jismlarni Yerga tortuvchi kuch?",["Ishqalanish","Magnit","Gravitatsiya","Elastiklik"],2],
-["Energiya birligi?",["Joul","Nyuton","Amper","Metr"],0]],
-algebra:[
-["x+7=12. x=?",["3","4","5","7"],2],
-["9×8=?",["63","72","81","64"],1],
-["3x=21. x=?",["6","7","8","9"],1],
-["(a+b)²=?",["a²+b²","a²+2ab+b²","a²−b²","2a+2b"],1],
-["5²=?",["10","15","20","25"],3]],
-informatika:[
-["Hisoblash qurilmasi?",["Protsessor","Monitor","Sichqoncha","Printer"],0],
-["1 bayt necha bit?",["2","4","8","16"],2],
-["HTML nimaga xizmat qiladi?",["Veb-sahifa tuzilishiga","Antivirusga","Operatsion tizimga","Hisob-kitobga"],0],
-["Fayllarni saqlash qurilmasi?",["RAM","SSD","Protsessor","Klaviatura"],1],
-["Algoritm nima?",["Amallar ketma-ketligi","Monitor turi","Fayl nomi","Internet kabeli"],0]],
-biologiya:[
-["Fotosintezda o‘simlik qaysi gazni yutadi?",["Kislorod","CO₂","Azot","Vodorod"],1],
-["Inson yuragi nechta kamerali?",["2","3","4","5"],2],
-["Tiriklikning tuzilish birligi?",["Atom","Hujayra","A’zo","To‘qima"],1],
-["Kislorod tashuvchi qon hujayrasi?",["Eritrotsit","Trombotsit","Neyron","Leykotsit"],0],
-["Ildizning vazifasi?",["Faqat gul ochish","Suv va mineral so‘rish","Faqat fotosintez","Changlanish"],1]],
-tarix:[
-["O‘zbekiston mustaqilligi qachon e’lon qilingan?",["1990-yil","1991-yil 31-avgust","1992-yil","1993-yil"],1],
-["Amir Temur davlatining poytaxti?",["Samarqand","Xiva","Qo‘qon","Termiz"],0],
-["Buyuk Ipak yo‘li nimaga xizmat qilgan?",["Faqat urushga","Savdo va madaniy aloqalarga","Faqat dehqonchilikka","Faqat dengizga"],1],
-["Konstitutsiya ilk bor qachon qabul qilingan?",["1991-yil","1992-yil 8-dekabr","1993-yil","1990-yil"],1],
-["Qadimgi Misr qaysi daryo bo‘yida rivojlangan?",["Amudaryo","Nil","Dunay","Volga"],1]],
-rus:[
-["«Книга» so‘zining ko‘plik shakli?",["Книги","Книгой","Книге","Книжка"],0],
-["«Здравствуйте» ma’nosi?",["Xayr","Rahmat","Salom","Iltimos"],2],
-["«Я ___ в школу»",["идёт","иду","идёшь","идут"],1],
-["«Большой» so‘zining teskarisi?",["Высокий","Маленький","Длинный","Широкий"],1],
-["«Мы» qaysi shaxs?",["1-shaxs ko‘plik","2-shaxs birlik","3-shaxs birlik","2-shaxs ko‘plik"],0]],
-ingliz:[
-["She ___ a student.",["am","are","is","be"],2],
-["Plural of child?",["childs","children","childes","childrens"],1],
-["Past form of go?",["goed","gone","went","going"],2],
-["Beautiful ma’nosi?",["Chiroyli","Tez","Sovuq","Qiyin"],0],
-["Choose the correct sentence.",["He play football.","He plays football.","He playing football.","He are play football."],1]]
-};
-function startTest(id){
- activeSubject=id;questions=bank[id];qIndex=0;points=0;
- $("testBox").classList.remove("hidden");
- renderQuestion();$("testBox").scrollIntoView({behavior:"smooth"});
-}
-function renderQuestion(){
- if(qIndex>=questions.length){
-  const percent=Math.round(points/questions.length*100);
-  const key="mm_results",arr=JSON.parse(localStorage.getItem(key)||"[]");
-  arr.unshift({subject:subjects.find(s=>s[0]===activeSubject)[2],grade:$("classSelect").value,points,total:questions.length,percent});
-  localStorage.setItem(key,JSON.stringify(arr.slice(0,30)));
-  $("testBox").innerHTML=`<h2>🏆 Test tugadi!</h2><h1>${points}/${questions.length} — ${percent}%</h1><button onclick="startTest('${activeSubject}')">Qayta ishlash</button>`;
-  showResults();return;
- }
- const q=questions[qIndex];
- $("testBox").innerHTML=`<p>Savol ${qIndex+1}/${questions.length}</p><h2>${q[0]}</h2>`+
- q[1].map((a,i)=>`<button class="secondary" onclick="answer(${i})">${["A","B","C","D"][i]}. ${a}</button>`).join("")+
- `<p id="feedback"></p>`;
-}
-function answer(i){
- const q=questions[qIndex];
- document.querySelectorAll("#testBox button").forEach(b=>b.disabled=true);
- if(i===q[2])points++;
- $("feedback").textContent=i===q[2]?"To‘g‘ri javob!":"To‘g‘ri javob: "+q[1][q[2]];
- const b=document.createElement("button");b.textContent="Keyingi savol →";b.onclick=()=>{qIndex++;renderQuestion()};
- $("testBox").appendChild(b);
-}
-function showResults(){
- const arr=JSON.parse(localStorage.getItem("mm_results")||"[]");
- $("results").innerHTML="<h2>📊 Natijalar</h2>"+(arr.length?arr.slice(0,10).map(r=>`<p>${r.subject} · ${r.grade}-sinf: <b>${r.points}/${r.total} (${r.percent}%)</b></p>`).join(""):"<p>Hali test ishlamadingiz.</p>");
-}
-async function logout(){
- const {error}=await db.auth.signOut();
- if(error){alert(error.message);return}
- activeUser=null;$("home").classList.add("hidden");$("auth").classList.remove("hidden");
- $("loginForm").reset();$("testBox").classList.add("hidden");
-}
-(async()=>{
- const {data:{session}}=await db.auth.getSession();
- if(session)enter(session.user,await profileFor(session.user));
+  $("connectBtn").addEventListener("click", async () => {
+    try {
+      db = getClient();
+      const { error } = await db.auth.getSession();
+      if (error) throw error;
+      localStorage.setItem("school_project_url", $("projectUrl").value.trim());
+      localStorage.setItem("school_public_key", $("publicKey").value.trim());
+      showMessage("Supabase bilan ulanish tayyor.");
+      await restoreSession();
+    } catch (e) {
+      showMessage(e.message || String(e), true);
+    }
+  });
+
+  async function restoreSession() {
+    if (!db) return;
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+    if (data.session) showDashboard(data.session.user);
+  }
+
+  function showDashboard(user) {
+    $("auth").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    $("logoutBtn").classList.remove("hidden");
+    $("welcome").textContent = "Xush kelibsiz! " + (user.email || "");
+    $("subjects").replaceChildren();
+
+    subjects.forEach(subject => {
+      const button = document.createElement("button");
+      button.className = "subject";
+      button.textContent = subject;
+      button.addEventListener("click", () => startQuiz(subject));
+      $("subjects").appendChild(button);
+    });
+  }
+
+  $("loginBtn").addEventListener("click", async () => {
+    try {
+      if (!db) db = getClient();
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      if (!email || !password) throw new Error("Email va parolni kiriting.");
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showDashboard(data.user);
+      showMessage("Hisobga muvaffaqiyatli kirildi.");
+    } catch (e) {
+      showMessage(e.message || String(e), true);
+    }
+  });
+
+  $("signupBtn").addEventListener("click", async () => {
+    try {
+      if (!db) db = getClient();
+      const fullName = $("fullName").value.trim();
+      const school = $("school").value.trim();
+      const grade = $("grade").value;
+      const email = $("email").value.trim();
+      const password = $("password").value;
+
+      if (!fullName || !school || !grade || !email || !password) {
+        throw new Error("Barcha maydonlarni to‘ldiring.");
+      }
+      if (password.length < 6) throw new Error("Parol kamida 6 belgidan iborat bo‘lsin.");
+
+      const { data, error } = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            school_name: school,
+            grade: grade,
+            requested_role: "student"
+          }
+        }
+      });
+      if (error) throw error;
+
+      if (data.session) {
+        showDashboard(data.user);
+        showMessage("Hisob yaratildi.");
+      } else {
+        showMessage("Hisob yaratildi. Emailingizni tasdiqlang, so‘ng kiring.");
+      }
+    } catch (e) {
+      showMessage(e.message || String(e), true);
+    }
+  });
+
+  $("logoutBtn").addEventListener("click", async () => {
+    try {
+      if (db) {
+        const { error } = await db.auth.signOut();
+        if (error) throw error;
+      }
+      $("dashboard").classList.add("hidden");
+      $("auth").classList.remove("hidden");
+      $("logoutBtn").classList.add("hidden");
+      showMessage("Hisobdan chiqildi.");
+    } catch (e) {
+      showMessage(e.message || String(e), true);
+    }
+  });
+
+  function startQuiz(subject) {
+    currentQuestions = samples[subject] || [];
+    currentIndex = 0;
+    score = 0;
+    if (!currentQuestions.length) {
+      $("quizArea").textContent = subject + ": savollar hali qo‘shilmagan.";
+      return;
+    }
+    renderQuestion(subject);
+  }
+
+  function renderQuestion(subject) {
+    const area = $("quizArea");
+    area.replaceChildren();
+
+    if (currentIndex >= currentQuestions.length) {
+      const result = document.createElement("h3");
+      result.textContent = "Natija: " + score + " / " + currentQuestions.length;
+      area.appendChild(result);
+      return;
+    }
+
+    const item = currentQuestions[currentIndex];
+    const title = document.createElement("h3");
+    title.textContent = subject + " — " + (currentIndex + 1) + "-savol";
+    area.appendChild(title);
+
+    const question = document.createElement("p");
+    question.textContent = item.q;
+    area.appendChild(question);
+
+    item.a.forEach((answer, index) => {
+      const button = document.createElement("button");
+      button.textContent = answer;
+      button.addEventListener("click", () => {
+        if (index === item.correct) score++;
+        currentIndex++;
+        renderQuestion(subject);
+      });
+      area.appendChild(button);
+    });
+  }
+
+  (async () => {
+    $("projectUrl").value = localStorage.getItem("school_project_url") || "";
+    $("publicKey").value = localStorage.getItem("school_public_key") || "";
+    if ($("projectUrl").value && $("publicKey").value) {
+      try {
+        db = getClient();
+        await restoreSession();
+      } catch (e) {
+        showMessage(e.message || String(e), true);
+      }
+    }
+  })();
 })();
 </script>
 </body>
