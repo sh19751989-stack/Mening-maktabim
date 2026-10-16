@@ -1,520 +1,363 @@
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mening Maktabim</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
 :root {
-  --bg:#0b1120; --panel:#151f32; --panel2:#1d2a40;
-  --text:#edf3ff; --muted:#a8b6ce; --accent:#70a5ff;
-  --border:#30415b; --green:#6ee7b7; --red:#fca5a5;
+  color-scheme: dark;
+  --bg: #080d19;
+  --panel: rgba(19, 29, 49, .88);
+  --panel2: #1a2942;
+  --text: #f1f5ff;
+  --muted: #9eacc5;
+  --accent: #7c9cff;
+  --border: rgba(148, 173, 220, .16);
+  --green: #61e6b1;
+  --red: #ff929f;
+  --radius: 20px;
+  --shadow: 0 18px 50px rgba(0, 0, 0, .2);
 }
-* { box-sizing:border-box }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  margin:0; background:var(--bg); color:var(--text);
-  font-family:Arial,sans-serif; line-height:1.55;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(68, 94, 220, .20), transparent 38%),
+    radial-gradient(ellipse at 95% 40%, rgba(125, 69, 220, .12), transparent 32%),
+    var(--bg);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
+
 header {
-  padding:20px; background:var(--panel);
-  border-bottom:1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  padding: 34px max(22px, calc((100% - 1050px) / 2));
+  background: linear-gradient(115deg, #182c55, #20234c 55%, #30204d);
+  border-bottom: 1px solid var(--border);
 }
-header h1 { margin:0 0 5px; font-size:25px }
-header p { margin:0; color:var(--muted) }
-.container { max-width:1050px; margin:auto; padding:20px }
-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px }
-button, input, select, textarea { font:inherit }
+
+header::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: 7%;
+  top: -150px;
+  border-radius: 50%;
+  background: rgba(142, 168, 255, .22);
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+header h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(27px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+
+header p {
+  position: relative;
+  z-index: 1;
+  margin: 7px 0 0;
+  color: #c6d4ff;
+  font-size: 14px;
+}
+
+.container {
+  width: min(1050px, 100%);
+  margin: auto;
+  padding: 28px 20px 60px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 10px;
+  background: rgba(15, 23, 40, .82);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+}
+
 button {
-  background:var(--accent); color:#081326; border:0;
-  padding:10px 15px; border-radius:9px; cursor:pointer;
-  font-weight:bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 43px;
+  padding: 11px 17px;
+  color: #091226;
+  background: linear-gradient(135deg, #a3b8ff, #7092ff);
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s ease, filter .18s ease,
+              border-color .18s ease, background .18s ease;
 }
-button:disabled { opacity:.5; cursor:not-allowed }
-button.secondary { background:var(--panel2); color:var(--text); border:1px solid var(--border) }
-button.danger { background:#7f1d1d; color:white }
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #a3b8ff;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  color: #dbe5ff;
+  background: #18243a;
+  border-color: var(--border);
+}
+
+button.secondary:hover:not(:disabled) {
+  background: #243553;
+  border-color: rgba(137, 164, 255, .48);
+}
+
+button.danger {
+  color: #fff;
+  background: linear-gradient(135deg, #c63d58, #8f2448);
+}
+
 .card {
-  background:var(--panel); border:1px solid var(--border);
-  padding:18px; border-radius:15px; margin-bottom:16px;
+  min-width: 0;
+  padding: clamp(18px, 3vw, 26px);
+  margin-bottom: 18px;
+  background: linear-gradient(
+    145deg,
+    rgba(24, 36, 59, .94),
+    rgba(15, 24, 41, .94)
+  );
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: border-color .2s ease, transform .2s ease;
 }
-h2 { margin-top:0 }
-.muted { color:var(--muted) }
-.status { padding:12px; border-radius:9px; background:var(--panel2); overflow-wrap:anywhere }
-label { display:block; margin:12px 0 5px }
-input, select, textarea {
-  width:100%; padding:11px; border-radius:8px;
-  color:var(--text); background:var(--bg);
-  border:1px solid var(--border);
+
+.grid .card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124, 156, 255, .4);
 }
-input[type="radio"] { width:auto; margin-right:8px }
+
+h2 {
+  margin: 0 0 12px;
+  font-size: clamp(22px, 3vw, 29px);
+  font-weight: 800;
+  letter-spacing: -.6px;
+  line-height: 1.3;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+p {
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.status {
+  padding: 13px 15px;
+  color: #dbe6ff;
+  background: rgba(97, 125, 190, .10);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+label {
+  display: block;
+  margin: 14px 0 7px;
+  color: #d9e4fa;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input:not([type="radio"]),
+select,
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  color: var(--text);
+  background: #0c1527;
+  border: 1px solid #2b3b57;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input:not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 156, 255, .12);
+  outline: none;
+}
+
+input[type="radio"] {
+  width: 17px;
+  height: 17px;
+  margin: 0 10px 0 0;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
 .option {
-  display:block; background:var(--panel2); padding:11px;
-  margin:8px 0; border-radius:9px; cursor:pointer;
-}
-.option label { margin:0; cursor:pointer }
-.page { display:none }
-.page.active { display:block }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px }
-.small { font-size:13px }
-hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
-#authPanel { margin-bottom:20px }
-</style>
-</head>
-<body>
-<header>
-  <h1>🏫 Mening Maktabim</h1>
-  <p>Bilim olish, test ishlash va natijalarni ko‘rish platformasi</p>
-</header>
-
-<main class="container">
-  <section class="card" id="authPanel">
-    <h2>🔐 Hisobga kirish</h2>
-    <p class="muted">Saytdan foydalanish uchun hisobingizga kiring.</p>
-
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="username" required>
-
-      <label for="password">Parol</label>
-      <input id="password" type="password" autocomplete="current-password" required>
-
-      <button type="submit" id="loginButton">Kirish</button>
-    </form>
-
-    <div id="accountInfo" hidden>
-      <p id="accountText"></p>
-      <button type="button" class="secondary" id="logoutButton">Hisobdan chiqish</button>
-    </div>
-
-    <p id="authStatus" class="status" aria-live="polite">Ulanish tekshirilmoqda...</p>
-  </section>
-
-  <nav aria-label="Asosiy menyu">
-    <button class="secondary" data-page="home">🏠 Bosh sahifa</button>
-    <button class="secondary" data-page="tests">📝 Testlar</button>
-    <button class="secondary" data-page="admin" id="adminNav" hidden>⚙️ Savollar boshqaruvi</button>
-  </nav>
-
-  <section class="page active" id="page-home">
-    <div class="card">
-      <h2>Assalomu alaykum!</h2>
-      <p>Mening Maktabim saytiga xush kelibsiz.</p>
-      <p>Hisobingizga kirganingizdan so‘ng fan tanlab, test ishlashingiz mumkin.</p>
-      <button id="homeTestsButton">Testlarga o‘tish →</button>
-    </div>
-    <div class="grid">
-      <div class="card"><h3>📚 8 ta fan</h3><p class="muted">Turli fanlardan savollar.</p></div>
-      <div class="card"><h3>🔒 Xavfsiz tekshiruv</h3><p class="muted">Javoblar serverda tekshiriladi.</p></div>
-      <div class="card"><h3>👥 Rollar</h3><p class="muted">Admin, o‘qituvchi va o‘quvchi.</p></div>
-    </div>
-  </section>
-
-  <section class="page" id="page-tests">
-    <div class="card">
-      <h2>📝 Test ishlash</h2>
-      <label for="subjectFilter">Fan</label>
-      <select id="subjectFilter">
-        <option>Kimyo</option>
-        <option>Fizika</option>
-        <option>Algebra</option>
-        <option>Informatika</option>
-        <option>Biologiya</option>
-        <option>Tarix</option>
-        <option>Rus tili</option>
-        <option>Ingliz tili</option>
-      </select>
-
-      <label for="gradeFilter">Sinf</label>
-      <select id="gradeFilter">
-        <option value="5">5-sinf</option>
-        <option value="6">6-sinf</option>
-        <option value="7">7-sinf</option>
-        <option value="8" selected>8-sinf</option>
-        <option value="9">9-sinf</option>
-        <option value="10">10-sinf</option>
-        <option value="11">11-sinf</option>
-      </select>
-      <button id="loadTestButton">Savollarni yuklash</button>
-      <p class="muted small">Faqat bazada nashr qilingan savollar yuklanadi.</p>
-    </div>
-
-    <div id="quizArea"></div>
-    <div id="resultArea" class="card" hidden aria-live="polite"></div>
-  </section>
-
-  <section class="page" id="page-admin">
-    <div class="card">
-      <h2>⚙️ Savollar boshqaruvi</h2>
-      <p class="muted">Bu bo‘lim faqat admin va o‘qituvchilar uchun.</p>
-
-      <form id="questionForm">
-        <label for="newSubject">Fan</label>
-        <select id="newSubject" required>
-          <option>Kimyo</option>
-          <option>Fizika</option>
-          <option>Algebra</option>
-          <option>Informatika</option>
-          <option>Biologiya</option>
-          <option>Tarix</option>
-          <option>Rus tili</option>
-          <option>Ingliz tili</option>
-        </select>
-
-        <label for="newGrade">Sinf</label>
-        <select id="newGrade" required>
-          <option value="5">5-sinf</option>
-          <option value="6">6-sinf</option>
-          <option value="7">7-sinf</option>
-          <option value="8" selected>8-sinf</option>
-          <option value="9">9-sinf</option>
-          <option value="10">10-sinf</option>
-          <option value="11">11-sinf</option>
-        </select>
-
-        <label for="newQuestion">Savol matni</label>
-        <textarea id="newQuestion" required rows="3" maxlength="2000"></textarea>
-
-        <label for="optionA">A varianti</label>
-        <input id="optionA" required maxlength="500">
-
-        <label for="optionB">B varianti</label>
-        <input id="optionB" required maxlength="500">
-
-        <label for="optionC">C varianti</label>
-        <input id="optionC" required maxlength="500">
-
-        <label for="optionD">D varianti</label>
-        <input id="optionD" required maxlength="500">
-
-        <label for="correctAnswer">To‘g‘ri javob (faqat xodim ko‘radi)</label>
-        <select id="correctAnswer" required>
-          <option value="a">A</option>
-          <option value="b">B</option>
-          <option value="c">C</option>
-          <option value="d">D</option>
-        </select>
-
-        <p><button type="submit" id="saveQuestionButton">Savolni saqlash</button></p>
-      </form>
-      <p id="adminStatus" class="status" aria-live="polite"></p>
-    </div>
-  </section>
-</main>
-
-<script>
-"use strict";
-
-const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let currentUser = null;
-let authRole = null;
-let quizQuestions = [];
-let submitting = false;
-
-const $ = id => document.getElementById(id);
-const staffRoles = ["admin", "teacher"];
-
-function showStatus(id, message) {
-  $(id).textContent = message;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 15px;
+  margin: 10px 0;
+  color: #e2eaff;
+  background: rgba(34, 49, 75, .68);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s;
 }
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[ch]);
+.option:hover {
+  background: #253653;
+  border-color: rgba(124, 156, 255, .55);
 }
 
-function isStaff() {
-  return staffRoles.includes(authRole);
+.option label {
+  margin: 0;
+  cursor: pointer;
 }
 
-function showPage(name) {
-  if (name === "admin" && !isStaff()) {
-    showStatus("authStatus", "Bu bo‘limga faqat admin va o‘qituvchi kira oladi.");
-    name = "home";
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 16px;
+}
+
+.grid .card {
+  margin-bottom: 0;
+}
+
+#authPanel {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(124, 156, 255, .25);
+}
+
+#authPanel h2::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 25px;
+  margin-right: 11px;
+  vertical-align: -4px;
+  border-radius: 5px;
+  background: linear-gradient(#9cb4ff, #8e71ff);
+}
+
+#quizArea .card {
+  animation: rise .35s ease both;
+}
+
+#resultArea {
+  border-color: rgba(97, 230, 177, .3);
+  background: linear-gradient(135deg, #12362f, #15283a);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 22px 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 25px 20px;
   }
 
-  document.querySelectorAll(".page").forEach(section => {
-    section.classList.toggle("active", section.id === "page-" + name);
-  });
-}
-
-document.querySelectorAll("[data-page]").forEach(button => {
-  button.addEventListener("click", () => showPage(button.dataset.page));
-});
-
-$("homeTestsButton").addEventListener("click", () => showPage("tests"));
-
-async function refreshAuth(sessionFromEvent) {
-  let session = sessionFromEvent;
-
-  if (session === undefined) {
-    const { data, error } = await supabaseClient.auth.getSession();
-    if (error) {
-      showStatus("authStatus", "Sessiya xatosi: " + error.message);
-      return;
-    }
-    session = data.session;
+  .container {
+    padding: 18px 13px 40px;
   }
 
-  currentUser = session?.user || null;
-  authRole = null;
-
-  if (currentUser) {
-    const { data: profile, error } = await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq("id", currentUser.id)
-      .maybeSingle();
-
-    if (error) {
-      showStatus("authStatus", "Profilni o‘qib bo‘lmadi: " + error.message);
-    } else if (profile && ["admin", "teacher", "student"].includes(profile.role)) {
-      authRole = profile.role;
-    }
-
-    $("loginForm").hidden = true;
-    $("accountInfo").hidden = false;
-    $("accountText").textContent =
-      "Hisob: " + (currentUser.email || "email ko‘rsatilmagan") +
-      " | Rol: " + (authRole || "rol belgilanmagan");
-
-    if (authRole) {
-      showStatus("authStatus", "Tizimga kirdingiz.");
-    } else {
-      showStatus("authStatus",
-        "Hisob ochildi, ammo profiles jadvalida mos rol topilmadi. Admin bilan bog‘laning.");
-    }
-  } else {
-    $("loginForm").hidden = false;
-    $("accountInfo").hidden = true;
-    showStatus("authStatus", "Tizimga kirmagansiz.");
+  nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
   }
 
-  $("adminNav").hidden = !isStaff();
+  nav button {
+    width: 100%;
+    padding: 10px 6px;
+    font-size: 12px;
+  }
 
-  if (!isStaff() && $("page-admin").classList.contains("active")) {
-    showPage("home");
+  .card {
+    border-radius: 16px;
+  }
+
+  button {
+    max-width: 100%;
   }
 }
 
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const email = $("email").value.trim();
-  const password = $("password").value;
-  const button = $("loginButton");
-
-  button.disabled = true;
-  showStatus("authStatus", "Hisob tekshirilmoqda...");
-
-  try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      showStatus("authStatus", "Kirish amalga oshmadi: " + error.message);
-      return;
-    }
-
-    await refreshAuth(data.session);
-    $("password").value = "";
-  } catch (error) {
-    showStatus("authStatus", "Ulanish xatosi: " + error.message);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-$("logoutButton").addEventListener("click", async () => {
-  const button = $("logoutButton");
-  button.disabled = true;
-
-  const { error } = await supabaseClient.auth.signOut();
-
-  button.disabled = false;
-
-  if (error) {
-    showStatus("authStatus", "Chiqishda xatolik: " + error.message);
-    return;
-  }
-
-  quizQuestions = [];
-  $("quizArea").replaceChildren();
-  $("resultArea").hidden = true;
-  await refreshAuth(null);
-  showPage("home");
-});
-
-supabaseClient.auth.onAuthStateChange((_event, session) => {
-  setTimeout(() => refreshAuth(session), 0);
-});
-
-async function loadTest() {
-  if (!currentUser) {
-    showStatus("authStatus", "Avval hisobingizga kiring.");
-    return;
-  }
-
-  if (!authRole) {
-    showStatus("authStatus", "Hisobingizga rol belgilanmagan. Admin bilan bog‘laning.");
-    return;
-  }
-
-  const button = $("loadTestButton");
-  button.disabled = true;
-  $("quizArea").replaceChildren();
-  $("resultArea").hidden = true;
-  showStatus("authStatus", "Savollar yuklanmoqda...");
-
-  try {
-    const { data, error } = await supabaseClient.rpc("get_school_questions", {
-      p_subject: $("subjectFilter").value,
-      p_grade: Number($("gradeFilter").value)
-    });
-
-    if (error) throw error;
-
-    quizQuestions = data || [];
-
-    if (quizQuestions.length === 0) {
-      $("quizArea").innerHTML =
-        '<div class="card">Bu fan va sinf uchun hozircha savollar yo‘q.</div>';
-      return;
-    }
-
-    $("quizArea").innerHTML = `
-      <form id="quizForm" class="card">
-        <h2>${escapeHTML($("subjectFilter").value)} — test</h2>
-        <p class="muted">${quizQuestions.length} ta savol</p>
-        ${quizQuestions.map((q, i) => `
-          <div class="card">
-            <h3>${i + 1}. ${escapeHTML(q.question)}</h3>
-            ${[
-              ["a", q.option_a], ["b", q.option_b],
-              ["c", q.option_c], ["d", q.option_d]
-            ].map(([letter, option]) => `
-              <label class="option">
-                <input type="radio" name="question_${escapeHTML(q.id)}"
-                  value="${letter}" required>
-                <strong>${letter.toUpperCase()}.</strong>
-                ${escapeHTML(option)}
-              </label>
-            `).join("")}
-          </div>
-        `).join("")}
-        <button id="submitQuizButton" type="submit">Testni yakunlash</button>
-      </form>
-    `;
-
-    $("quizForm").addEventListener("submit", submitQuiz);
-    showStatus("authStatus", "Savollar tayyor.");
-  } catch (error) {
-    showStatus("authStatus", "Savollarni yuklab bo‘lmadi: " + error.message);
-  } finally {
-    button.disabled = false;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
   }
 }
-
-$("loadTestButton").addEventListener("click", loadTest);
-
-async function submitQuiz(event) {
-  event.preventDefault();
-
-  if (submitting || !currentUser || quizQuestions.length === 0) return;
-
-  submitting = true;
-  const button = $("submitQuizButton");
-  button.disabled = true;
-
-  let correctCount = 0;
-  let checkedCount = 0;
-
-  try {
-    for (const question of quizQuestions) {
-      const selected = document.querySelector(
-        `input[name="question_${CSS.escape(question.id)}"]:checked`
-      );
-
-      if (!selected) throw new Error("Barcha savollarga javob bering.");
-
-      const { data, error } = await supabaseClient.rpc("check_school_answer", {
-        p_question_id: question.id,
-        p_answer: selected.value
-      });
-
-      if (error) throw error;
-
-      if (data === true) correctCount++;
-      checkedCount++;
-    }
-
-    $("resultArea").hidden = false;
-    $("resultArea").innerHTML = `
-      <h2>📊 Test natijasi</h2>
-      <p>Jami savollar: <strong>${checkedCount}</strong></p>
-      <p>To‘g‘ri javoblar: <strong>${correctCount}</strong></p>
-      <p>Natija: <strong>${Math.round(correctCount / checkedCount * 100)}%</strong></p>
-      <p class="muted">Javoblar server tomonidan tekshirildi. To‘g‘ri javoblar kaliti ko‘rsatilmaydi.</p>
-    `;
-    $("resultArea").scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (error) {
-    showStatus("authStatus", "Testni tekshirishda xatolik: " + error.message);
-  } finally {
-    submitting = false;
-    button.disabled = false;
-  }
-}
-
-$("questionForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!currentUser || !isStaff()) {
-    showStatus("adminStatus", "Bu amal uchun admin yoki o‘qituvchi huquqi kerak.");
-    return;
-  }
-
-  const button = $("saveQuestionButton");
-  button.disabled = true;
-  showStatus("adminStatus", "Savol saqlanmoqda...");
-
-  try {
-    const { data, error } = await supabaseClient.rpc("add_school_question", {
-      p_subject: $("newSubject").value,
-      p_grade: Number($("newGrade").value),
-      p_question: $("newQuestion").value.trim(),
-      p_option_a: $("optionA").value.trim(),
-      p_option_b: $("optionB").value.trim(),
-      p_option_c: $("optionC").value.trim(),
-      p_option_d: $("optionD").value.trim(),
-      p_correct_answer: $("correctAnswer").value
-    });
-
-    if (error) throw error;
-
-    $("questionForm").reset();
-    showStatus("adminStatus", "Savol bazaga saqlandi. ID: " + data);
-  } catch (error) {
-    showStatus("adminStatus", "Savol saqlanmadi: " + error.message);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-refreshAuth();
-</script>
-</body>
-</html>
