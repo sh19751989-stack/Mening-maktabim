@@ -234,12 +234,78 @@ footer{color:#63708d;font-size:10px;margin-top:40px;text-align:center}
           <h2>Hisobingizga kiring</h2>
           <p class="subtitle">Platformadan foydalanish uchun Supabase hisobingiz orqali kiring.</p>
           <form id="loginForm" style="margin-top:22px">
+            <div class="row" style="margin-top:14px">
+  <button class="btn full" type="button" id="showRegister">
+    Yangi hisob yaratish
+  </button>
+</div>
+
+<form id="registerForm" hidden style="margin-top:22px">
+  <h3>Ro‘yxatdan o‘tish</h3>
+
+  <div class="field">
+    <label for="regFirstName">Ism</label>
+    <input id="regFirstName" required maxlength="60"
+      autocomplete="given-name" placeholder="Ismingiz">
+  </div>
+
+  <div class="field">
+    <label for="regLastName">Familiya</label>
+    <input id="regLastName" required maxlength="60"
+      autocomplete="family-name" placeholder="Familiyangiz">
+  </div>
+
+  <div class="field">
+    <label for="regEmail">Email</label>
+    <input id="regEmail" type="email" required
+      autocomplete="email" placeholder="siz@example.com">
+  </div>
+
+  <div class="field">
+    <label for="regPassword">Parol (kamida 8 belgi)</label>
+    <input id="regPassword" type="password" required minlength="8"
+      autocomplete="new-password" placeholder="Yangi parol">
+  </div>
+
+  <div class="field">
+    <label for="regGrade">Sinf</label>
+    <select id="regGrade" required>
+      <option value="">Sinfni tanlang</option>
+      <option value="1">1-sinf</option>
+      <option value="2">2-sinf</option>
+      <option value="3">3-sinf</option>
+      <option value="4">4-sinf</option>
+      <option value="5">5-sinf</option>
+      <option value="6">6-sinf</option>
+      <option value="7">7-sinf</option>
+      <option value="8">8-sinf</option>
+      <option value="9">9-sinf</option>
+      <option value="10">10-sinf</option>
+      <option value="11">11-sinf</option>
+    </select>
+  </div>
+
+  <button class="btn primary full" type="submit" id="registerBtn">
+    Ro‘yxatdan o‘tish →
+  </button>
+
+  <button class="btn full" type="button" id="showLogin"
+    style="margin-top:10px">
+    Kirish oynasiga qaytish
+  </button>
+
+  <p id="registerMessage" class="subtitle"
+    aria-live="polite" style="margin-top:15px"></p>
+</form>
             <div class="field"><label for="email">Elektron pochta</label><input id="email" type="email" required autocomplete="username" placeholder="siz@example.com"></div>
             <div class="field"><label for="password">Parol</label><input id="password" type="password" required autocomplete="current-password" placeholder="Parolingiz"></div>
             <button class="btn primary full" type="submit" id="loginBtn">Kirish →</button>
           </form>
           <p id="loginMessage" class="subtitle" aria-live="polite" style="margin-top:15px"></p>
-          <div class="notice" style="margin-top:18px">Yangi hisob yaratish ushbu sahifada yoqilmagan. Administrator Supabase Authentication orqali foydalanuvchi yaratishi kerak.</div>
+       <div class="notice" style="margin-top:18px">
+  Ro‘yxatdan o‘tish uchun ism, familiya, email, parol va sinfingizni
+  kiriting. Admin huquqi faqat vakolatli foydalanuvchilarga beriladi.
+</div>
         </div>
       </div>
     </section>
@@ -649,7 +715,78 @@ db.auth.onAuthStateChange((_event,session)=>{
   setTimeout(()=>refreshAuth(session),0);
 });
 refreshAuth();
-loadQuestionCount();
+loadQuestionCount()
+  $("showRegister").addEventListener("click", () => {
+  $("loginForm").hidden = true;
+  $("registerForm").hidden = false;
+  $("loginMessage").textContent = "";
+  $("registerMessage").textContent = "";
+});
+
+$("showLogin").addEventListener("click", () => {
+  $("registerForm").hidden = true;
+  $("loginForm").hidden = false;
+});
+
+$("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const btn = $("registerBtn");
+  const msg = $("registerMessage");
+
+  const firstName = $("regFirstName").value.trim();
+  const lastName = $("regLastName").value.trim();
+  const email = $("regEmail").value.trim();
+  const password = $("regPassword").value;
+  const grade = Number($("regGrade").value);
+
+  if (!firstName || !lastName || !email ||
+      password.length < 8 || grade < 1 || grade > 11) {
+    msg.textContent = "Barcha maydonlarni to‘g‘ri to‘ldiring.";
+    msg.className = "subtitle error";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Hisob yaratilmoqda...";
+  msg.textContent = "";
+
+  try {
+    const { data, error } = await db.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          grade: String(grade)
+        }
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.session) {
+      await refreshAuth(data.session);
+      showPage("home");
+      toast("Ro‘yxatdan muvaffaqiyatli o‘tdingiz!");
+    } else {
+      msg.textContent =
+        "Hisob yaratildi! Emailingizni tekshiring va tasdiqlash havolasi orqali hisobingizni faollashtiring.";
+      msg.className = "subtitle success-text";
+    }
+  } catch (error) {
+    console.error(error);
+    msg.textContent =
+      "Ro‘yxatdan o‘tib bo‘lmadi: " +
+      (error.message || "Xatolik yuz berdi.");
+    msg.className = "subtitle error";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Ro‘yxatdan o‘tish →";
+  }
+});
+</script>
 </script>
 </body>
 </html>
