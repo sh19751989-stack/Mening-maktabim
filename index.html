@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b75">
+<title>Mening Maktabim</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--blue:#1649a0;--navy:#102d59;--bg:#f3f6fc;--white:#fff;--text:#17253d;--muted:#697891;--line:#e1e8f2;--green:#16835d}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{background:linear-gradient(125deg,#102d59,#2265c6);color:white;padding:22px max(18px,calc((100% - 1100px)/2))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:22px;font-weight:800}
+.logo span{color:#8ed7ff}
+header p{color:#dbe8ff;margin:10px 0 0;font-size:14px}
+main{max-width:1100px;margin:24px auto;padding:0 15px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:19px;margin-bottom:16px;box-shadow:0 5px 20px #18335b08}
+h2{font-size:20px;margin:0 0 15px}
+h3{font-size:17px;margin:0 0 9px}
+.muted{color:var(--muted);font-size:14px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:#edf4ff;border-radius:13px;padding:16px}
+.stat strong{display:block;font-size:25px;color:var(--blue);margin-top:8px}
+label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d6dfed;border-radius:10px;background:white;color:var(--text);outline-color:var(--blue)}
+textarea{min-height:100px;resize:vertical}
+.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700;background:var(--blue);color:white}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.light{background:#edf3ff;color:var(--blue)}
+.btn.red{background:#fff0f0;color:#b42318}
+.btn.green{background:#e5f7ee;color:#126a4b}
+.btn.small{padding:8px 10px;font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:5px}
+.tabs button{white-space:nowrap;border:1px solid var(--line);background:white;color:var(--text);border-radius:10px;padding:11px 13px}
+.tabs button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.lesson{border:1px solid var(--line);border-radius:13px;padding:15px;margin-top:12px}
+.badge{display:inline-block;background:#eaf1ff;color:#1649a0;border-radius:20px;padding:5px 9px;font-size:12px;margin:3px 0}
+.notice{padding:12px;border-radius:10px;background:#eef5ff;color:#234a7d;font-size:14px;line-height:1.5;margin:12px 0}
+.error{background:#fff0f0;color:#9b1c1c}
+.success{background:#e8f8ef;color:#176443}
+.hidden{display:none!important}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+a{color:var(--blue)}
+@media(max-width:600px){.grid,.stats{grid-template-columns:1fr 1fr}.card{padding:15px}.logo{font-size:19px}header{padding:20px 15px}.stat{padding:12px}.stat strong{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="logo">🎓 Mening <span>Maktabim</span></div>
+    <button id="logout" class="btn light hidden">Chiqish</button>
+  </div>
+  <p>Bilim olish, darslar va maktab bilan muloqot qilish uchun yagona platforma.</p>
+</header>
+
+<main>
+  <div id="setup" class="card">
+    <h2>Platformani ulash</h2>
+    <p class="muted">Supabase loyihangning URL manzili va Publishable yoki anon kalitini kiriting. Ular ushbu brauzerda saqlanadi.</p>
+    <label>Supabase Project URL</label>
+    <input id="projectUrl" type="url" placeholder="https://xxxx.supabase.co">
+    <label>Publishable / anon key</label>
+    <input id="projectKey" type="text" placeholder="sb_publishable_... yoki eski anon kaliti">
+    <div class="actions">
+      <button id="connect" class="btn">Bazaga ulash</button>
+    </div>
+    <div id="setupMsg" class="notice">Ulanish uchun o‘z loyihang ma’lumotlarini kiriting.</div>
+  </div>
+
+  <section id="auth" class="card hidden">
+    <h2 id="authTitle">Platformaga kirish</h2>
+    <p class="muted">O‘quvchi sifatida ro‘yxatdan o‘tish yoki mavjud hisobga kirish.</p>
+    <div class="grid">
+      <div>
+        <label>Ism va familiya</label>
+        <input id="fullName" placeholder="Ism Familiya">
+      </div>
+      <div>
+        <label>Email</label>
+        <input id="email" type="email" placeholder="email@example.com" autocomplete="email">
+      </div>
+    </div>
+    <label>Parol (kamida 6 belgi)</label>
+    <input id="password" type="password" minlength="6" autocomplete="current-password" placeholder="Parolingiz">
+    <div class="actions">
+      <button id="login" class="btn">Kirish</button>
+      <button id="signup" class="btn light">Ro‘yxatdan o‘tish</button>
+    </div>
+    <div id="authMsg" class="notice hidden"></div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="card">
+      <h2 id="welcome">Xush kelibsiz!</h2>
+      <p id="accountInfo" class="muted"></p>
+      <div class="notice">Hisobingizning roli bazada belgilanadi. O‘qituvchi va administrator huquqlarini faqat vakolatli administrator tayinlaydi.</div>
+    </div>
+
+    <div id="adminStats" class="stats hidden"></div>
+
+    <nav class="tabs">
+      <button class="active" data-tab="home">🏠 Bosh sahifa</button>
+      <button data-tab="lessons">📚 Darslar</button>
+      <button data-tab="complaints">✉️ Murojaatlar</button>
+      <button data-tab="profile">👤 Profil</button>
+      <button id="adminTab" data-tab="admin" class="hidden">⚙️ Boshqaruv</button>
+    </nav>
+
+    <section id="tab-home" class="tabContent">
+      <div class="card">
+        <h2>Platformamizga xush kelibsiz!</h2>
+        <p class="muted">Maqsadimiz — o‘quvchilar va o‘qituvchilar uchun qulay, zamonaviy ta’lim muhitini yaratish.</p>
+        <div class="grid">
+          <div class="stat">📚<h3>Darslar</h3><span class="muted">Tasdiqlangan videodarslarni ko‘ring.</span></div>
+          <div class="stat">💬<h3>Murojaatlar</h3><span class="muted">Taklif yoki shikoyat yuboring.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Fanlar</h2>
+        <div id="subjectList" class="muted">Fanlar yuklanmoqda...</div>
+      </div>
+    </section>
+
+    <section id="tab-lessons" class="tabContent hidden">
+      <div class="card">
+        <h2>Videodarslar</h2>
+        <p class="muted">Tasdiqlangan darslarni ko‘ring.</p>
+        <div id="lessonList">Darslar yuklanmoqda...</div>
+      </div>
+      <div id="addLessonCard" class="card hidden">
+        <h2>Yangi dars qo‘shish</h2>
+        <p class="muted">Dars administrator tasdig‘idan keyin hammaga ko‘rinadi.</p>
+        <form id="lessonForm">
+          <label>Dars nomi</label><input id="lessonTitle" required maxlength="150">
+          <label>Fan</label>
+          <select id="lessonSubject" required></select>
+          <label>Sinf</label>
+          <select id="lessonGrade">
+            <option>1-sinf</option><option>2-sinf</option><option>3-sinf</option>
+            <option>4-sinf</option><option>5-sinf</option><option>6-sinf</option>
+            <option>7-sinf</option><option>8-sinf</option><option>9-sinf</option>
+            <option>10-sinf</option><option>11-sinf</option>
+          </select>
+          <label>YouTube video havolasi</label><input id="lessonUrl" type="url" required placeholder="https://www.youtube.com/watch?v=...">
+          <label>Izoh</label><textarea id="lessonDescription" maxlength="2000"></textarea>
+          <button class="btn" type="submit">Darsni yuborish</button>
+        </form>
+        <div id="lessonMsg" class="notice hidden"></div>
+      </div>
+    </section>
+
+    <section id="tab-complaints" class="tabContent hidden">
+      <div class="card">
+        <h2>Murojaat yuborish</h2>
+        <p class="muted">Taklif, shikoyat yoki tashabbusingizni yozing. Murojaatni faqat tegishli ruxsatga ega xodimlar ko‘ra oladi.</p>
+        <form id="complaintForm">
+          <label>Murojaat turi</label>
+          <select id="complaintKind">
+            <option value="suggestion">Taklif</option>
+            <option value="complaint">Shikoyat</option>
+            <option value="initiative">Tashabbus</option>
+          </select>
+          <label>Mavzu</label><input id="complaintTitle" required maxlength="150">
+          <label>Murojaat matni</label><textarea id="complaintBody" required maxlength="5000"></textarea>
+          <button class="btn" type="submit">Yuborish</button>
+        </form>
+        <div id="complaintMsg" class="notice hidden"></div>
+      </div>
+      <div class="card">
+        <h2>Mening murojaatlarim</h2>
+        <div id="myComplaints" class="muted">Yuklanmoqda...</div>
+      </div>
+    </section>
+
+    <section id="tab-profile" class="tabContent hidden">
+      <div class="card">
+        <h2>Profilim</h2>
+        <p class="muted">Shaxsiy ma’lumotlaringizni yangilashingiz mumkin. Rolni bu yerdan o‘zgartirib bo‘lmaydi.</p>
+        <label>Ism va familiya</label><input id="profileName" maxlength="150">
+        <label>Maktab nomi</label><input id="profileSchool" maxlength="200">
+        <label>Sinf</label><input id="profileGrade" maxlength="30">
+        <div class="actions"><button id="saveProfile" class="btn">Saqlash</button></div>
+        <div id="profileMsg" class="notice hidden"></div>
+      </div>
+    </section>
+
+    <section id="tab-admin" class="tabContent hidden">
+      <div class="card">
+        <h2>Administrator boshqaruvi</h2>
+        <p class="muted">Bu bo‘lim faqat bazada administrator roli berilgan foydalanuvchiga mo‘ljallangan.</p>
+        <h3>Kutilayotgan darslar</h3>
+        <div id="pendingLessons">Yuklanmoqda...</div>
+      </div>
+      <div class="card">
+        <h2>Barcha murojaatlar</h2>
+        <div id="allComplaints">Yuklanmoqda...</div>
+      </div>
+    </section>
+  </section>
+
+  <div id="globalMsg" class="notice hidden"></div>
+</main>
+
+<footer>© <span id="year"></span> Mening Maktabim · Ta’lim kelajak sari</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+
+  let db = null;
+  let user = null;
+  let profile = null;
+  let subjects = [];
+
+  $("year").textContent = new Date().getFullYear();
+
+  function message(id, text, type="notice") {
+    const el = $(id);
+    el.textContent = text;
+    el.className = "notice " + type;
+    el.classList.remove("hidden");
+  }
+
+  function hide(id) { $(id).classList.add("hidden"); }
+
+  function showTab(name) {
+    document.querySelectorAll(".tabContent").forEach(el => el.classList.add("hidden"));
+    $("tab-" + name).classList.remove("hidden");
+    document.querySelectorAll("[data-tab]").forEach(btn =>
+      btn.classList.toggle("active", btn.dataset.tab === name)
+    );
+    if (name === "lessons") loadLessons();
+    if (name === "complaints") loadMyComplaints();
+    if (name === "admin" && profile?.role === "admin") loadAdmin();
+    if (name === "home") loadSubjects();
+  }
+
+  document.querySelectorAll("[data-tab]").forEach(btn =>
+    btn.addEventListener("click", () => showTab(btn.dataset.tab))
+  );
+
+  function setSignedIn(signedIn) {
+    $("auth").classList.toggle("hidden", signedIn);
+    $("app").classList.toggle("hidden", !signedIn);
+    $("logout").classList.toggle("hidden", !signedIn);
+  }
+
+  function youtubeId(url) {
+    try {
+      const u = new URL(url);
+      if (u.hostname === "youtu.be") return u.pathname.slice(1);
+      if (["youtube.com","www.youtube.com","m.youtube.com","youtube-nocookie.com"].includes(u.hostname)) {
+        if (u.pathname === "/watch") return u.searchParams.get("v") || "";
+        const m = u.pathname.match(/^\/(?:embed|shorts)\/([A-Za-z0-9_-]+)/);
+        return m ? m[1] : "";
+      }
+    } catch {}
+    return "";
+  }
+
+  async function connect() {
+    const url = $("projectUrl").value.trim().replace(/\/+$/, "");
+    const key = $("projectKey").value.trim();
+    if (!url || !key || !/^https:\/\/[a-zA-Z0-9.-]+$/.test(url)) {
+      message("setupMsg", "Supabase URL va kalitni to‘g‘ri kiriting.", "error");
+      return;
+    }
+    try {
+      const client = window.supabase.createClient(url, key);
+      const { error } = await client.auth.getSession();
+      if (error) throw error;
+      db = client;
+      localStorage.setItem("mm_url", url);
+      localStorage.setItem("mm_key", key);
+      $("setup").classList.add("hidden");
+      setSignedIn(false);
+      message("authMsg", "Baza ulandi. Endi tizimga kiring yoki ro‘yxatdan o‘ting.");
+      await checkSession();
+    } catch (e) {
+      message("setupMsg", "Ulanishda xatolik: " + e.message, "error");
+    }
+  }
+
+  $("connect").addEventListener("click", connect);
+
+  async function checkSession() {
+    if (!db) return;
+    const { data, error } = await db.auth.getSession();
+    if (error) {
+      message("globalMsg", error.message, "error");
+      return;
+    }
+    if (data.session) {
+      user = data.session.user;
+      await loadProfile();
+    } else {
+      user = null;
+      profile = null;
+      setSignedIn(false);
+    }
+  }
+
+  async function signUp() {
+    if (!db) return;
+    const name = $("fullName").value.trim();
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    if (!name || !email || password.length < 6) {
+      message("authMsg", "Ism, email va kamida 6 belgili parolni kiriting.", "error");
+      return;
+    }
+    const { data, error } = await db.auth.signUp({
+      email, password, options: { data: { full_name: name } }
+    });
+    if (error) {
+      message("authMsg", error.message, "error");
+      return;
+    }
+    if (data.session) {
+      user = data.user;
+      await loadProfile();
+    } else {
+      message("authMsg", "Ro‘yxatdan o‘tish so‘rovi qabul qilindi. Emailingizni tasdiqlang, keyin tizimga kiring.", "success");
+    }
+  }
+
+  async function signIn() {
+    if (!db) return;
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    if (!email || !password) {
+      message("authMsg", "Email va parolni kiriting.", "error");
+      return;
+    }
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if (error) {
+      message("authMsg", error.message, "error");
+      return;
+    }
+    user = data.user;
+    await loadProfile();
+  }
+
+  $("signup").addEventListener("click", signUp);
+  $("login").addEventListener("click", signIn);
+
+  $("logout").addEventListener("click", async () => {
+    if (db) await db.auth.signOut();
+    user = null;
+    profile = null;
+    setSignedIn(false);
+    message("authMsg", "Hisobdan chiqdingiz.", "success");
+  });
+
+  async function loadProfile() {
+    if (!user || !db) return;
+    const { data, error } = await db.from("profiles")
+      .select("id,full_name,role,school_name,grade")
+      .eq("id", user.id).maybeSingle();
+
+    if (error) {
+      message("globalMsg", "Profilni olishda xatolik: " + error.message, "error");
+      return;
+    }
+    if (!data) {
+      message("globalMsg", "Profil topilmadi. Supabase trigger va profiles jadvalini tekshirish kerak.", "error");
+      return;
+    }
+    profile = data;
+    setSignedIn(true);
+    $("welcome").textContent = "Xush kelibsiz, " + (profile.full_name || user.email || "foydalanuvchi") + "!";
+    $("accountInfo").textContent = "Hisob: " + user.email + " · Rol: " + profile.role;
+    $("profileName").value = profile.full_name || "";
+    $("profileSchool").value = profile.school_name || "";
+    $("profileGrade").value = profile.grade || "";
+
+    const staff = ["teacher","admin"].includes(profile.role);
+    $("addLessonCard").classList.toggle("hidden", !staff);
+    $("adminTab").classList.toggle("hidden", profile.role !== "admin");
+    $("adminStats").classList.toggle("hidden", profile.role !== "admin");
+    await loadSubjects();
+    if (profile.role === "admin") await loadStats();
+    showTab("home");
+  }
+
+  async function loadSubjects() {
+    if (!db || !user) return;
+    const { data, error } = await db.from("subjects").select("id,name,description").order("name");
+    if (error) {
+      $("subjectList").textContent = "Fanlarni yuklab bo‘lmadi: " + error.message;
+      return;
+    }
+    subjects = data || [];
+    $("subjectList").innerHTML = subjects.length
+      ? '<div class="grid">' + subjects.map(s =>
+          '<div class="lesson"><h3>' + esc(s.name) + '</h3><p class="muted">' +
+          esc(s.description || "Fan bo‘yicha darslar") + '</p></div>'
+        ).join("") + '</div>'
+      : "Fanlar hali qo‘shilmagan.";
+
+    $("lessonSubject").innerHTML = subjects.map(s =>
+      '<option value="' + esc(s.name) + '">' + esc(s.name) + '</option>'
+    ).join("");
+  }
+
+  async function loadLessons() {
+    if (!db || !user) return;
+    $("lessonList").textContent = "Yuklanmoqda...";
+    const { data, error } = await db.from("lessons")
+      .select("id,title,subject,grade,youtube_url,description,status,created_at")
+      .order("created_at", { ascending: false });
+    if (error) {
+      $("lessonList").textContent = "Darslarni yuklab bo‘lmadi: " + error.message;
+      return;
+    }
+    if (!data?.length) {
+      $("lessonList").textContent = "Hozircha ko‘rsatiladigan dars yo‘q.";
+      return;
+    }
+    $("lessonList").innerHTML = data.map(l => {
+      const id = youtubeId(l.youtube_url);
+      const video = id
+        ? '<div style="position:relative;padding-top:56.25%;margin-top:12px"><iframe title="Videodars" src="https://www.youtube-nocookie.com/embed/' +
+          encodeURIComponent(id) + '" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:10px" allowfullscreen loading="lazy"></iframe></div>'
+        : '<p><a href="' + esc(l.youtube_url) + '" target="_blank" rel="noopener noreferrer">Videoni ochish</a></p>';
+      return '<article class="lesson"><h3>' + esc(l.title) + '</h3><span class="badge">' +
+        esc(l.subject) + '</span> <span class="badge">' + esc(l.grade || "Sinf ko‘rsatilmagan") +
+        '</span><p class="muted">' + esc(l.description || "") + '</p>' + video + '</article>';
+    }).join("");
+  }
+
+  $("lessonForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!db || !user || !profile || !["teacher","admin"].includes(profile.role)) return;
+    const url = $("lessonUrl").value.trim();
+    if (!youtubeId(url)) {
+      message("lessonMsg", "Yaroqli YouTube video havolasini kiriting.", "error");
+      return;
+    }
+    const row = {
+      title: $("lessonTitle").value.trim(),
+      subject: $("lessonSubject").value,
+      grade: $("lessonGrade").value,
+      youtube_url: url,
+      description: $("lessonDescription").value.trim(),
+      created_by: user.id,
+      status: "pending"
+    };
+    const { error } = await db.from("lessons").insert(row);
+    if (error) {
+      message("lessonMsg", "Dars yuborilmadi: " + error.message, "error");
+      return;
+    }
+    $("lessonForm").reset();
+    message("lessonMsg", "Dars yuborildi. Administrator tasdig‘ini kuting.", "success");
+    await loadLessons();
+  });
+
+  $("complaintForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!db || !user || !profile) return;
+    const row = {
+      user_id: user.id,
+      school_name: profile.school_name || null,
+      kind: $("complaintKind").value,
+      title: $("complaintTitle").value.trim(),
+      body: $("complaintBody").value.trim(),
+      status: "new"
+    };
+    const { error } = await db.from("complaints").insert(row);
+    if (error) {
+      message("complaintMsg", "Murojaat yuborilmadi: " + error.message, "error");
+      return;
+    }
+    $("complaintForm").reset();
+    message("complaintMsg", "Murojaat muvaffaqiyatli yuborildi.", "success");
+    await loadMyComplaints();
+  });
+
+  async function loadMyComplaints() {
+    if (!db || !user) return;
+    const { data, error } = await db.from("complaints")
+      .select("id,title,kind,body,status,created_at")
+      .eq("user_id", user.id).order("created_at", { ascending: false });
+    if (error) {
+      $("myComplaints").textContent = "Murojaatlarni yuklab bo‘lmadi: " + error.message;
+      return;
+    }
+    $("myComplaints").innerHTML = data?.length ? data.map(c =>
+      '<div class="lesson"><h3>' + esc(c.title) + '</h3><span class="badge">' +
+      esc(c.kind) + '</span> <span class="badge">' + esc(c.status) +
+      '</span><p class="muted">' + esc(c.body) + '</p></div>'
+    ).join("") : "Siz hali murojaat yubormagansiz.";
+  }
+
+  $("saveProfile").addEventListener("click", async () => {
+    if (!db || !user || !profile) return;
+    const patch = {
+      full_name: $("profileName").value.trim(),
+      school_name: $("profileSchool").value.trim() || null,
+      grade: $("profileGrade").value.trim() || null
+    };
+    const { error } = await db.from("profiles").update(patch).eq("id", user.id);
+    if (error) {
+      message("profileMsg", "Profil saqlanmadi: " + error.message, "error");
+      return;
+    }
+    message("profileMsg", "Profil yangilandi.", "success");
+    await loadProfile();
+  });
+
+  async function loadStats() {
+    const { data, error } = await db.rpc("school_statistics");
+    if (error || !data) {
+      $("adminStats").innerHTML = '<div class="stat">Statistika</div>';
+      return;
+    }
+    const items = [
+      ["O‘quvchilar",data.students],
+      ["O‘qituvchilar",data.teachers],
+      ["Tasdiqlangan darslar",data.lessons],
+      ["Murojaatlar",data.complaints]
+    ];
+    $("adminStats").innerHTML = items.map(([name,count]) =>
+      '<div class="stat">' + esc(name) + '<strong>' + esc(count) + '</strong></div>'
+    ).join("");
+  }
+
+  async function loadAdmin() {
+    if (!db || profile?.role !== "admin") return;
+    const { data: lessons, error: lessonError } = await db.from("lessons")
+      .select("id,title,subject,grade,status,created_at")
+      .eq("status", "pending").order("created_at", { ascending: false });
+    if (lessonError) {
+      $("pendingLessons").textContent = "Darslar: " + lessonError.message;
+    } else if (!lessons?.length) {
+      $("pendingLessons").textContent = "Kutilayotgan dars yo‘q.";
+    } else {
+      $("pendingLessons").innerHTML = lessons.map(l =>
+        '<div class="lesson"><h3>' + esc(l.title) + '</h3><p class="muted">' +
+        esc(l.subject) + ' · ' + esc(l.grade || "") + '</p><div class="actions">' +
+        '<button class="btn green small" data-approve="' + esc(l.id) + '">Tasdiqlash</button>' +
+        '<button class="btn red small" data-reject="' + esc(l.id) + '">Rad etish</button></div></div>'
+      ).join("");
+    }
+
+    const { data: complaints, error: complaintError } = await db.from("complaints")
+      .select("id,title,kind,body,status,school_name,created_at")
+      .order("created_at", { ascending: false });
+    if (complaintError) {
+      $("allComplaints").textContent = "Murojaatlar: " + complaintError.message;
+    } else {
+      $("allComplaints").innerHTML = complaints?.length ? complaints.map(c =>
+        '<div class="lesson"><h3>' + esc(c.title) + '</h3><p class="muted">' +
+        esc(c.kind) + ' · ' + esc(c.school_name || "Maktab ko‘rsatilmagan") +
+        '</p><p>' + esc(c.body) + '</p><label>Holati</label><select data-status="' +
+        esc(c.id) + '"><option value="new" ' + (c.status==="new"?"selected":"") +
+        '>Yangi</option><option value="reviewing" ' + (c.status==="reviewing"?"selected":"") +
+        '>Ko‘rib chiqilmoqda</option><option value="resolved" ' + (c.status==="resolved"?"selected":"") +
+        '>Hal qilindi</option><option value="rejected" ' + (c.status==="rejected"?"selected":"") +
+        '>Rad etildi</option></select><button class="btn small" data-save-status="' +
+        esc(c.id) + '" style="margin-top:8px">Holatni saqlash</button></div>'
+      ).join("") : "Murojaatlar yo‘q.";
+    }
+  }
+
+  $("tab-admin").addEventListener("click", async e => {
+    const approve = e.target.closest("[data-approve]");
+    const reject = e.target.closest("[data-reject]");
+    const saveStatus = e.target.closest("[data-save-status]");
+    if (approve || reject) {
+      const id = (approve || reject).dataset.approve || (approve || reject).dataset.reject;
+      const status = approve ? "approved" : "rejected";
+      const { error } = await db.from("lessons").update({status}).eq("id", id);
+      if (error) alert("Xatolik: " + error.message);
+      else { await loadAdmin(); await loadLessons(); await loadStats(); }
+    }
+    if (saveStatus) {
+      const id = saveStatus.dataset.saveStatus;
+      const status = document.querySelector('[data-status="' + CSS.escape(id) + '"]').value;
+      const { error } = await db.from("complaints").update({
+        status, updated_at: new Date().toISOString()
+      }).eq("id", id);
+      if (error) alert("Xatolik: " + error.message);
+      else { await loadAdmin(); await loadStats(); }
+    }
+  });
+
+  async function init() {
+    const url = localStorage.getItem("mm_url");
+    const key = localStorage.getItem("mm_key");
+    if (url && key) {
+      $("projectUrl").value = url;
+      $("projectKey").value = key;
+      await connect();
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
