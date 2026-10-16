@@ -3,790 +3,395 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mening Maktabim</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#090d19; --panel:#11182a; --panel2:#171f34;
-  --border:#26314a; --text:#f2f5ff; --muted:#929db7;
-  --purple:#8b5cf6; --blue:#4f8cff; --green:#35d49a;
-  --red:#ff667d; --radius:18px;
-}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 80% 0%,#182044 0,transparent 38%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
-.sidebar{background:#0c1120;border-right:1px solid var(--border);padding:25px 16px;display:flex;flex-direction:column;gap:26px}
-.brand{display:flex;align-items:center;gap:12px;padding:3px 8px}
-.brand-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--blue));font-size:22px;box-shadow:0 8px 30px #7955ed40}
-.brand strong{font-size:15px;display:block}
-.brand small{color:var(--muted);font-size:11px;display:block;margin-top:5px}
-.menu-label{color:#6e7b99;font-size:10px;font-weight:800;letter-spacing:1.6px;padding:0 12px;margin-bottom:8px}
-.nav{display:flex;flex-direction:column;gap:6px}
-.nav button{border:0;background:transparent;color:#a9b4ce;padding:13px 14px;text-align:left;border-radius:12px;display:flex;gap:12px;align-items:center;transition:.2s}
-.nav button:hover,.nav button.active{background:linear-gradient(100deg,#7c5cf52b,#4f8cff13);color:white}
-.nav button.active{box-shadow:inset 3px 0 var(--purple)}
-.nav .ico{width:22px;text-align:center;font-size:17px}
-.sidebar-bottom{margin-top:auto}
-.user-card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:13px;display:flex;gap:10px;align-items:center}
-.avatar{width:37px;height:37px;display:grid;place-items:center;border-radius:12px;background:#34265c;color:#d6c5ff;font-weight:800;flex-shrink:0}
-.user-card strong{font-size:12px;display:block;overflow-wrap:anywhere}
-.user-card small{font-size:10px;color:var(--muted);display:block;margin-top:4px}
-main{min-width:0;padding:28px 34px 50px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:30px}
-.eyebrow{color:#9f8bff;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
-h1{font-size:clamp(24px,3vw,34px);letter-spacing:-1.2px;margin:8px 0}
-.subtitle{color:var(--muted);font-size:13px;line-height:1.7}
-.top-actions{display:flex;align-items:center;gap:10px}
-.status{font-size:11px;color:var(--green);background:#35d49a13;border:1px solid #35d49a35;border-radius:99px;padding:9px 12px}
-.page{display:none;animation:appear .25s ease}
-.page.active{display:block}
-@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.grid{display:grid;gap:17px}
-.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin:25px 0}
-.card{background:linear-gradient(145deg,#151d31,#101727);border:1px solid var(--border);border-radius:var(--radius);padding:21px;min-width:0}
-.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;gap:8px}
-.stat-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#8b5cf620;font-size:18px}
-.stat-number{font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:17px}
-.stat-caption{font-size:11px;color:var(--muted);margin-top:7px}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 15px}
-h2{font-size:18px;margin:0;letter-spacing:-.4px}
-h3{font-size:14px;margin:0 0 9px}
-.subjects{grid-template-columns:repeat(4,minmax(0,1fr))}
-.subject{padding:19px;transition:.2s;cursor:pointer}
-.subject:hover{transform:translateY(-3px);border-color:#8b5cf680}
-.subject-icon{width:45px;height:45px;border-radius:14px;background:#8b5cf61b;display:grid;place-items:center;font-size:22px;margin-bottom:20px}
-.subject strong{display:block;font-size:13px}
-.subject p{font-size:11px;color:var(--muted);line-height:1.6;margin:8px 0 0}
-.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.btn{border:1px solid var(--border);border-radius:11px;padding:11px 15px;background:var(--panel2);color:var(--text);font-size:12px;font-weight:700;transition:.2s}
-.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
-.btn.primary{background:linear-gradient(110deg,#7955ed,#4f7df7);border-color:transparent;box-shadow:0 7px 22px #7955ed25}
-.btn.success{background:#35d49a17;border-color:#35d49a45;color:#63e9b7}
-.btn.danger{color:#ff9aaa;border-color:#ff667d44}
-.btn.full{width:100%}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.field label{font-size:12px;color:#b9c4dd;font-weight:600}
-.field input,.field select,.field textarea{width:100%;background:#0b1120;border:1px solid #2a3550;color:var(--text);border-radius:11px;padding:12px;outline:none;min-width:0}
-.field textarea{resize:vertical;min-height:85px}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #8b5cf620}
-.field option{background:#11182a}
-.notice{padding:13px 15px;border:1px solid #4f8cff45;background:#4f8cff10;color:#b9d0ff;border-radius:12px;font-size:12px;line-height:1.7;margin-bottom:16px}
-.error{color:#ff9aaa}.success-text{color:#63e9b7}
-.auth-wrap{max-width:480px;margin:40px auto}
-.auth-logo{margin-bottom:22px}
-.question-card{margin:16px 0}
-.question-title{font-size:16px;line-height:1.8;margin:12px 0 18px}
-.answers{display:grid;gap:10px}
-.answer{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);background:#0d1424;border-radius:12px;cursor:pointer;font-size:13px;line-height:1.6}
-.answer:hover{border-color:#8b5cf680}
-.answer input{accent-color:var(--purple)}
-.answer:has(input:checked){border-color:var(--purple);background:#8b5cf617}
-.result-box{padding:17px;border-radius:14px;background:#35d49a12;border:1px solid #35d49a40;margin-top:15px}
-.list-item{padding:14px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.list-item:last-child{border-bottom:0}
-.muted{color:var(--muted);font-size:12px}
-.pill{font-size:10px;padding:6px 9px;border-radius:99px;background:#8b5cf620;color:#c9baff;white-space:nowrap}
-.mobile-menu{display:none}
-#toast{position:fixed;bottom:22px;right:22px;max-width:calc(100vw - 44px);background:#202b43;border:1px solid #455473;padding:14px 18px;border-radius:13px;font-size:13px;z-index:20;display:none;box-shadow:0 12px 35px #0005}
-footer{color:#63708d;font-size:10px;margin-top:40px;text-align:center}
-@media(max-width:1100px){.subjects{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:24px}}
-@media(max-width:720px){
- .app{grid-template-columns:1fr}
- .sidebar{display:none;position:fixed;z-index:10;inset:0 auto 0 0;width:260px;box-shadow:20px 0 60px #0008}
- .sidebar.open{display:flex}
- main{padding:20px 15px 35px}
- .mobile-menu{display:inline-block}
- .stats{grid-template-columns:1fr}
- .stats .card{padding:16px}
- .stat-number{font-size:25px;margin-top:10px}
- .subjects{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .subject{padding:14px}
- .subject-icon{margin-bottom:13px}
- .form-grid{grid-template-columns:1fr}
- .topbar{align-items:flex-start}
- .top-actions{flex-wrap:wrap;justify-content:flex-end}
- .status{display:none}
-}
+body{margin:0;background:#0b1020;color:#eef2ff;font-family:Arial,sans-serif}
+header{padding:20px;background:#171d35;border-bottom:1px solid #343d60}
+h1{margin:0;color:#a5b4fc;font-size:25px}
+main{max-width:950px;margin:24px auto;padding:16px}
+.card{background:#171d35;border:1px solid #303957;border-radius:16px;padding:20px;margin-bottom:16px}
+input,select,button{width:100%;padding:12px;margin:7px 0;border-radius:9px;border:1px solid #414b70;font-size:15px}
+input,select{background:#0d1428;color:white}
+button{background:#6366f1;color:white;border:0;font-weight:bold;cursor:pointer}
+button:hover{background:#4f46e5}
+button.secondary{background:#303957}
+.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.muted{color:#aab4d0;font-size:14px}
+#message{white-space:pre-wrap;color:#fbbf24}
+.option{display:block;text-align:left;background:#242e4d;margin:9px 0}
+.option.selected{outline:2px solid #a5b4fc}
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-icon">🎓</div>
-      <div><strong>Mening Maktabim</strong><small>TA'LIM PLATFORMASI</small></div>
-    </div>
-    <div>
-      <div class="menu-label">ASOSIY MENYU</div>
-      <nav class="nav">
-        <button class="active" data-page="home"><span class="ico">⌂</span> Bosh sahifa</button>
-        <button data-page="subjects"><span class="ico">▦</span> Fanlar</button>
-        <button data-page="tests"><span class="ico">✎</span> Testlar</button>
-        <button data-page="results"><span class="ico">▤</span> Natijalar</button>
-        <button data-page="admin" id="adminNav" hidden><span class="ico">⚙</span> Boshqaruv</button>
-      </nav>
-    </div>
-    <div class="sidebar-bottom">
-      <div class="user-card">
-        <div class="avatar" id="avatar">O</div>
-        <div style="min-width:0"><strong id="sideEmail">Mehmon</strong><small id="sideRole">Tizimga kirmagan</small></div>
-      </div>
-      <button class="btn full" id="sideLogout" style="margin-top:12px;display:none">Chiqish ↗</button>
-    </div>
-  </aside>
+<header>
+  <h1>🎓 Mening Maktabim</h1>
+  <p class="muted">Bilim ol. Test ishlа. Natijangni kuzat.</p>
+</header>
 
-  <main>
-    <header class="topbar">
-      <div>
-        <button class="btn mobile-menu" id="menuBtn">☰</button>
-        <div class="eyebrow">BILIM • RIVOJLANISH • NATIJA</div>
-        <h1 id="pageTitle">Bosh sahifa</h1>
-        <div class="subtitle" id="pageSubtitle">Bilim olish sari navbatdagi qadamingiz.</div>
-      </div>
-      <div class="top-actions"><span class="status">● Tizim tayyor</span></div>
-    </header>
+<main>
+  <p id="message"></p>
 
-    <section class="page active" id="page-home">
-      <div class="card" style="background:linear-gradient(115deg,#211c4a,#172b4a 75%,#15353f);border-color:#51418a;padding:27px">
-        <div class="eyebrow">XUSH KELIBSIZ!</div>
-        <h1 style="font-size:clamp(23px,3vw,32px);margin-top:13px">Kelajagingizni bilim bilan yarating.</h1>
-        <p class="subtitle" style="max-width:560px">Fanlarni o‘rganing, testlarni bajaring va o‘z natijalaringizni kuzatib boring. Har bir kichik qadam katta yutuqqa olib boradi.</p>
-        <div class="row" style="margin-top:22px">
-          <button class="btn primary" data-goto="subjects">Fanlarni ko‘rish →</button>
-          <button class="btn" data-goto="tests">Test ishlash</button>
+  <section id="auth" class="card">
+    <h2 id="authTitle">Tizimga kirish</h2>
+    <div id="registerFields" class="hidden">
+      <input id="fullName" placeholder="Ism va familiya">
+      <select id="registerGrade">
+        <option value="">Sinfni tanlang</option>
+      </select>
+    </div>
+    <input id="email" type="email" placeholder="Elektron pochta">
+    <input id="password" type="password" placeholder="Parol (kamida 6 belgi)">
+    <button id="authButton" onclick="authenticate()">Kirish</button>
+    <button class="secondary" onclick="toggleAuth()" id="toggleButton">
+      Yangi hisob ochish
+    </button>
+    <p class="muted">Ro‘yxatdan o‘tgandan keyin elektron pochtangni tasdiqlash talab qilinishi mumkin.</p>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="card">
+      <h2 id="welcome">Xush kelibsiz!</h2>
+      <p id="roleText" class="muted"></p>
+      <button class="secondary" onclick="logout()">Hisobdan chiqish</button>
+    </div>
+
+    <section class="card">
+      <h2>📚 Test tanlash</h2>
+      <div class="grid">
+        <div>
+          <label for="subject">Fan</label>
+          <select id="subject">
+            <option>Kimyo</option>
+            <option>Fizika</option>
+            <option>Algebra</option>
+            <option>Informatika</option>
+            <option>Biologiya</option>
+            <option>Tarix</option>
+            <option>Rus tili</option>
+            <option>Ingliz tili</option>
+          </select>
+        </div>
+        <div>
+          <label for="grade">Sinf</label>
+          <select id="grade"></select>
         </div>
       </div>
-      <div class="grid stats">
-        <div class="card"><div class="stat-top">Fanlar soni <span class="stat-icon">📚</span></div><div class="stat-number">08</div><div class="stat-caption">O‘rganish uchun fanlar</div></div>
-        <div class="card"><div class="stat-top">Mavjud testlar <span class="stat-icon">✎</span></div><div class="stat-number" id="statQuestions">—</div><div class="stat-caption">Bazadagi savollar</div></div>
-        <div class="card"><div class="stat-top">Hisob holati <span class="stat-icon">✦</span></div><div class="stat-number" id="statAccount" style="font-size:20px">Mehmon</div><div class="stat-caption" id="statAccountSub">Kirish orqali davom eting</div></div>
-      </div>
-      <div class="section-head"><h2>Fanlar bo‘limi</h2><button class="btn" data-goto="subjects">Barchasi →</button></div>
-      <div class="grid subjects" id="homeSubjects"></div>
-      <footer>MENING MAKTABIM · BILIM — ENG KATTA BOYLIK</footer>
+      <button onclick="loadTest()">Testlarni yuklash</button>
+      <p id="questionCount" class="muted"></p>
+      <div id="testArea"></div>
+      <button id="submitTest" class="hidden" onclick="submitTest()">Testni yakunlash</button>
     </section>
 
-    <section class="page" id="page-subjects">
-      <div class="section-head"><h2>Barcha fanlar</h2><span class="pill">8 ta fan</span></div>
-      <div class="grid subjects" id="allSubjects"></div>
+    <section id="adminPanel" class="card hidden">
+      <h2>🛠️ Savol boshqaruvi</h2>
+      <p class="muted">Bu bo‘lim faqat admin va o‘qituvchi hisoblariga mo‘ljallangan.</p>
+      <input id="newQuestion" placeholder="Savol matni">
+      <div class="grid">
+        <input id="optionA" placeholder="A varianti">
+        <input id="optionB" placeholder="B varianti">
+        <input id="optionC" placeholder="C varianti">
+        <input id="optionD" placeholder="D varianti">
+      </div>
+      <div class="grid">
+        <select id="newSubject">
+          <option>Kimyo</option><option>Fizika</option>
+          <option>Algebra</option><option>Informatika</option>
+          <option>Biologiya</option><option>Tarix</option>
+          <option>Rus tili</option><option>Ingliz tili</option>
+        </select>
+        <select id="newGrade"></select>
+        <select id="correctAnswer">
+          <option value="A">To‘g‘ri javob: A</option>
+          <option value="B">To‘g‘ri javob: B</option>
+          <option value="C">To‘g‘ri javob: C</option>
+          <option value="D">To‘g‘ri javob: D</option>
+        </select>
+      </div>
+      <button onclick="addQuestion()">Savolni saqlash</button>
     </section>
 
-    <section class="page" id="page-tests">
-      <div id="testStart" class="card">
-        <h2>Bilimingizni sinab ko‘ring</h2>
-        <p class="subtitle">Fan va sinfni tanlang. Test savollari bazadan yuklanadi.</p>
-        <div class="form-grid" style="margin-top:20px">
-          <div class="field"><label for="testSubject">Fan</label><select id="testSubject"></select></div>
-          <div class="field"><label for="testGrade">Sinf</label><select id="testGrade"></select></div>
-        </div>
-        <button class="btn primary" id="startTest">Testni boshlash →</button>
-        <div class="subtitle" id="testInfo" style="margin-top:15px"></div>
-      </div>
-      <div id="testArea" hidden></div>
+    <section class="card">
+      <h2>📊 Mening natijalarim</h2>
+      <div id="results" class="muted">Hozircha natijalar yo‘q.</div>
     </section>
-
-    <section class="page" id="page-results">
-      <div class="card">
-        <h2>Natijalar</h2>
-        <p class="subtitle">Ushbu brauzerda saqlangan test natijalaringiz.</p>
-        <div id="resultsList" style="margin-top:20px"></div>
-        <button class="btn" id="clearResults" style="margin-top:15px">Natijalarni tozalash</button>
-      </div>
-    </section>
-
-    <section class="page" id="page-admin">
-      <div class="notice">Bu bo‘lim faqat Supabase profilida <b>admin</b> yoki <b>teacher</b> roli bo‘lgan foydalanuvchilar uchun. Savolning to‘g‘ri javobi o‘quvchilarga ochiq ro‘yxatda yuborilmaydi.</div>
-      <div class="card">
-        <div class="section-head" style="margin-top:0"><h2>＋ Yangi savol yaratish</h2><span class="pill">Admin / O‘qituvchi</span></div>
-        <form id="questionForm">
-          <div class="form-grid">
-            <div class="field"><label for="qSubject">Fan</label><select id="qSubject" required></select></div>
-            <div class="field"><label for="qGrade">Sinf</label><select id="qGrade" required></select></div>
-          </div>
-          <div class="field"><label for="qText">Savol matni</label><textarea id="qText" required maxlength="1500" placeholder="Savolni shu yerga yozing..."></textarea></div>
-          <div class="form-grid">
-            <div class="field"><label for="optA">A varianti</label><input id="optA" required maxlength="500" placeholder="A javob"></div>
-            <div class="field"><label for="optB">B varianti</label><input id="optB" required maxlength="500" placeholder="B javob"></div>
-            <div class="field"><label for="optC">C varianti</label><input id="optC" required maxlength="500" placeholder="C javob"></div>
-            <div class="field"><label for="optD">D varianti</label><input id="optD" required maxlength="500" placeholder="D javob"></div>
-          </div>
-          <div class="field"><label for="qCorrect">To‘g‘ri javob</label><select id="qCorrect" required><option value="a">A varianti</option><option value="b">B varianti</option><option value="c">C varianti</option><option value="d">D varianti</option></select></div>
-          <button class="btn primary" type="submit" id="saveQuestion">Savolni saqlash ↗</button>
-        </form>
-      </div>
-      <div class="card" style="margin-top:18px">
-        <h2>Yordam va eslatma</h2>
-        <p class="subtitle">Savol saqlanmasa, Supabase loyihasidagi RPC funksiyasi va RLS ruxsatlarini tekshiring. Savolni tahrirlash yoki o‘chirish ushbu boshlang‘ich versiyada kiritilmagan.</p>
-      </div>
-    </section>
-
-    <section class="page" id="page-login">
-      <div class="auth-wrap">
-        <div class="card">
-          <div class="brand auth-logo"><div class="brand-icon">🎓</div><div><strong>Mening Maktabim</strong><small>XAVFSIZ KIRISH</small></div></div>
-          <h2>Hisobingizga kiring</h2>
-          <p class="subtitle">Platformadan foydalanish uchun Supabase hisobingiz orqali kiring.</p>
-          <form id="loginForm" style="margin-top:22px">
-            <div class="row" style="margin-top:14px">
-  <button class="btn full" type="button" id="showRegister">
-    Yangi hisob yaratish
-  </button>
-</div>
-
-<form id="registerForm" hidden style="margin-top:22px">
-  <h3>Ro‘yxatdan o‘tish</h3>
-
-  <div class="field">
-    <label for="regFirstName">Ism</label>
-    <input id="regFirstName" required maxlength="60"
-      autocomplete="given-name" placeholder="Ismingiz">
-  </div>
-
-  <div class="field">
-    <label for="regLastName">Familiya</label>
-    <input id="regLastName" required maxlength="60"
-      autocomplete="family-name" placeholder="Familiyangiz">
-  </div>
-
-  <div class="field">
-    <label for="regEmail">Email</label>
-    <input id="regEmail" type="email" required
-      autocomplete="email" placeholder="siz@example.com">
-  </div>
-
-  <div class="field">
-    <label for="regPassword">Parol (kamida 8 belgi)</label>
-    <input id="regPassword" type="password" required minlength="8"
-      autocomplete="new-password" placeholder="Yangi parol">
-  </div>
-
-  <div class="field">
-    <label for="regGrade">Sinf</label>
-    <select id="regGrade" required>
-      <option value="">Sinfni tanlang</option>
-      <option value="1">1-sinf</option>
-      <option value="2">2-sinf</option>
-      <option value="3">3-sinf</option>
-      <option value="4">4-sinf</option>
-      <option value="5">5-sinf</option>
-      <option value="6">6-sinf</option>
-      <option value="7">7-sinf</option>
-      <option value="8">8-sinf</option>
-      <option value="9">9-sinf</option>
-      <option value="10">10-sinf</option>
-      <option value="11">11-sinf</option>
-    </select>
-  </div>
-
-  <button class="btn primary full" type="submit" id="registerBtn">
-    Ro‘yxatdan o‘tish →
-  </button>
-
-  <button class="btn full" type="button" id="showLogin"
-    style="margin-top:10px">
-    Kirish oynasiga qaytish
-  </button>
-
-  <p id="registerMessage" class="subtitle"
-    aria-live="polite" style="margin-top:15px"></p>
-</form>
-            <div class="field"><label for="email">Elektron pochta</label><input id="email" type="email" required autocomplete="username" placeholder="siz@example.com"></div>
-            <div class="field"><label for="password">Parol</label><input id="password" type="password" required autocomplete="current-password" placeholder="Parolingiz"></div>
-            <button class="btn primary full" type="submit" id="loginBtn">Kirish →</button>
-          </form>
-          <p id="loginMessage" class="subtitle" aria-live="polite" style="margin-top:15px"></p>
-       <div class="notice" style="margin-top:18px">
-  Ro‘yxatdan o‘tish uchun ism, familiya, email, parol va sinfingizni
-  kiriting. Admin huquqi faqat vakolatli foydalanuvchilarga beriladi.
-</div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-<div id="toast" role="status" aria-live="polite"></div>
+  </section>
+</main>
 
 <script>
-"use strict";
-
-/* Supabase loyihangizning brauzerda ishlatishga mo‘ljallangan publishable kaliti. */
 const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
-
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const SUBJECTS = [
-  {name:"Kimyo",icon:"🧪",desc:"Moddalar, reaksiyalar va tajribalar"},
-  {name:"Fizika",icon:"⚛️",desc:"Tabiat qonunlari va energiya"},
-  {name:"Algebra",icon:"📐",desc:"Sonlar, tenglamalar va mantiq"},
-  {name:"Informatika",icon:"💻",desc:"Texnologiya va dasturlash"},
-  {name:"Biologiya",icon:"🌿",desc:"Tabiat va tirik organizmlar"},
-  {name:"Tarix",icon:"🏛️",desc:"O‘tmish va tarixiy voqealar"},
-  {name:"Rus tili",icon:"🔤",desc:"Til, grammatika va lug‘at"},
-  {name:"Ingliz tili",icon:"🌐",desc:"Xalqaro til va muloqot"}
-];
-
-const TITLES = {
-  home:["Bosh sahifa","Bilim olish sari navbatdagi qadamingiz."],
-  subjects:["Fanlar","O‘zingizga kerakli fanni tanlang."],
-  tests:["Testlar","Bilimingizni savollar orqali sinab ko‘ring."],
-  results:["Natijalar","Bajargan testlaringiz tarixini ko‘ring."],
-  admin:["Boshqaruv","Savollarni yaratish va ta’lim jarayonini boshqarish."],
-  login:["Kirish","Hisobingiz orqali platformaga kiring."]
-};
-
+let registering = false;
 let currentUser = null;
-let currentRole = null;
-let currentQuestions = [];
-let currentAnswers = {};
-let currentIndex = 0;
-let checkedAnswers = {};
-let testLocked = false;
-let toastTimer = null;
+let currentRole = "student";
+let questions = [];
+let answers = {};
 
-const $ = id => document.getElementById(id);
-const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
+for (let i = 1; i <= 11; i++) {
+  for (const id of ["grade", "newGrade", "registerGrade"]) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i + "-sinf";
+    document.getElementById(id).appendChild(option);
+  }
+}
+document.getElementById("registerGrade").value = "";
 
-function toast(message) {
-  const el = $("toast");
-  el.textContent = message;
-  el.style.display = "block";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.style.display = "none", 3500);
+function message(text) {
+  document.getElementById("message").textContent = text;
 }
 
-function showPage(name) {
-  if (name === "admin" && !["admin","teacher"].includes(currentRole)) {
-    toast("Bu bo‘lim uchun admin yoki o‘qituvchi ruxsati kerak.");
+function toggleAuth() {
+  registering = !registering;
+  document.getElementById("registerFields").classList.toggle("hidden", !registering);
+  document.getElementById("authTitle").textContent =
+    registering ? "Yangi hisob ochish" : "Tizimga kirish";
+  document.getElementById("authButton").textContent =
+    registering ? "Ro‘yxatdan o‘tish" : "Kirish";
+  document.getElementById("toggleButton").textContent =
+    registering ? "Hisobim bor — kirish" : "Yangi hisob ochish";
+  message("");
+}
+
+async function authenticate() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if (!email || password.length < 6) {
+    message("Emailni kiriting. Parol kamida 6 belgidan iborat bo‘lsin.");
     return;
   }
-  if (name === "login" && currentUser) name = "home";
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  const page = $("page-" + name);
-  if (page) page.classList.add("active");
-  document.querySelectorAll("[data-page]").forEach(b =>
-    b.classList.toggle("active", b.dataset.page === name)
-  );
-  $("pageTitle").textContent = TITLES[name]?.[0] || "Mening Maktabim";
-  $("pageSubtitle").textContent = TITLES[name]?.[1] || "";
-  $("sidebar").classList.remove("open");
-  if (name === "results") renderResults();
-  if (name === "tests") loadQuestionCount();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
 
-function subjectCard(s) {
-  return `<div class="card subject" tabindex="0" role="button" data-subject="${escapeHTML(s.name)}">
-    <div class="subject-icon">${s.icon}</div>
-    <strong>${escapeHTML(s.name)}</strong>
-    <p>${escapeHTML(s.desc)}</p>
-  </div>`;
-}
+  message("Tekshirilmoqda...");
+  let result;
 
-function renderSubjects() {
-  $("homeSubjects").innerHTML = SUBJECTS.slice(0,4).map(subjectCard).join("");
-  $("allSubjects").innerHTML = SUBJECTS.map(subjectCard).join("");
-  const options = SUBJECTS.map(s => `<option value="${escapeHTML(s.name)}">${escapeHTML(s.name)}</option>`).join("");
-  $("testSubject").innerHTML = options;
-  $("qSubject").innerHTML = options;
-  const grades = Array.from({length:11},(_,i)=>i+1)
-    .map(n=>`<option value="${n}">${n}-sinf</option>`).join("");
-  $("testGrade").innerHTML = grades;
-  $("qGrade").innerHTML = grades;
-}
-
-async function refreshAuth(session) {
-  try {
-    const {data:{session:latest}} = await db.auth.getSession();
-    currentUser = session?.user || latest?.user || null;
-    currentRole = null;
-
-    if (currentUser) {
-      const {data:profile,error} = await db.from("profiles")
-        .select("role").eq("id",currentUser.id).maybeSingle();
-      if (!error && profile) currentRole = profile.role;
-    }
-
-    const signedIn = !!currentUser;
-    $("adminNav").hidden = !["admin","teacher"].includes(currentRole);
-    $("sideEmail").textContent = signedIn ? currentUser.email : "Mehmon";
-    $("sideRole").textContent = currentRole || (signedIn ? "O‘quvchi" : "Tizimga kirmagan");
-    $("avatar").textContent = signedIn ? (currentUser.email || "O")[0].toUpperCase() : "O";
-    $("sideLogout").style.display = signedIn ? "block" : "none";
-    $("statAccount").textContent = signedIn ? (currentRole || "O‘quvchi") : "Mehmon";
-    $("statAccountSub").textContent = signedIn ? "Hisobga muvaffaqiyatli kirilgan" : "Kirish orqali davom eting";
-
-    if (signedIn && !currentRole) {
-      toast("Hisobingizda profil roli topilmadi. Administrator profiles jadvalini tekshirsin.");
-    }
-    if (!signedIn && $("page-admin").classList.contains("active")) showPage("home");
-  } catch (e) {
-    console.error(e);
-    toast("Hisob ma’lumotlarini olishda xatolik yuz berdi.");
-  }
-}
-
-async function loadQuestionCount() {
-  const {data,error} = await db.rpc("get_school_questions", {
-    p_subject:null, p_grade:null
-  });
-  if (!error && Array.isArray(data)) {
-    $("statQuestions").textContent = data.length;
-    $("testInfo").textContent = `${data.length} ta savol topildi. Tanlangan fan va sinf bo‘yicha test boshlang.`;
-  } else {
-    $("statQuestions").textContent = "—";
-    $("testInfo").textContent = currentUser
-      ? "Savollarni yuklab bo‘lmadi. Supabase funksiyasi va ruxsatlarini tekshiring."
-      : "Test ishlash uchun avval hisobingizga kiring.";
-  }
-}
-
-async function beginTest() {
-  if (!currentUser) {
-    showPage("login");
-    $("loginMessage").textContent = "Test ishlash uchun avval tizimga kiring.";
-    return;
-  }
-  $("startTest").disabled = true;
-  $("testInfo").textContent = "Savollar yuklanmoqda...";
-  try {
-    const {data,error} = await db.rpc("get_school_questions", {
-      p_subject:$("testSubject").value,
-      p_grade:Number($("testGrade").value)
-    });
-    if (error) throw error;
-    if (!Array.isArray(data) || data.length === 0) {
-      $("testInfo").textContent = "Bu fan va sinf uchun savollar topilmadi.";
+  if (registering) {
+    const fullName = document.getElementById("fullName").value.trim();
+    const grade = document.getElementById("registerGrade").value;
+    if (!fullName || !grade) {
+      message("Ism-familiya va sinfni kiriting.");
       return;
     }
-    currentQuestions = data;
-    currentAnswers = {};
-    checkedAnswers = {};
-    currentIndex = 0;
-    testLocked = false;
-    $("testStart").hidden = true;
-    $("testArea").hidden = false;
-    renderQuestion();
-  } catch (e) {
-    console.error(e);
-    $("testInfo").textContent = "Savollarni yuklab bo‘lmadi: " + (e.message || "noma’lum xato");
-  } finally {
-    $("startTest").disabled = false;
-  }
-}
-
-function renderQuestion() {
-  if (currentIndex >= currentQuestions.length) {
-    renderTestSummary();
-    return;
-  }
-  const q = currentQuestions[currentIndex];
-  const options = [
-    ["a",q.option_a],["b",q.option_b],["c",q.option_c],["d",q.option_d]
-  ];
-  $("testArea").innerHTML = `
-    <div class="row" style="justify-content:space-between;margin:18px 0">
-      <span class="pill">${escapeHTML(q.subject)} · ${escapeHTML(q.grade)}-sinf</span>
-      <span class="muted">${currentIndex+1} / ${currentQuestions.length}</span>
-    </div>
-    <div class="card question-card">
-      <div class="eyebrow">SAVOL ${currentIndex+1}</div>
-      <div class="question-title">${escapeHTML(q.question)}</div>
-      <div class="answers">${options.map(([letter,value])=>`
-        <label class="answer">
-          <input type="radio" name="testAnswer" value="${letter}" ${currentAnswers[q.id]===letter?"checked":""} ${testLocked?"disabled":""}>
-          <span><b>${letter.toUpperCase()}.</b> ${escapeHTML(value)}</span>
-        </label>`).join("")}
-      </div>
-      <div class="row" style="justify-content:space-between;margin-top:20px">
-        <button class="btn" id="prevQuestion" ${currentIndex===0?"disabled":""}>← Oldingi</button>
-        <button class="btn primary" id="nextQuestion">${currentIndex===currentQuestions.length-1?"Yakunlash":"Keyingi →"}</button>
-      </div>
-      <p class="muted" id="answerFeedback" style="margin-top:15px"></p>
-    </div>`;
-  $("testArea").querySelectorAll('input[name="testAnswer"]').forEach(input=>{
-    input.addEventListener("change",e=>{currentAnswers[q.id]=e.target.value;});
-  });
-  $("prevQuestion").addEventListener("click",()=>{
-    if(currentIndex>0){currentIndex--;renderQuestion();}
-  });
-  $("nextQuestion").addEventListener("click",async()=>{
-    if (!currentAnswers[q.id]) {
-      toast("Davom etishdan oldin javobni tanlang.");
-      return;
-    }
-    if(currentIndex<currentQuestions.length-1){currentIndex++;renderQuestion();}
-    else await finishTest();
-  });
-}
-
-async function finishTest() {
-  const unanswered = currentQuestions.filter(q=>!currentAnswers[q.id]);
-  if(unanswered.length){toast("Barcha savollarga javob bering.");return;}
-  const btn=$("nextQuestion");
-  if(btn){btn.disabled=true;btn.textContent="Tekshirilmoqda...";}
-  let correct=0;
-  let failed=0;
-  try {
-    for(const q of currentQuestions){
-      const {data,error}=await db.rpc("check_school_answer",{
-        p_question_id:q.id,
-        p_answer:currentAnswers[q.id]
-      });
-      if(error) throw error;
-      const isCorrect = data === true || data === "true";
-      if(isCorrect) correct++;
-      checkedAnswers[q.id]=isCorrect;
-    }
-  } catch(e) {
-    console.error(e);
-    failed=1;
-  }
-  if(failed){
-    toast("Javoblarni tekshirish amalga oshmadi. Internet va Supabase funksiyasini tekshiring.");
-    renderQuestion();
-    return;
-  }
-  testLocked=true;
-  const total=currentQuestions.length;
-  const percent=Math.round(correct/total*100);
-  const result={
-    date:new Date().toLocaleString("uz-UZ"),
-    subject:currentQuestions[0]?.subject || $("testSubject").value,
-    grade:$("testGrade").value,
-    correct,total,percent
-  };
-  try {
-    const old=JSON.parse(localStorage.getItem("schoolTestResults")||"[]");
-    old.unshift(result);
-    localStorage.setItem("schoolTestResults",JSON.stringify(old.slice(0,50)));
-  } catch(e) { console.warn("Natijani mahalliy saqlash amalga oshmadi",e); }
-  $("testArea").innerHTML=`
-    <div class="card" style="text-align:center;padding:35px 20px">
-      <div style="font-size:46px">${percent>=70?"🏆":"📘"}</div>
-      <div class="eyebrow" style="margin-top:14px">TEST YAKUNLANDI</div>
-      <h1 style="font-size:42px">${percent}%</h1>
-      <p class="subtitle">${total} ta savoldan ${correct} tasiga to‘g‘ri javob berdingiz.</p>
-      <div class="result-box"><strong>${percent>=70?"Ajoyib natija! Davom eting.":"Mashq qilishda davom eting!"}</strong></div>
-      <div class="row" style="justify-content:center;margin-top:22px">
-        <button class="btn primary" id="againTest">Yana test ishlash</button>
-        <button class="btn" id="showResults">Natijalarim</button>
-      </div>
-    </div>`;
-  $("againTest").addEventListener("click",resetTest);
-  $("showResults").addEventListener("click",()=>showPage("results"));
-  renderResults();
-}
-
-function renderTestSummary() {
-  finishTest();
-}
-
-function resetTest() {
-  $("testStart").hidden=false;
-  $("testArea").hidden=true;
-  $("testArea").innerHTML="";
-  currentQuestions=[];currentAnswers={};checkedAnswers={};currentIndex=0;testLocked=false;
-  showPage("tests");
-}
-
-function renderResults() {
-  let results=[];
-  try {results=JSON.parse(localStorage.getItem("schoolTestResults")||"[]");}
-  catch(e){results=[];}
-  $("resultsList").innerHTML=results.length?results.map(r=>`
-    <div class="list-item">
-      <div><strong style="font-size:13px">${escapeHTML(r.subject)} · ${escapeHTML(r.grade)}-sinf</strong>
-      <div class="muted" style="margin-top:6px">${escapeHTML(r.date)}</div>
-      <div class="muted" style="margin-top:5px">${r.correct}/${r.total} ta to‘g‘ri javob</div></div>
-      <span class="pill">${Number(r.percent)||0}%</span>
-    </div>`).join(""):'<p class="subtitle">Hozircha saqlangan natijalar yo‘q. Birinchi testingizni bajaring!</p>';
-  $("clearResults").disabled=!results.length;
-}
-
-async function saveQuestion(e) {
-  e.preventDefault();
-  if(!currentUser || !["admin","teacher"].includes(currentRole)){
-    toast("Savol qo‘shish uchun admin yoki o‘qituvchi ruxsati kerak.");
-    return;
-  }
-  const btn=$("saveQuestion");
-  btn.disabled=true;btn.textContent="Saqlanmoqda...";
-  try {
-    const {error}=await db.rpc("add_school_question",{
-      p_subject:$("qSubject").value,
-      p_grade:Number($("qGrade").value),
-      p_question:$("qText").value.trim(),
-      p_option_a:$("optA").value.trim(),
-      p_option_b:$("optB").value.trim(),
-      p_option_c:$("optC").value.trim(),
-      p_option_d:$("optD").value.trim(),
-      p_correct_answer:$("qCorrect").value
-    });
-    if(error) throw error;
-    $("questionForm").reset();
-    toast("Savol muvaffaqiyatli saqlandi!");
-    await loadQuestionCount();
-  } catch(e) {
-    console.error(e);
-    toast("Saqlash amalga oshmadi: " + (e.message || "Supabase xatosi"));
-  } finally {
-    btn.disabled=false;btn.textContent="Savolni saqlash ↗";
-  }
-}
-
-$("loginForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const btn=$("loginBtn"), msg=$("loginMessage");
-  btn.disabled=true;btn.textContent="Kirilmoqda...";
-  msg.textContent="";
-  try {
-    const {data,error}=await db.auth.signInWithPassword({
-      email:$("email").value.trim(),
-      password:$("password").value
-    });
-    if(error) throw error;
-    await refreshAuth(data.session);
-    msg.textContent="Muvaffaqiyatli kirdingiz.";
-    msg.className="subtitle success-text";
-    showPage("home");
-    toast("Xush kelibsiz!");
-  } catch(e) {
-    msg.textContent="Kirish amalga oshmadi. Email va parolni tekshiring.";
-    msg.className="subtitle error";
-    console.error(e);
-  } finally {
-    btn.disabled=false;btn.textContent="Kirish →";
-  }
-});
-
-async function logout() {
-  const {error}=await db.auth.signOut();
-  if(error){toast("Chiqishda xatolik yuz berdi.");return;}
-  await refreshAuth(null);
-  showPage("home");
-  toast("Hisobdan chiqdingiz.");
-}
-
-document.querySelectorAll("[data-page]").forEach(b=>
-  b.addEventListener("click",()=>showPage(b.dataset.page))
-);
-document.querySelectorAll("[data-goto]").forEach(b=>
-  b.addEventListener("click",()=>showPage(b.dataset.goto))
-);
-document.addEventListener("click",e=>{
-  const card=e.target.closest("[data-subject]");
-  if(card){
-    $("testSubject").value=card.dataset.subject;
-    showPage("tests");
-    beginTest();
-  }
-});
-document.addEventListener("keydown",e=>{
-  if((e.key==="Enter"||e.key===" ") && e.target.matches("[data-subject]")){
-    e.preventDefault();
-    e.target.click();
-  }
-});
-$("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
-$("sideLogout").addEventListener("click",logout);
-$("startTest").addEventListener("click",beginTest);
-$("questionForm").addEventListener("submit",saveQuestion);
-$("clearResults").addEventListener("click",()=>{
-  if(confirm("Barcha saqlangan natijalarni tozalaysizmi?")){
-    localStorage.removeItem("schoolTestResults");
-    renderResults();
-    toast("Natijalar tozalandi.");
-  }
-});
-
-renderSubjects();
-renderResults();
-db.auth.onAuthStateChange((_event,session)=>{
-  setTimeout(()=>refreshAuth(session),0);
-});
-refreshAuth();
-loadQuestionCount()
-  $("showRegister").addEventListener("click", () => {
-  $("loginForm").hidden = true;
-  $("registerForm").hidden = false;
-  $("loginMessage").textContent = "";
-  $("registerMessage").textContent = "";
-});
-
-$("showLogin").addEventListener("click", () => {
-  $("registerForm").hidden = true;
-  $("loginForm").hidden = false;
-});
-
-$("registerForm").addEventListener("submit", async e => {
-  e.preventDefault();
-
-  const btn = $("registerBtn");
-  const msg = $("registerMessage");
-
-  const firstName = $("regFirstName").value.trim();
-  const lastName = $("regLastName").value.trim();
-  const email = $("regEmail").value.trim();
-  const password = $("regPassword").value;
-  const grade = Number($("regGrade").value);
-
-  if (!firstName || !lastName || !email ||
-      password.length < 8 || grade < 1 || grade > 11) {
-    msg.textContent = "Barcha maydonlarni to‘g‘ri to‘ldiring.";
-    msg.className = "subtitle error";
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Hisob yaratilmoqda...";
-  msg.textContent = "";
-
-  try {
-    const { data, error } = await db.auth.signUp({
+    result = await db.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          grade: String(grade)
-        }
+        data: { full_name: fullName, grade: Number(grade) }
       }
     });
+  } else {
+    result = await db.auth.signInWithPassword({ email, password });
+  }
 
-    if (error) throw error;
+  if (result.error) {
+    message("Xatolik: " + result.error.message);
+    return;
+  }
 
-    if (data.session) {
-      await refreshAuth(data.session);
-      showPage("home");
-      toast("Ro‘yxatdan muvaffaqiyatli o‘tdingiz!");
-    } else {
-      msg.textContent =
-        "Hisob yaratildi! Emailingizni tekshiring va tasdiqlash havolasi orqali hisobingizni faollashtiring.";
-      msg.className = "subtitle success-text";
+  if (registering && !result.data.session) {
+    message("Hisob yaratildi. Emailingizni tasdiqlang, keyin tizimga kiring.");
+    return;
+  }
+
+  currentUser = result.data.user;
+  await showApp();
+}
+
+async function showApp() {
+  if (!currentUser) return;
+  document.getElementById("auth").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+
+  const meta = currentUser.user_metadata || {};
+  document.getElementById("welcome").textContent =
+    "Xush kelibsiz, " + (meta.full_name || currentUser.email);
+
+  const { data: profile, error } = await db
+    .from("profiles")
+    .select("role")
+    .eq("id", currentUser.id)
+    .maybeSingle();
+
+  currentRole = !error && profile?.role ? profile.role : "student";
+  document.getElementById("roleText").textContent =
+    "Hisob turi: " + currentRole;
+
+  document.getElementById("adminPanel").classList.toggle(
+    "hidden", !["admin", "teacher"].includes(currentRole)
+  );
+  renderResults();
+  message("");
+}
+
+async function logout() {
+  await db.auth.signOut();
+  currentUser = null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("auth").classList.remove("hidden");
+  message("Hisobdan chiqdingiz.");
+}
+
+async function loadTest() {
+  if (!currentUser) return;
+  message("Savollar yuklanmoqda...");
+  document.getElementById("testArea").innerHTML = "";
+  document.getElementById("submitTest").classList.add("hidden");
+  questions = [];
+  answers = {};
+
+  const subject = document.getElementById("subject").value;
+  const grade = Number(document.getElementById("grade").value);
+
+  const { data, error } = await db.rpc("get_school_questions", {
+    p_subject: subject,
+    p_grade: grade
+  });
+
+  if (error) {
+    message("Savollarni olishda xatolik: " + error.message);
+    return;
+  }
+
+  questions = data || [];
+  document.getElementById("questionCount").textContent =
+    "Topilgan savollar: " + questions.length;
+
+  if (!questions.length) {
+    message("Bu fan va sinf uchun savollar bazada hali mavjud emas.");
+    return;
+  }
+
+  questions.forEach((q, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const title = document.createElement("h3");
+    title.textContent = (index + 1) + ". " + q.question;
+    card.appendChild(title);
+
+    for (const letter of ["A", "B", "C", "D"]) {
+      const value = q["option_" + letter.toLowerCase()];
+      if (value == null) continue;
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = letter + ") " + value;
+      btn.onclick = () => {
+        answers[q.id] = letter;
+        [...card.querySelectorAll("button")].forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+      };
+      card.appendChild(btn);
     }
-  } catch (error) {
-    console.error(error);
-    msg.textContent =
-      "Ro‘yxatdan o‘tib bo‘lmadi: " +
-      (error.message || "Xatolik yuz berdi.");
-    msg.className = "subtitle error";
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Ro‘yxatdan o‘tish →";
+    document.getElementById("testArea").appendChild(card);
+  });
+
+  document.getElementById("submitTest").classList.remove("hidden");
+  message("");
+}
+
+async function submitTest() {
+  if (!questions.length) return;
+  let correct = 0;
+  let checked = 0;
+
+  for (const q of questions) {
+    const answer = answers[q.id];
+    if (!answer) continue;
+    const { data, error } = await db.rpc("check_school_answer", {
+      p_question_id: q.id,
+      p_answer: answer
+    });
+    if (!error) {
+      checked++;
+      if (data === true) correct++;
+    }
+  }
+
+  const percent = checked ? Math.round(correct / questions.length * 100) : 0;
+  const record = {
+    date: new Date().toLocaleString("uz-UZ"),
+    subject: document.getElementById("subject").value,
+    grade: document.getElementById("grade").value,
+    total: questions.length,
+    answered: checked,
+    correct,
+    percent
+  };
+
+  const key = "school_results_" + currentUser.id;
+  const history = JSON.parse(localStorage.getItem(key) || "[]");
+  history.unshift(record);
+  localStorage.setItem(key, JSON.stringify(history.slice(0, 50)));
+  message(`Natija: ${correct}/${questions.length}. Javob berilgan: ${checked}. Foiz: ${percent}%`);
+  renderResults();
+}
+
+function renderResults() {
+  if (!currentUser) return;
+  const history = JSON.parse(
+    localStorage.getItem("school_results_" + currentUser.id) || "[]"
+  );
+  const target = document.getElementById("results");
+  target.textContent = "";
+  if (!history.length) {
+    target.textContent = "Hozircha natijalar yo‘q.";
+    return;
+  }
+  history.forEach(r => {
+    const p = document.createElement("p");
+    p.textContent = `${r.date} — ${r.subject}, ${r.grade}-sinf: ${r.correct}/${r.total} (${r.percent}%)`;
+    target.appendChild(p);
+  });
+}
+
+async function addQuestion() {
+  if (!["admin", "teacher"].includes(currentRole)) {
+    message("Bu amal uchun ruxsat yo‘q.");
+    return;
+  }
+
+  const question = document.getElementById("newQuestion").value.trim();
+  const options = ["A", "B", "C", "D"].map(letter =>
+    document.getElementById("option" + letter).value.trim()
+  );
+
+  if (!question || options.some(x => !x)) {
+    message("Savol va barcha to‘rtta variantni to‘ldiring.");
+    return;
+  }
+
+  const { error } = await db.rpc("add_school_question", {
+    p_subject: document.getElementById("newSubject").value,
+    p_grade: Number(document.getElementById("newGrade").value),
+    p_question: question,
+    p_option_a: options[0],
+    p_option_b: options[1],
+    p_option_c: options[2],
+    p_option_d: options[3],
+    p_correct_answer: document.getElementById("correctAnswer").value
+  });
+
+  if (error) {
+    message("Savol saqlanmadi: " + error.message);
+    return;
+  }
+
+  document.getElementById("newQuestion").value = "";
+  ["A", "B", "C", "D"].forEach(l =>
+    document.getElementById("option" + l).value = ""
+  );
+  message("Savol muvaffaqiyatli saqlandi.");
+}
+
+db.auth.getSession().then(({ data }) => {
+  if (data.session) {
+    currentUser = data.session.user;
+    showApp();
   }
 });
-</script>
 </script>
 </body>
 </html>
