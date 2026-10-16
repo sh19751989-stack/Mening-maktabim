@@ -105,14 +105,14 @@ a{color:var(--blue)}
 </div>
 <label>Parol (kamida 6 belgi)</label>
 <input id="password" type="password" minlength="6" autocomplete="current-password" placeholder="Parolingiz" required>
-<div class="actions">
-      <button id="login" class="btn">Kirish</button>
-      <button id="signup" class="btn light">Ro‘yxatdan o‘tish</button>
-    </div>
-    <div id="authMsg" class="notice hidden"></div>
-  </section>
 
-  <section id="app" class="hidden">
+<div class="actions">
+  <button id="login" class="btn">Kirish</button>
+  <button id="signup" class="btn light">Ro‘yxatdan o‘tish</button>
+  <button id="forgotPassword" type="button" class="btn light">Parolni unutdingizmi?</button>
+</div>
+<div id="authMsg" class="notice hidden"></div>
+
     <div class="card">
       <h2 id="welcome">Xush kelibsiz!</h2>
       <p id="accountInfo" class="muted"></p>
@@ -394,6 +394,32 @@ async function signUp() {
   }
 
   $("signup").addEventListener("click", signUp);
+  
+$("forgotPassword").addEventListener("click", async () => {
+  const email = $("email").value.trim();
+
+  if (!db) {
+    message("authMsg", "Avval bazaga ulaning.", "error");
+    return;
+  }
+
+  if (!email) {
+    message("authMsg", "Avval email manzilingizni kiriting.", "error");
+    return;
+  }
+
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if (error) {
+    message("authMsg", "Xatolik: " + error.message, "error");
+    return;
+  }
+
+  message("authMsg", "Emailingizni tekshiring. Parolni tiklash havolasi yuborildi.", "success");
+});
+
   $("login").addEventListener("click", signIn);
 
   $("logout").addEventListener("click", async () => {
