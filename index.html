@@ -2,294 +2,248 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mening Maktabim</title>
-  <style>
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
-    header{background:#1746a2;color:white;padding:22px;text-align:center}
-    header h1{margin:0 0 8px}
-    main{max-width:900px;margin:25px auto;padding:16px}
-    .card{background:white;padding:22px;border-radius:16px;margin-bottom:18px;box-shadow:0 5px 20px #152b4b12}
-    input,select,button{width:100%;padding:12px;margin:7px 0;border-radius:9px;border:1px solid #ccd5e1;font-size:16px}
-    button{background:#1746a2;color:white;border:0;cursor:pointer;font-weight:bold}
-    button:hover{background:#10377f}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-    .subject{min-height:65px}
-    .hidden{display:none}
-    #message{white-space:pre-wrap;overflow-wrap:anywhere}
-    .muted{color:#64748b;font-size:14px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mening Maktabim</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef3fb;color:#18233b}
+header{background:linear-gradient(120deg,#102b65,#2463cf);color:white;padding:24px;text-align:center}
+header h1{margin:0 0 8px}.wrap{max-width:1050px;margin:22px auto;padding:12px}
+.card{background:white;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #142a4a12}
+input,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #d3dbea;border-radius:9px;font-size:15px}
+button{background:#2058bd;color:white;border:0;font-weight:bold;cursor:pointer}
+button:hover{background:#153e8b}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.hidden{display:none!important}.muted{color:#64748b;font-size:14px}.danger{color:#b91c1c}.success{color:#15803d}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.badge{display:inline-block;background:#e5edff;color:#1746a2;border-radius:20px;padding:6px 12px}
+</style>
 </head>
 <body>
 <header>
-  <h1>🎓 Mening Maktabim</h1>
-  <p>Bilim ol — kelajagingni yarat!</p>
+<h1>🎓 MENING MAKTABIM</h1>
+<p>O‘quvchi • O‘qituvchi • Administrator</p>
 </header>
 
-<main>
-  <div class="card">
-    <h2>Sayt sozlamasi</h2>
-    <p class="muted">Supabase loyihang URL manzili va publishable key qiymatini kiriting.</p>
-    <input id="projectUrl" placeholder="https://PROJECT_ID.supabase.co">
-    <input id="publicKey" placeholder="Supabase publishable key">
-    <button id="connectBtn">Supabase'ga ulanish</button>
-    <p id="message"></p>
-  </div>
+<div class="wrap">
+<div class="card" id="auth">
+<h2>🔐 Hisobga kirish</h2>
+<label>Hisob turi</label>
+<select id="role">
+<option value="student">O‘quvchi</option>
+<option value="teacher">O‘qituvchi</option>
+<option value="admin">Administrator</option>
+</select>
+<input id="name" placeholder="Ism va familiya">
+<input id="school" placeholder="Maktab nomi">
+<input id="schoolNumber" placeholder="Maktab raqami (masalan, 12)">
+<label>Sinf</label>
+<select id="grade">
+<option value="">Sinfni tanlang</option>
+<option>1</option><option>2</option><option>3</option><option>4</option>
+<option>5</option><option>6</option><option>7</option><option>8</option>
+<option>9</option><option>10</option><option>11</option>
+</select>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Parol (kamida 6 belgi)">
+<button id="signup">Ro‘yxatdan o‘tish</button>
+<button id="login">Kirish</button>
+<p class="muted">O‘qituvchi va administrator huquqlari ma’lumotlar bazasida xavfsiz tekshirilishi kerak. Bu tanlovning o‘zi ularga maxsus huquq bermaydi.</p>
+</div>
 
-  <section id="auth" class="card">
-    <h2>Hisobga kirish</h2>
-    <input id="email" type="email" placeholder="Email manziling">
-    <input id="password" type="password" placeholder="Parol">
-    <button id="loginBtn">Kirish</button>
-    <hr>
-    <h3>Yangi hisob yaratish</h3>
-    <input id="fullName" placeholder="Ism va familiya">
-    <input id="school" placeholder="Maktab nomi">
-    <select id="grade">
-      <option value="">Sinfni tanlang</option>
-      <option>1</option><option>2</option><option>3</option>
-      <option>4</option><option>5</option><option>6</option>
-      <option>7</option><option>8</option><option>9</option>
-      <option>10</option><option>11</option>
-    </select>
-    <button id="signupBtn">Ro‘yxatdan o‘tish</button>
-    <button id="logoutBtn" class="hidden">Chiqish</button>
-  </section>
+<div id="app" class="hidden">
+<div class="card">
+<div class="top">
+<div><h2 id="welcome">Xush kelibsiz!</h2><span class="badge" id="roleBadge"></span></div>
+<button id="logout" style="width:auto">Chiqish</button>
+</div>
+<p id="profileInfo"></p>
+</div>
 
-  <section id="dashboard" class="card hidden">
-    <h2 id="welcome">Xush kelibsiz!</h2>
-    <p>Fanlardan birini tanlang:</p>
-    <div class="grid" id="subjects"></div>
-    <div id="quizArea"></div>
-  </section>
-</main>
+<div class="card" id="schoolPanel">
+<h2>🏫 Maktab va sinf</h2>
+<div class="grid">
+<div><label>Maktab</label><input id="editSchool" placeholder="Maktab nomi"></div>
+<div><label>Maktab raqami</label><input id="editSchoolNumber" placeholder="Maktab raqami"></div>
+<div><label>Sinf</label><select id="editGrade">
+<option value="">Tanlang</option>
+<option>1</option><option>2</option><option>3</option><option>4</option>
+<option>5</option><option>6</option><option>7</option><option>8</option>
+<option>9</option><option>10</option><option>11</option>
+</select></div>
+</div>
+<button id="saveProfile">Ma’lumotlarni saqlash</button>
+</div>
+
+<div class="card">
+<h2>📚 Fanlar</h2>
+<p class="muted">Tanlangan fan bo‘yicha mavjud namunaviy testlarni ishlang.</p>
+<div class="grid" id="subjects"></div>
+<div id="quiz"></div>
+</div>
+
+<div class="card" id="teacherPanel">
+<h2>👨‍🏫 O‘qituvchi bo‘limi</h2>
+<p>Bu bo‘limni faqat bazada o‘qituvchi sifatida tasdiqlangan foydalanuvchilar uchun himoyalash lozim.</p>
+<input id="classForTeacher" placeholder="Sinf haqida ma’lumot">
+<input id="lessonForTeacher" placeholder="Dars yoki fan nomi">
+<button id="saveLesson">Dars ma’lumotini tayyorlash</button>
+<p id="lessonMessage"></p>
+</div>
+
+<div class="card" id="adminPanel">
+<h2>🛡️ Administrator bo‘limi</h2>
+<p>Foydalanuvchilar rollarini faqat himoyalangan server va ruxsatlar orqali boshqarish mumkin.</p>
+<p class="muted">Ushbu sahifa o‘z-o‘zidan administrator vakolatini bermaydi.</p>
+</div>
+
+<div class="card">
+<h2>📊 Test natijasi</h2>
+<p id="result">Hali test ishlanmadi.</p>
+</div>
+</div>
+<p id="message"></p>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
-  const $ = id => document.getElementById(id);
-  let db = null;
-  let currentQuestions = [];
-  let currentIndex = 0;
-  let score = 0;
+"use strict";
 
-  const subjects = [
-    "Kimyo","Fizika","Algebra","Informatika",
-    "Biologiya","Tarix","Rus tili","Ingliz tili"
-  ];
+// O‘ZINGNING SUPABASE LOYIHANGDAGI QIYMATLARNI YOZ.
+const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
 
-  // Namuna savollar. To‘liq 8 800 ta savol bu namunaga kiritilmagan.
-  const samples = {
-    "Algebra":[
-      {q:"2 + 3 = ?",a:["4","5","6","7"],correct:1},
-      {q:"5 × 4 = ?",a:["9","15","20","25"],correct:2}
-    ],
-    "Ingliz tili":[
-      {q:"'Kitob' ingliz tilida qanday?",a:["Pen","Book","Door","Desk"],correct:1},
-      {q:"'Apple' so‘zining tarjimasi?",a:["Olma","Nok","Uzum","Anor"],correct:0}
-    ],
-    "Kimyo":[
-      {q:"Suvning formulasi qaysi?",a:["CO₂","O₂","H₂O","NaCl"],correct:2}
-    ],
-    "Fizika":[
-      {q:"Kuchning SI birligi?",a:["Joul","Nyuton","Vatt","Metr"],correct:1}
-    ],
-    "Informatika":[
-      {q:"Kompyuterning asosiy hisoblash qurilmasi?",a:["Monitor","Sichqoncha","Protsessor","Printer"],correct:2}
-    ],
-    "Biologiya":[
-      {q:"O‘simliklar fotosintezda nimadan foydalanadi?",a:["Quyosh nuridan","Plastmassadan","Temirdan","Qumdan"],correct:0}
-    ],
-    "Tarix":[
-      {q:"O‘zbekiston mustaqilligi qaysi yilda e’lon qilingan?",a:["1989","1991","1995","2000"],correct:1}
-    ],
-    "Rus tili":[
-      {q:"'Книга' so‘zining o‘zbekcha ma’nosi?",a:["Daftar","Qalam","Kitob","Maktab"],correct:2}
-    ]
-  };
+const $ = id => document.getElementById(id);
+let db = null, user = null, profile = null, activeQuestions = [], questionIndex = 0, points = 0;
 
-  function showMessage(text, error = false) {
-    $("message").textContent = text;
-    $("message").style.color = error ? "#b91c1c" : "#166534";
-  }
+const subjects = ["Kimyo","Fizika","Algebra","Informatika","Biologiya","Tarix","Rus tili","Ingliz tili"];
+const tests = {
+"Kimyo":[{q:"Suv formulasi qaysi?",a:["CO₂","H₂O","O₂","NaCl"],c:1}],
+"Fizika":[{q:"Kuchning SI birligi?",a:["Joul","Vatt","Nyuton","Metr"],c:2}],
+"Algebra":[{q:"7 + 5 = ?",a:["10","11","12","13"],c:2}],
+"Informatika":[{q:"Kompyuter hisoblashlarini bajaruvchi qurilma?",a:["Monitor","Protsessor","Printer","Klaviatura"],c:1}],
+"Biologiya":[{q:"O‘simlikning suv shimuvchi qismi?",a:["Ildiz","Gul","Meva","Barg"],c:0}],
+"Tarix":[{q:"O‘zbekiston mustaqilligi qaysi yilda e’lon qilingan?",a:["1989","1991","1995","2001"],c:1}],
+"Rus tili":[{q:"«Книга» so‘zining tarjimasi?",a:["Qalam","Daftar","Kitob","Eshik"],c:2}],
+"Ingliz tili":[{q:"«Book» so‘zining tarjimasi?",a:["Kitob","Olma","Maktab","Suv"],c:0}]
+};
 
-  function getClient() {
-    const url = $("projectUrl").value.trim().replace(/\/+$/, "");
-    const key = $("publicKey").value.trim();
-
-    if (!/^https:\/\/[a-zA-Z0-9-]+\.supabase\.co$/.test(url)) {
-      throw new Error("Supabase URL noto‘g‘ri. Masalan: https://abcdefgh.supabase.co");
-    }
-    if (!key) throw new Error("Supabase publishable key kiritilmagan.");
-    if (!window.supabase?.createClient) {
-      throw new Error("Supabase kutubxonasi yuklanmadi. Internetni tekshiring.");
-    }
-    return window.supabase.createClient(url, key);
-  }
-
-  $("connectBtn").addEventListener("click", async () => {
-    try {
-      db = getClient();
-      const { error } = await db.auth.getSession();
-      if (error) throw error;
-      localStorage.setItem("school_project_url", $("projectUrl").value.trim());
-      localStorage.setItem("school_public_key", $("publicKey").value.trim());
-      showMessage("Supabase bilan ulanish tayyor.");
-      await restoreSession();
-    } catch (e) {
-      showMessage(e.message || String(e), true);
-    }
-  });
-
-  async function restoreSession() {
-    if (!db) return;
-    const { data, error } = await db.auth.getSession();
-    if (error) throw error;
-    if (data.session) showDashboard(data.session.user);
-  }
-
-  function showDashboard(user) {
-    $("auth").classList.add("hidden");
-    $("dashboard").classList.remove("hidden");
-    $("logoutBtn").classList.remove("hidden");
-    $("welcome").textContent = "Xush kelibsiz! " + (user.email || "");
-    $("subjects").replaceChildren();
-
-    subjects.forEach(subject => {
-      const button = document.createElement("button");
-      button.className = "subject";
-      button.textContent = subject;
-      button.addEventListener("click", () => startQuiz(subject));
-      $("subjects").appendChild(button);
-    });
-  }
-
-  $("loginBtn").addEventListener("click", async () => {
-    try {
-      if (!db) db = getClient();
-      const email = $("email").value.trim();
-      const password = $("password").value;
-      if (!email || !password) throw new Error("Email va parolni kiriting.");
-      const { data, error } = await db.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      showDashboard(data.user);
-      showMessage("Hisobga muvaffaqiyatli kirildi.");
-    } catch (e) {
-      showMessage(e.message || String(e), true);
-    }
-  });
-
-  $("signupBtn").addEventListener("click", async () => {
-    try {
-      if (!db) db = getClient();
-      const fullName = $("fullName").value.trim();
-      const school = $("school").value.trim();
-      const grade = $("grade").value;
-      const email = $("email").value.trim();
-      const password = $("password").value;
-
-      if (!fullName || !school || !grade || !email || !password) {
-        throw new Error("Barcha maydonlarni to‘ldiring.");
-      }
-      if (password.length < 6) throw new Error("Parol kamida 6 belgidan iborat bo‘lsin.");
-
-      const { data, error } = await db.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            school_name: school,
-            grade: grade,
-            requested_role: "student"
-          }
-        }
-      });
-      if (error) throw error;
-
-      if (data.session) {
-        showDashboard(data.user);
-        showMessage("Hisob yaratildi.");
-      } else {
-        showMessage("Hisob yaratildi. Emailingizni tasdiqlang, so‘ng kiring.");
-      }
-    } catch (e) {
-      showMessage(e.message || String(e), true);
-    }
-  });
-
-  $("logoutBtn").addEventListener("click", async () => {
-    try {
-      if (db) {
-        const { error } = await db.auth.signOut();
-        if (error) throw error;
-      }
-      $("dashboard").classList.add("hidden");
-      $("auth").classList.remove("hidden");
-      $("logoutBtn").classList.add("hidden");
-      showMessage("Hisobdan chiqildi.");
-    } catch (e) {
-      showMessage(e.message || String(e), true);
-    }
-  });
-
-  function startQuiz(subject) {
-    currentQuestions = samples[subject] || [];
-    currentIndex = 0;
-    score = 0;
-    if (!currentQuestions.length) {
-      $("quizArea").textContent = subject + ": savollar hali qo‘shilmagan.";
-      return;
-    }
-    renderQuestion(subject);
-  }
-
-  function renderQuestion(subject) {
-    const area = $("quizArea");
-    area.replaceChildren();
-
-    if (currentIndex >= currentQuestions.length) {
-      const result = document.createElement("h3");
-      result.textContent = "Natija: " + score + " / " + currentQuestions.length;
-      area.appendChild(result);
-      return;
-    }
-
-    const item = currentQuestions[currentIndex];
-    const title = document.createElement("h3");
-    title.textContent = subject + " — " + (currentIndex + 1) + "-savol";
-    area.appendChild(title);
-
-    const question = document.createElement("p");
-    question.textContent = item.q;
-    area.appendChild(question);
-
-    item.a.forEach((answer, index) => {
-      const button = document.createElement("button");
-      button.textContent = answer;
-      button.addEventListener("click", () => {
-        if (index === item.correct) score++;
-        currentIndex++;
-        renderQuestion(subject);
-      });
-      area.appendChild(button);
-    });
-  }
-
-  (async () => {
-    $("projectUrl").value = localStorage.getItem("school_project_url") || "";
-    $("publicKey").value = localStorage.getItem("school_public_key") || "";
-    if ($("projectUrl").value && $("publicKey").value) {
-      try {
-        db = getClient();
-        await restoreSession();
-      } catch (e) {
-        showMessage(e.message || String(e), true);
-      }
-    }
-  })();
+function msg(text, bad=false){
+$("message").textContent=text;
+$("message").className=bad?"danger":"success";
+}
+function connect(){
+if(!window.supabase) throw Error("Supabase kutubxonasi yuklanmadi. Internetni tekshiring.");
+if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(SUPABASE_URL)) throw Error("Supabase URL noto‘g‘ri.");
+if(!SUPABASE_KEY || SUPABASE_KEY.includes("PASTE")) throw Error("Supabase publishable keyni tekshiring.");
+if(!db) db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+return db;
+}
+function chosenRole(){
+return $("role").value;
+}
+function showApp(u,p){
+user=u;profile=p||{};
+$("auth").classList.add("hidden");
+$("app").classList.remove("hidden");
+const roleNames={student:"O‘quvchi",teacher:"O‘qituvchi",admin:"Administrator"};
+const actualRole=profile.role||"student";
+$("welcome").textContent="Xush kelibsiz, "+(profile.full_name||u.email||"foydalanuvchi");
+$("roleBadge").textContent=roleNames[actualRole]||"O‘quvchi";
+$("profileInfo").textContent=
+"Maktab: "+(profile.school_name||"Kiritilmagan")+
+" | Maktab raqami: "+(profile.school_number||"—")+
+" | Sinf: "+(profile.grade||"—");
+$("editSchool").value=profile.school_name||"";
+$("editSchoolNumber").value=profile.school_number||"";
+$("editGrade").value=profile.grade||"";
+$("teacherPanel").classList.toggle("hidden",actualRole!=="teacher");
+$("adminPanel").classList.toggle("hidden",actualRole!=="admin");
+$("subjects").replaceChildren();
+subjects.forEach(s=>{
+const b=document.createElement("button");
+b.textContent=s;
+b.addEventListener("click",()=>startTest(s));
+$("subjects").appendChild(b);
+});
+}
+async function loadProfile(u){
+const {data,error}=await connect().from("profiles").select("*").eq("id",u.id).maybeSingle();
+if(error) throw error;
+return data||{id:u.id,full_name:u.user_metadata?.full_name||"",role:"student"};
+}
+$("signup").addEventListener("click",async()=>{
+try{
+const client=connect();
+const fullName=$("name").value.trim(), school=$("school").value.trim(),
+schoolNumber=$("schoolNumber").value.trim(), grade=$("grade").value,
+email=$("email").value.trim(), password=$("password").value;
+if(!fullName||!school||!schoolNumber||!grade||!email||!password)
+throw Error("Ism, maktab, maktab raqami, sinf, email va parolni kiriting.");
+if(password.length<6) throw Error("Parol kamida 6 belgidan iborat bo‘lsin.");
+if(chosenRole()!=="student") throw Error("O‘qituvchi yoki administrator hisobini administrator tasdiqlashi kerak. O‘quvchi sifatida ro‘yxatdan o‘ting.");
+const {data,error}=await client.auth.signUp({
+email,password,
+options:{data:{full_name:fullName,school_name:school,school_number:schoolNumber,grade,requested_role:"student"}}
+});
+if(error) throw error;
+if(data.session){
+const p=await loadProfile(data.user);showApp(data.user,p);
+msg("Hisob yaratildi.");
+}else msg("Hisob yaratildi. Emailni tasdiqlab, keyin kiring.");
+}catch(e){msg(e.message||String(e),true);}
+});
+$("login").addEventListener("click",async()=>{
+try{
+const client=connect(),email=$("email").value.trim(),password=$("password").value;
+if(!email||!password) throw Error("Email va parolni kiriting.");
+const {data,error}=await client.auth.signInWithPassword({email,password});
+if(error) throw error;
+const p=await loadProfile(data.user);
+showApp(data.user,p);msg("Tizimga kirdingiz.");
+}catch(e){msg(e.message||String(e),true);}
+});
+$("logout").addEventListener("click",async()=>{
+try{const {error}=await connect().auth.signOut();if(error)throw error;
+user=null;profile=null;$("app").classList.add("hidden");$("auth").classList.remove("hidden");msg("Hisobdan chiqdingiz.");
+}catch(e){msg(e.message||String(e),true);}
+});
+$("saveProfile").addEventListener("click",async()=>{
+try{
+if(!user) throw Error("Avval hisobga kiring.");
+const patch={school_name:$("editSchool").value.trim(),school_number:$("editSchoolNumber").value.trim(),grade:$("editGrade").value};
+const {error}=await connect().from("profiles").update(patch).eq("id",user.id);
+if(error)throw error;
+profile={...profile,...patch};showApp(user,profile);msg("Maktab va sinf ma’lumotlari saqlandi.");
+}catch(e){msg("Saqlash amalga oshmadi: "+(e.message||String(e)),true);}
+});
+$("saveLesson").addEventListener("click",()=>{
+$("lessonMessage").textContent="Dars: "+$("lessonForTeacher").value+" | Sinf: "+$("classForTeacher").value+" (hozircha faqat sahifada ko‘rsatiladi).";
+});
+function startTest(subject){
+activeQuestions=tests[subject]||[];questionIndex=0;points=0;
+if(!activeQuestions.length){$("quiz").textContent="Bu fan uchun savollar kiritilmagan.";return;}
+renderQuestion(subject);
+}
+function renderQuestion(subject){
+const area=$("quiz");area.replaceChildren();
+if(questionIndex>=activeQuestions.length){
+area.textContent="Test tugadi! Natija: "+points+"/"+activeQuestions.length;
+$("result").textContent=subject+": "+points+"/"+activeQuestions.length;
+return;
+}
+const q=activeQuestions[questionIndex],h=document.createElement("h3");
+h.textContent=subject+" — "+(questionIndex+1)+"-savol: "+q.q;area.appendChild(h);
+q.a.forEach((answer,i)=>{
+const b=document.createElement("button");b.textContent=answer;
+b.addEventListener("click",()=>{if(i===q.c)points++;questionIndex++;renderQuestion(subject);});
+area.appendChild(b);
+});
+}
+connect().auth.getSession().then(async({data,error})=>{
+if(error)throw error;
+if(data.session){const p=await loadProfile(data.session.user);showApp(data.session.user,p);}
+}).catch(e=>msg(e.message||String(e),true));
 })();
 </script>
 </body>
