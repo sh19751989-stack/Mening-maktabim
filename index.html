@@ -421,32 +421,43 @@ async function signUp() {
 }
 
   async function signIn() {
-    if (!db) return;
-    const email = $("email").value.trim();
-    const password = $("password").value;
-    if (!email || !password) {
-      message("authMsg", "Email va parolni kiriting.", "error");
-      return;
-    }
-    const { data, error } = await db.auth.signInWithPassword({ email, password });
-    if (error) {
-      message("authMsg", error.message, "error");
-      return;
-    }
-    user = data.user;
-    await loadProfile();
-  }
+  if (!db) return;
 
-  $("signup").addEventListener("click", signUp);
-  
-$("forgotPassword").addEventListener("click", async () => {
-  const email = $("email").value.trim();
+  const username = $("username").value.trim().toLowerCase();
+  const password = $("password").value;
 
-  if (!db) {
-    message("authMsg", "Avval bazaga ulaning.", "error");
+  if (!username || !password) {
+    message("authMsg", "Username va parolni kiriting.", "error");
     return;
   }
 
+  const { data, error } = await db.functions.invoke("username-login", {
+    body: { username, password }
+  });
+
+  if (error || !data?.session) {
+    message(
+      "authMsg",
+      data?.error || error?.message || "Username yoki parol noto‘g‘ri.",
+      "error"
+    );
+    return;
+  }
+
+  const { data: sessionData, error: sessionError } =
+    await db.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token
+    });
+
+  if (sessionError) {
+    message("authMsg", sessionError.message, "error");
+    return;
+  }
+
+  user = sessionData.user;
+  await loadProfile();
+}
   if (!email) {
     message("authMsg", "Avval email manzilingizni kiriting.", "error");
     return;
