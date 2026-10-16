@@ -133,6 +133,41 @@ form .btn{margin-top:14px}
     <div class="profile"><div class="usertext"><b id="userName">O‘quvchi</b><div class="muted">Mustaqil o‘rganuvchi</div></div><div class="avatar">👨‍🎓</div></div>
   </div>
 
+<div class="card" id="authPanel" style="margin-bottom:18px">
+  <h2>🔐 Hisobga kirish</h2>
+  <p>Email va parolingiz bilan kiring.</p>
+
+  <form id="loginForm">
+    <label for="loginEmail">Email</label>
+    <input
+      id="loginEmail"
+      type="email"
+      required
+      autocomplete="username"
+      style="width:100%;margin-bottom:12px"
+    >
+
+    <label for="loginPassword">Parol</label>
+    <input
+      id="loginPassword"
+      type="password"
+      required
+      autocomplete="current-password"
+      style="width:100%;margin-bottom:12px"
+    >
+
+    <button class="btn" type="submit">Kirish</button>
+    <button
+      class="btn secondary"
+      type="button"
+      id="logoutButton"
+      style="display:none"
+    >Chiqish</button>
+  </form>
+
+  <p id="authStatus" class="muted">Tizimga kirmagansiz.</p>
+</div>
+
   <section id="page-home" class="page active">
     <div class="hero">
       <div class="eyebrow" style="color:#e9d5ff">KELAJAK BUGUNDAN BOSHLANADI</div>
@@ -216,9 +251,22 @@ form .btn{margin-top:14px}
 </main>
 </div>
 <div id="toast"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
+const SUPABASE_URL =
+  "https://pkbhavmbudmyrmfhifmr.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let currentUser = null;
+let authRole = null;
 const SUBJECTS=[
  {name:"Kimyo",icon:"⚗️",color:"#a78bfa",desc:"Moddalar va reaksiyalar"},
  {name:"Fizika",icon:"⚡",color:"#fbbf24",desc:"Tabiat qonunlari"},
