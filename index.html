@@ -81,7 +81,16 @@ a{color:var(--blue)}
       <div>
 <div>
   <label>Ism va familiya</label>
+  
+<div>
+  <label>Username (login)</label>
+  <input id="username" placeholder="Masalan: ali20011" autocomplete="username" required>
+</div>
+<div>
+  <label>Ism va familiya</label>
   <input id="fullName" placeholder="Ism Familiya" required>
+</div>
+
 </div>
 <div>
   <label>Email</label>
@@ -328,21 +337,43 @@ const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
       setSignedIn(false);
     }
   }
-
+  
 async function signUp() {
   if (!db) return;
 
   const name = $("fullName").value.trim();
+  const username = $("username").value.trim().toLowerCase();
   const email = $("email").value.trim();
   const password = $("password").value;
   const role = $("userRole").value;
   const schoolName = $("schoolName").value.trim();
   const schoolNumber = $("schoolNumber").value.trim();
 
+  if (!/^[a-z0-9_]{3,20}$/.test(username)) {
+    message("authMsg", "Username 3–20 belgi bo‘lsin: faqat ingliz harflari, raqam va _.", "error");
+    return;
+  }
+
   if (!name || !email || password.length < 6 ||
       !role || !schoolName || !schoolNumber ||
       Number(schoolNumber) < 1) {
     message("authMsg", "Barcha maydonlarni to‘g‘ri to‘ldiring.", "error");
+    return;
+  }
+
+  const { data: existing, error: checkError } = await db
+    .from("profiles")
+    .select("id")
+    .ilike("username", username)
+    .limit(1);
+
+  if (checkError) {
+    message("authMsg", "Username tekshiruvida xatolik: " + checkError.message, "error");
+    return;
+  }
+
+  if (existing && existing.length > 0) {
+    message("authMsg", "Bu username band. Boshqasini tanlang.", "error");
     return;
   }
 
@@ -352,12 +383,25 @@ async function signUp() {
     options: {
       data: {
         full_name: name,
+        username,
         requested_role: role,
         school_name: schoolName,
         school_number: schoolNumber
       }
     }
   });
+
+  if (error) {
+    message("authMsg", error.message, "error");
+    return;
+  }
+
+  message(
+    "authMsg",
+    "Ro‘yxatdan o‘tish qabul qilindi. Emailingizni tasdiqlang.",
+    "success"
+  );
+}
 
   if (error) {
     message("authMsg", error.message, "error");
