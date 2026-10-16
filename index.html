@@ -338,11 +338,9 @@ connect();
       profile = null;
       setSignedIn(false);
     }
-  }
-  
+  }  
 async function signUp() {
   if (!db) return;
-
   const name = $("fullName").value.trim();
   const username = $("username").value.trim().toLowerCase();
   const email = $("email").value.trim();
@@ -350,7 +348,6 @@ async function signUp() {
   const role = $("userRole").value;
   const schoolName = $("schoolName").value.trim();
   const schoolNumber = $("schoolNumber").value.trim();
-
   if (!/^[a-z0-9_]{3,20}$/.test(username)) {
     message("authMsg", "Username 3–20 belgi bo‘lsin: faqat ingliz harflari, raqam va _.", "error");
     return;
