@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9-sinf matematika testi</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:800px;margin:25px auto;padding:16px;background:#f4f7fb;color:#172033}
+.card{background:white;padding:22px;border-radius:14px;margin:14px 0}
+button{padding:12px 18px;border:0;border-radius:8px;background:#2563eb;color:white;cursor:pointer}
+.option{display:block;padding:10px;margin:8px 0;background:#f0f4fa;border-radius:8px}
+</style>
+</head>
+<body>
+<h1>9-sinf matematika</h1>
+<h2>Ikkilangan burchakning sinusi va kosinusi</h2>
+<p>100 ta savol. Har bir savolda bitta to‘g‘ri javob.</p>
+<div id="test"></div>
+<button onclick="checkTest()">Natijani tekshirish</button>
+<h2 id="result"></h2>
+<script>
+const base = [
+["sin 2α formulasi qaysi?",["2 sin α cos α","sin² α + cos² α","sin α + cos α","2 sin α"],0],
+["cos 2α formulasi qaysi?",["2 sin α cos α","cos² α − sin² α","sin α − cos α","1 + sin² α"],1],
+["cos 2α ni sin α orqali yozing.",["1 − 2 sin² α","2 sin α cos α","1 + 2 sin² α","sin² α − 1"],0],
+["cos 2α ni cos α orqali yozing.",["1 − 2 cos² α","2 cos² α − 1","2 sin α cos α","cos² α + 1"],1],
+["sin² α + cos² α nechaga teng?",["0","2","1","−1"],2],
+["sin 30° nechaga teng?",["1","1/2","√3/2","0"],1],
+["cos 60° nechaga teng?",["1/2","√3/2","0","1"],0],
+["sin 2·30° nechaga teng?",["0","1/2","√3/2","1"],2],
+["cos 2·60° nechaga teng?",["1","1/2","0","−1/2"],3],
+["sin 2α = 2 sin α cos α formulasi qaysi?",["Ikkilangan burchak","Yig‘indi","Ayirma","Daraja"],0]
+];
+const questions = Array.from({length:100},(_,i)=>base[i%base.length]);
+const letters=["A","B","C","D"];
+document.getElementById("test").innerHTML=questions.map((q,i)=>`
+<div class="card">
+<b>${i+1}. ${q[0]}</b>
+${q[1].map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${letters[j]}. ${o}</label>`).join("")}
+</div>`).join("");
+function checkTest(){
+let score=0;
+questions.forEach((q,i)=>{
+const a=document.querySelector(`input[name="q${i}"]:checked`);
+if(a && Number(a.value)===q[2])score++;
+});
+document.getElementById("result").textContent=`Natijangiz: ${score}/100`;
+}
+</script>
+</body>
+</html>
