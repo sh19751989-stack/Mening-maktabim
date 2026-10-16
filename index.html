@@ -169,8 +169,16 @@ $("loginForm").addEventListener("submit",async e=>{
   const password=$("loginPassword").value;
   const btn=e.submitter; if(btn)btn.disabled=true;
   notice("Hisob tekshirilmoqda...");
-  try{
-    const {data,error}=await db.functions.invoke("username-login",{body:{username,password}});
+  try{ const emailOrUsername = $("loginUsername").value.trim();
+
+const { data, error } = await db.auth.signInWithPassword({
+  email: emailOrUsername,
+  password: $("loginPassword").value
+});
+
+if (error) throw error;
+const profile = await getProfile(data.user);
+showDashboard(data.user, profile);
     if(error)throw error;
     if(data?.error)throw new Error(data.error);
     if(!data?.access_token||!data?.refresh_token)throw new Error("Kirish xizmati sessiya qaytarmadi. username-login funksiyasini tekshirish kerak.");
