@@ -3,665 +3,497 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mening Maktabim</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--blue:#2457d6;--dark:#172554;--bg:#f3f6fc;--green:#15803d;--red:#b91c1c}
+:root{--blue:#2457d6;--bg:#f3f6fc;--ink:#18233b}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#172033}
-header{background:linear-gradient(120deg,#173f8a,#3674f5);color:white;padding:20px}
-header h1{margin:0 0 8px;font-size:25px}
-header p{margin:0;opacity:.9}
-main{max-width:1050px;margin:22px auto;padding:0 14px}
-.card{background:white;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 5px 20px #1725540b}
-h2{margin-top:0}
-input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;background:white}
-textarea{min-height:100px;resize:vertical}
-button{padding:11px 16px;border:0;border-radius:9px;background:var(--blue);color:white;font-size:15px;cursor:pointer;margin:4px 3px 4px 0}
-button.secondary{background:#e8eefb;color:#173f8a}
-button.danger{background:#b91c1c}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif}
+header{background:linear-gradient(120deg,#163a91,#3977f6);color:white;padding:22px}
+header h1{margin:0 0 8px}
+main{max-width:1000px;margin:25px auto;padding:16px}
+.card{background:white;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 5px 22px #152b5510}
+input,select,button{width:100%;padding:12px;margin:7px 0;border:1px solid #d5ddeb;border-radius:9px;font-size:16px}
+button{background:var(--blue);color:white;border:0;font-weight:bold;cursor:pointer}
+button.secondary{background:#e8efff;color:#1743a6}
 button:disabled{opacity:.5;cursor:not-allowed}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.tile{padding:18px;border:1px solid #e2e8f0;border-radius:13px;background:#fff}
-.tile h3{margin:0 0 10px}
-.muted{color:#64748b;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .hidden{display:none!important}
-.notice{padding:12px;border-radius:9px;margin:10px 0;background:#eff6ff;color:#1d4ed8;overflow-wrap:anywhere}
-.notice.error{background:#fef2f2;color:#991b1b}
-.notice.success{background:#f0fdf4;color:#166534}
-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-nav button{background:white;color:#173f8a;border:1px solid #dbe3f2}
-nav button.active{background:var(--blue);color:white}
-.option{display:block;border:1px solid #dbe3f2;border-radius:10px;padding:13px;margin:9px 0;cursor:pointer}
-.option:has(input:checked){background:#eff6ff;border-color:var(--blue)}
-.option input{width:auto;margin:0 9px 0 0}
-.bar{height:8px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-#progress{height:100%;background:var(--blue);width:0}
-footer{text-align:center;padding:22px;color:#64748b}
-a{color:var(--blue)}
-@media(max-width:600px){header{padding:17px}main{margin:14px auto}.card{padding:15px}button{font-size:14px}}
+.muted{color:#63708a;font-size:14px}
+#message{padding:12px;border-radius:8px;margin:10px 0;overflow-wrap:anywhere}
+.error{background:#ffe8e8;color:#9b2020}
+.success{background:#e3f9ed;color:#126b3b}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+nav button{width:auto;flex:1;min-width:110px}
+h2{margin-top:0}
 </style>
 </head>
 <body>
 <header>
   <h1>🏫 Mening Maktabim</h1>
-  <p>Bilim olamiz, o‘rganamiz va rivojlanamiz!</p>
+  <div>Bilim olish va natijalarni kuzatish platformasi</div>
 </header>
 
 <main>
-<section id="connection" class="card hidden">
-  <h2>Bazaga ulanish</h2>
-  <p class="muted">Supabase sozlamalarini tekshiring.</p>
-  <div id="connectionMsg" class="notice">Ulanish tekshirilmoqda...</div>
-  <button onclick="connect()">Qayta ulash</button>
-</section>
+  <div id="message" class="hidden"></div>
 
-<section id="auth" class="card">
-  <h2>Platformaga xush kelibsiz!</h2>
-  <p class="muted">Hisobingizga kiring yoki yangi hisob yarating.</p>
-  <div id="authMsg" class="notice hidden"></div>
-  <label>Username</label>
-  <input id="username" autocomplete="username" placeholder="Masalan: ali_2009">
-  <label>Parol</label>
-  <input id="password" type="password" autocomplete="current-password" placeholder="Parolingiz">
-  <button id="loginBtn">Kirish</button>
-  <button id="showSignup" class="secondary">Ro‘yxatdan o‘tish</button>
-  <button id="forgotBtn" class="secondary">Parolni tiklash</button>
+  <section id="auth">
+    <div class="card">
+      <h2>Hisobga kirish</h2>
+      <p class="muted">Username va parolingizni kiriting.</p>
+      <input id="username" placeholder="Username" autocomplete="username">
+      <input id="password" type="password" placeholder="Parol" autocomplete="current-password">
+      <button id="loginBtn">Kirish</button>
+      <button id="forgotBtn" class="secondary">Parolni tiklash</button>
+      <button id="showSignup" class="secondary">Yangi hisob yaratish</button>
+    </div>
 
-  <div id="signupBox" class="hidden">
-    <hr>
-    <h3>Yangi hisob yaratish</h3>
-    <label>Ism va familiya</label>
-    <input id="fullName" autocomplete="name" placeholder="Ism Familiya">
-    <label>Email manzil</label>
-    <input id="email" type="email" autocomplete="email" placeholder="email@example.com">
-    <label>Maktab nomi</label>
-    <input id="schoolName" placeholder="Maktab nomi">
-    <label>Maktab raqami</label>
-    <input id="schoolNumber" type="number" min="1" placeholder="Masalan: 12">
-    <label>Sinf</label>
-    <select id="grade">
-      <option value="5">5-sinf</option><option value="6">6-sinf</option>
-      <option value="7">7-sinf</option><option value="8">8-sinf</option>
-      <option value="9" selected>9-sinf</option><option value="10">10-sinf</option>
-      <option value="11">11-sinf</option>
-    </select>
-    <label>Hisob turi</label>
-    <select id="requestedRole">
-      <option value="student">O‘quvchi</option>
-      <option value="teacher">O‘qituvchi</option>
-    </select>
-    <button id="signupBtn">Hisob yaratish</button>
-    <button id="hideSignup" class="secondary">Ortga</button>
-  </div>
-</section>
-
-<section id="app" class="hidden">
-  <div class="card">
-    <h2 id="welcome">Xush kelibsiz!</h2>
-    <p id="profileSummary" class="muted"></p>
-    <button id="logoutBtn" class="danger">Chiqish</button>
-  </div>
-
-  <nav id="navigation">
-    <button data-tab="home" class="active">Bosh sahifa</button>
-    <button data-tab="subjects">Fanlar va darslar</button>
-    <button data-tab="tests">100 ta test</button>
-    <button data-tab="results">Natijalarim</button>
-    <button data-tab="appeals">Murojaatlar</button>
-    <button data-tab="profile">Profil</button>
-    <button data-tab="admin" id="adminNav" class="hidden">Administrator</button>
-  </nav>
-
-  <section id="tab-home" class="tab card">
-    <h2>Bosh sahifa</h2>
-    <p>Bilimingizni oshirish uchun fanlarni o‘rganing va testlarni ishlang.</p>
-    <div class="grid">
-      <div class="tile"><h3>📚 Fanlar</h3><p>6 ta fan bo‘yicha o‘quv materiallari.</p><button data-go="subjects">Fanlarni ko‘rish</button></div>
-      <div class="tile"><h3>📝 Testlar</h3><p>100 ta savol, har biriga 1 ball.</p><button data-go="tests">Testni boshlash</button></div>
-      <div class="tile"><h3>🏆 Natijalar</h3><p>Oldingi test natijalaringizni ko‘ring.</p><button data-go="results">Natijalarim</button></div>
+    <div id="signupBox" class="card hidden">
+      <h2>Yangi hisob</h2>
+      <input id="fullName" placeholder="Ism va familiya" autocomplete="name">
+      <input id="newUsername" placeholder="Username (3–20 belgi)">
+      <input id="email" type="email" placeholder="Email manzilingiz">
+      <input id="newPassword" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="new-password">
+      <input id="schoolName" placeholder="Maktab nomi">
+      <input id="schoolNumber" type="number" min="1" placeholder="Maktab raqami">
+      <select id="grade">
+        <option value="9">9-sinf</option>
+      </select>
+      <p class="muted">Yangi hisoblar o‘quvchi sifatida yaratiladi. O‘qituvchi va admin huquqini faqat vakolatli administrator belgilaydi.</p>
+      <button id="signupBtn">Hisob yaratish</button>
+      <button id="hideSignup" class="secondary">Ortga qaytish</button>
     </div>
   </section>
 
-  <section id="tab-subjects" class="tab card hidden">
-    <h2>Fanlar va darslar</h2>
-    <p class="muted">Quyidagi fanlar bo‘yicha o‘rganishni boshlang. YouTube havolalarini keyin o‘zingiz qo‘shishingiz mumkin.</p>
-    <div id="subjectsGrid" class="grid"></div>
-  </section>
-
-  <section id="tab-tests" class="tab card hidden">
-    <h2>Bilimni sinash</h2>
-    <p>9-sinf — 100 ta savol. To‘g‘ri javob uchun 1 ball beriladi.</p>
-    <label>Test turi</label>
-    <select id="testSubject">
-      <option value="all">Barcha fanlar — 100 savol</option>
-      <option>Matematika</option><option>Fizika</option><option>Tarix</option>
-      <option>Kimyo</option><option>Biologiya</option><option>Informatika</option>
-    </select>
-    <button id="startTest">Testni boshlash</button>
-    <div id="quizBox" class="hidden">
-      <hr>
-      <p id="testLabel" class="muted"></p>
-      <p id="counter"></p>
-      <div class="bar"><div id="progress"></div></div>
-      <h3 id="question"></h3>
-      <div id="options"></div>
-      <div id="feedback"></div>
-      <button id="checkAnswer">Javobni tekshirish</button>
-      <button id="nextQuestion" class="hidden">Keyingi savol</button>
+  <section id="app" class="hidden">
+    <div class="card">
+      <h2 id="welcome">Xush kelibsiz!</h2>
+      <p id="roleLabel" class="muted"></p>
+      <nav>
+        <button data-page="home">Bosh sahifa</button>
+        <button data-page="subjects">Fanlar</button>
+        <button data-page="results">Natijalarim</button>
+        <button data-page="staff">Boshqaruv</button>
+        <button id="logoutBtn" class="secondary">Chiqish</button>
+      </nav>
     </div>
-    <div id="testResult" class="notice hidden"></div>
-  </section>
 
-  <section id="tab-results" class="tab card hidden">
-    <h2>Natijalarim</h2>
-    <p class="muted">Ushbu qurilmada saqlangan natijalar ko‘rsatiladi.</p>
-    <div id="resultsList"></div>
-    <button id="clearResults" class="secondary">Natijalarni tozalash</button>
-  </section>
+    <div id="home" class="card page">
+      <h2>Bosh sahifa</h2>
+      <p>Platformaga xush kelibsiz. Fan tanlab, bilimlaringizni sinab ko‘ring.</p>
+      <div class="grid">
+        <div class="card"><strong>6 ta fan</strong><p class="muted">9-sinf uchun</p></div>
+        <div class="card"><strong>Testlar</strong><p class="muted">Bilimingizni tekshiring</p></div>
+        <div class="card"><strong>Natijalar</strong><p class="muted">O‘z natijalaringizni kuzating</p></div>
+      </div>
+    </div>
 
-  <section id="tab-appeals" class="tab card hidden">
-    <h2>Murojaat yuborish</h2>
-    <p class="muted">Savol yoki taklifingizni yozing.</p>
-    <label>Murojaat mavzusi</label>
-    <input id="appealTitle" placeholder="Mavzu">
-    <label>Murojaat matni</label>
-    <textarea id="appealText" placeholder="Murojaatingiz..."></textarea>
-    <button id="sendAppeal">Yuborish</button>
-    <div id="appealMsg" class="notice hidden"></div>
-    <p class="muted">Murojaatni bazada saqlash uchun Supabase’da tegishli jadval va RLS siyosatlari sozlangan bo‘lishi kerak.</p>
-  </section>
+    <div id="subjects" class="card page hidden">
+      <h2>Fanlar</h2>
+      <div id="subjectList" class="grid"></div>
+    </div>
 
-  <section id="tab-profile" class="tab card hidden">
-    <h2>Mening profilim</h2>
-    <label>Ism va familiya</label><input id="editName">
-    <label>Maktab nomi</label><input id="editSchool">
-    <label>Sinf</label>
-    <select id="editGrade">
-      <option value="5">5-sinf</option><option value="6">6-sinf</option>
-      <option value="7">7-sinf</option><option value="8">8-sinf</option>
-      <option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option>
-    </select>
-    <button id="saveProfile">Profilni saqlash</button>
-    <div id="profileMsg" class="notice hidden"></div>
-  </section>
+    <div id="quiz" class="card hidden">
+      <h2 id="quizTitle">Test</h2>
+      <p id="questionText"></p>
+      <div id="answerList"></div>
+      <button id="nextBtn">Javobni tekshirish</button>
+      <p id="quizFeedback"></p>
+    </div>
 
-  <section id="tab-admin" class="tab card hidden">
-    <h2>Administrator paneli</h2>
-    <p class="muted">Faqat ruxsat berilgan administratorlarga mo‘ljallangan. Foydalanuvchi roli brauzerda o‘zgartirilmaydi.</p>
-    <button id="reloadAdmin">Foydalanuvchilarni yuklash</button>
-    <div id="adminMsg" class="notice hidden"></div>
-    <div id="adminUsers"></div>
+    <div id="results" class="card page hidden">
+      <h2>Natijalarim</h2>
+      <div id="resultList">Natijalar yuklanmoqda...</div>
+    </div>
+
+    <div id="staff" class="card page hidden">
+      <h2>Boshqaruv</h2>
+      <p id="staffMessage">Ruxsat tekshirilmoqda...</p>
+      <div id="staffContent"></div>
+    </div>
   </section>
-</section>
 </main>
-<footer>Mening Maktabim © 2026</footer>
 
 <script>
 "use strict";
 
-/* Ochiq publishable kalit. Service role kalitini HTML ichiga qo‘ymang. */
+/* Ochiq frontend kaliti. Service-role kalitini bu yerga yozmang. */
 const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
 
-let db = null;
-let currentUser = null;
-let currentProfile = null;
-let testQuestions = [];
-let testIndex = 0;
-let testScore = 0;
-let testLocked = false;
-let testAnswers = [];
-let testStartedAt = 0;
-
 const $ = id => document.getElementById(id);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let profile = null;
+let questions = [];
+let questionIndex = 0;
+let score = 0;
+let chosenSubject = "";
+
 const subjects = [
-  ["Matematika","➗","Algebra, geometriya va masalalar"],
-  ["Fizika","⚛️","Harakat, kuch, elektr va energiya"],
-  ["Tarix","🏛️","O‘zbekiston va jahon tarixi"],
-  ["Kimyo","🧪","Elementlar, formulalar va reaksiyalar"],
-  ["Biologiya","🌿","Hujayra, organizmlar va tabiat"],
-  ["Informatika","💻","Algoritmlar va kompyuter savodxonligi"]
+  "Matematika", "Fizika", "Tarix",
+  "Kimyo", "Biologiya", "Informatika"
 ];
 
-function message(id,text,type=""){
-  const el=$(id);
-  if(!el)return;
+/* Hozircha namuna savollar. To'liq 100 ta savol keyingi bosqichda
+   alohida tekshirilgan savollar bankiga joylanishi kerak. */
+const sampleQuestions = {
+  "Matematika": [
+    {q:"12 × 8 nechaga teng?", a:["86","96","108","92"], correct:1},
+    {q:"x + 7 = 15. x ni toping.", a:["6","7","8","9"], correct:2}
+  ],
+  "Fizika": [
+    {q:"Kuchning SI birligi qaysi?", a:["Joul","Vatt","Nyuton","Paskal"],correct:2},
+    {q:"Tezlik qanday topiladi?", a:["Masofa / vaqt","Vaqt / masofa","Massa × hajm","Kuch / vaqt"],correct:0}
+  ],
+  "Tarix": [
+    {q:"Amir Temur qaysi yilda tug‘ilgan?", a:["1336","1405","1220","1441"],correct:0}
+  ],
+  "Kimyo": [
+    {q:"Suvning kimyoviy formulasi qaysi?", a:["CO₂","O₂","H₂O","NaCl"],correct:2}
+  ],
+  "Biologiya": [
+    {q:"Fotosintez asosan qaysi organoidda sodir bo‘ladi?", a:["Yadro","Xloroplast","Ribosoma","Lizosoma"],correct:1}
+  ],
+  "Informatika": [
+    {q:"Kompyuterning asosiy hisoblash qurilmasi qaysi?", a:["CPU","Monitor","Klaviatura","Printer"],correct:0}
+  ]
+};
+
+function message(text, type="success") {
+  const el=$("message");
   el.textContent=text;
-  el.className="notice"+(type?" "+type:"");
+  el.className=type;
   el.classList.remove("hidden");
 }
-function hide(id){$(id).classList.add("hidden");}
-function show(id){$(id).classList.remove("hidden");}
 
-function setSignedIn(signedIn){
-  $("auth").classList.toggle("hidden",signedIn);
-  $("app").classList.toggle("hidden",!signedIn);
-  if(signedIn) hide("connection");
-}
-function showTab(name){
-  document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
-  $("tab-"+name).classList.remove("hidden");
-  document.querySelectorAll("#navigation button[data-tab]").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.tab===name);
-  });
-  if(name==="results")renderResults();
-}
-function renderSubjects(){
-  $("subjectsGrid").innerHTML="";
-  subjects.forEach(([name,icon,desc])=>{
-    const el=document.createElement("div");
-    el.className="tile";
-    const h=document.createElement("h3");h.textContent=icon+" "+name;
-    const p=document.createElement("p");p.textContent=desc;
-    const btn=document.createElement("button");btn.textContent="Shu fan testlari";
-    btn.onclick=()=>{$("testSubject").value=name;showTab("tests");hide("quizBox");hide("testResult");};
-    el.append(h,p,btn);
-    $("subjectsGrid").append(el);
-  });
+function clearMessage(){
+  $("message").classList.add("hidden");
 }
 
-async function connect(){
-  try{
-    if(!window.supabase)throw new Error("Supabase kutubxonasi yuklanmadi. Internetni tekshiring.");
-    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-    const {error}=await db.auth.getSession();
-    if(error)throw error;
-    hide("connection");
-    await checkSession();
-  }catch(e){
-    show("connection");
-    message("connectionMsg","Bazaga ulanishda xatolik: "+e.message,"error");
-  }
+function showAuth(){
+  $("auth").classList.remove("hidden");
+  $("app").classList.add("hidden");
 }
 
-async function checkSession(){
-  if(!db)return;
-  const {data,error}=await db.auth.getSession();
-  if(error)throw error;
-  if(data.session){
-    currentUser=data.session.user;
-    await loadProfile();
-  }else{
-    currentUser=null;
-    currentProfile=null;
-    setSignedIn(false);
-  }
+function showApp(){
+  $("auth").classList.add("hidden");
+  $("app").classList.remove("hidden");
+}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));
+  $("quiz").classList.add("hidden");
+  $(id).classList.remove("hidden");
+  if(id==="results") loadResults();
+  if(id==="staff") showStaff();
 }
 
 async function loadProfile(){
-  if(!db||!currentUser)return;
   const {data,error}=await db.from("profiles")
-    .select("id,full_name,role,school_name,grade,username,school_number")
+    .select("id,full_name,role,school_name,grade,username")
     .eq("id",currentUser.id).maybeSingle();
+
   if(error){
-    setSignedIn(false);
-    message("authMsg","Profilni yuklab bo‘lmadi: "+error.message,"error");
-    return;
+    message("Profilni yuklashda xatolik: "+error.message,"error");
+    return false;
   }
   if(!data){
-    setSignedIn(false);
-    message("authMsg","Profil topilmadi. Supabase profillar jadvali va auth triggerini tekshiring.","error");
-    return;
+    message("Profil topilmadi. Supabase profiles jadvali va Auth triggerini tekshiring.","error");
+    return false;
   }
-  currentProfile=data;
-  $("welcome").textContent="Xush kelibsiz, "+(data.full_name||"foydalanuvchi")+"!";
-  $("profileSummary").textContent=
-    (data.school_name||"Maktab kiritilmagan")+" · "+
-    (data.grade?data.grade+"-sinf":"Sinf kiritilmagan")+" · "+
-    (data.role||"foydalanuvchi");
-  $("editName").value=data.full_name||"";
-  $("editSchool").value=data.school_name||"";
-  $("editGrade").value=String(data.grade||9);
-  $("adminNav").classList.toggle("hidden",data.role!=="admin");
-  setSignedIn(true);
+
+  profile=data;
+  $("welcome").textContent="Xush kelibsiz, "+(profile.full_name||"foydalanuvchi")+"!";
+  $("roleLabel").textContent=
+    "Rol: "+({student:"O‘quvchi",teacher:"O‘qituvchi",admin:"Administrator"}[profile.role]||"Noma’lum");
+  showApp();
+  showPage("home");
   renderSubjects();
-  showTab("home");
-}
-
-async function signUp(){
-  if(!db)return;
-  const full_name=$("fullName").value.trim();
-  const username=$("username").value.trim().toLowerCase();
-  const email=$("email").value.trim();
-  const password=$("password").value;
-  const school_name=$("schoolName").value.trim();
-  const school_number=$("schoolNumber").value.trim();
-  const grade=$("grade").value;
-  const requested_role=$("requestedRole").value;
-
-  if(!/^[a-z0-9_]{3,20}$/.test(username)){
-    message("authMsg","Username 3–20 belgidan iborat bo‘lsin. Faqat harf, raqam va _ ishlating.","error");return;
-  }
-  if(!full_name||!email||password.length<6||!school_name||!school_number||Number(school_number)<1){
-    message("authMsg","Barcha maydonlarni to‘g‘ri to‘ldiring. Parol kamida 6 belgi bo‘lsin.","error");return;
-  }
-  const {error}=await db.auth.signUp({
-    email,password,
-    options:{data:{full_name,username,school_name,school_number,grade,requested_role}}
-  });
-  if(error){
-    message("authMsg","Ro‘yxatdan o‘tishda xatolik: "+error.message,"error");return;
-  }
-  message("authMsg","Ro‘yxatdan o‘tish so‘rovi yuborildi. Email tasdiqlash talab qilinsa, emailingizni tekshiring.","success");
+  return true;
 }
 
 async function signIn(){
-  if(!db)return;
+  clearMessage();
   const username=$("username").value.trim().toLowerCase();
   const password=$("password").value;
+
   if(!username||!password){
-    message("authMsg","Username va parolni kiriting.","error");return;
+    message("Username va parolni kiriting.","error");return;
   }
-  const {data,error}=await db.functions.invoke("username-login",{body:{username,password}});
-  if(error||!data?.session){
-    message("authMsg",data?.error||error?.message||"Kirish amalga oshmadi. Edge Function sozlamalarini tekshiring.","error");return;
+
+  $("loginBtn").disabled=true;
+  try{
+    const {data,error}=await db.functions.invoke("username-login",{
+      body:{username,password}
+    });
+    if(error) throw error;
+    if(!data?.session) throw new Error(data?.error||"Kirish amalga oshmadi.");
+
+    const {error:sessionError}=await db.auth.setSession({
+      access_token:data.session.access_token,
+      refresh_token:data.session.refresh_token
+    });
+    if(sessionError) throw sessionError;
+
+    currentUser=data.user || (await db.auth.getUser()).data.user;
+    if(!currentUser) throw new Error("Foydalanuvchi sessiyasi topilmadi.");
+
+    await loadProfile();
+  }catch(e){
+    message("Kirish xatosi: "+(e.message||"Noma’lum xato"),"error");
+  }finally{
+    $("loginBtn").disabled=false;
   }
-  const {data:result,error:sessionError}=await db.auth.setSession({
-    access_token:data.session.access_token,
-    refresh_token:data.session.refresh_token
-  });
-  if(sessionError){
-    message("authMsg",sessionError.message,"error");return;
+}
+
+async function signUp(){
+  clearMessage();
+  const full_name=$("fullName").value.trim();
+  const username=$("newUsername").value.trim().toLowerCase();
+  const email=$("email").value.trim();
+  const password=$("newPassword").value;
+  const school_name=$("schoolName").value.trim();
+  const school_number=$("schoolNumber").value.trim();
+  const grade=$("grade").value;
+
+  if(!/^[a-z0-9_]{3,20}$/.test(username)){
+    message("Username 3–20 belgidan iborat bo‘lsin; faqat harf, raqam va _ ishlating.","error");return;
   }
-  currentUser=result.user;
-  await loadProfile();
+  if(!full_name||!email||password.length<6||!school_name||!school_number||Number(school_number)<1){
+    message("Barcha maydonlarni to‘g‘ri to‘ldiring. Parol kamida 6 belgi bo‘lsin.","error");return;
+  }
+
+  $("signupBtn").disabled=true;
+  try{
+    const {data,error}=await db.auth.signUp({
+      email,password,
+      options:{data:{
+        full_name,username,school_name,school_number,grade,
+        requested_role:"student"
+      }}
+    });
+    if(error) throw error;
+
+    if(data.session){
+      currentUser=data.user;
+      const ok=await loadProfile();
+      if(ok) message("Hisob yaratildi.","success");
+    }else{
+      message("Ro‘yxatdan o‘tish so‘rovi yuborildi. Email tasdiqlash talab qilinsa, emailingizni tekshiring.");
+    }
+  }catch(e){
+    message("Ro‘yxatdan o‘tish xatosi: "+(e.message||"Noma’lum xato"),"error");
+  }finally{
+    $("signupBtn").disabled=false;
+  }
 }
 
 async function forgotPassword(){
-  if(!db)return;
-  const email=$("email").value.trim();
-  if(!email){
-    message("authMsg","Avval ro‘yxatdan o‘tgan email manzilingizni kiriting.","error");return;
+  clearMessage();
+  const email=prompt("Hisobingizga bog‘langan emailni kiriting:");
+  if(!email) return;
+  try{
+    const {error}=await db.auth.resetPasswordForEmail(email.trim());
+    if(error) throw error;
+    message("Agar email ro‘yxatdan o‘tgan bo‘lsa, tiklash xabari yuboriladi.");
+  }catch(e){
+    message("Xatolik: "+e.message,"error");
   }
-  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin});
-  if(error)message("authMsg",error.message,"error");
-  else message("authMsg","Agar bu email ro‘yxatdan o‘tgan bo‘lsa, tiklash havolasi yuboriladi. Emailingizni tekshiring.","success");
+}
+
+function renderSubjects(){
+  $("subjectList").replaceChildren();
+  subjects.forEach(subject=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const title=document.createElement("h3");
+    title.textContent=subject;
+    const button=document.createElement("button");
+    button.textContent="Testni boshlash";
+    button.addEventListener("click",()=>startTest(subject));
+    card.append(title,button);
+    $("subjectList").append(card);
+  });
+}
+
+function startTest(subject){
+  chosenSubject=subject;
+  questions=sampleQuestions[subject]||[];
+  if(!questions.length){
+    message("Bu fan uchun savollar hali qo‘shilmagan.","error");return;
+  }
+  questionIndex=0;
+  score=0;
+  $("quizTitle").textContent=subject+" testi";
+  $("subjects").classList.add("hidden");
+  $("quiz").classList.remove("hidden");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=questions[questionIndex];
+  $("questionText").textContent=
+    `Savol ${questionIndex+1}/${questions.length}: ${q.q}`;
+  $("answerList").replaceChildren();
+  $("quizFeedback").textContent="";
+  q.a.forEach((answer,index)=>{
+    const label=document.createElement("label");
+    label.style.display="block";
+    label.style.padding="10px";
+    const radio=document.createElement("input");
+    radio.type="radio";
+    radio.name="answer";
+    radio.value=String(index);
+    radio.style.width="auto";
+    label.append(radio,document.createTextNode(" "+answer));
+    $("answerList").append(label);
+  });
+  $("nextBtn").textContent=questionIndex===questions.length-1?"Testni yakunlash":"Javobni tekshirish";
+}
+
+async function checkAnswer(){
+  const selected=document.querySelector('input[name="answer"]:checked');
+  if(!selected){
+    $("quizFeedback").textContent="Avval javobni tanlang.";
+    return;
+  }
+
+  if(Number(selected.value)===questions[questionIndex].correct) score++;
+
+  questionIndex++;
+  if(questionIndex<questions.length){
+    renderQuestion();
+    return;
+  }
+
+  const percent=Math.round(score/questions.length*100);
+  $("quizTitle").textContent="Test yakunlandi";
+  $("questionText").textContent=`Natija: ${score}/${questions.length} (${percent}%)`;
+  $("answerList").replaceChildren();
+  $("nextBtn").textContent="Fanlarga qaytish";
+  $("quizFeedback").textContent="Natijani saqlashga urinish...";
+  $("nextBtn").onclick=()=>{
+    $("nextBtn").onclick=checkAnswer;
+    showPage("subjects");
+  };
+
+  try{
+    const {error}=await db.from("test_results").insert({
+      user_id:currentUser.id,
+      subject:chosenSubject,
+      score,
+      total:questions.length,
+      percentage:percent
+    });
+    if(error) throw error;
+    $("quizFeedback").textContent="Natija hisobingizga saqlandi.";
+  }catch(e){
+    $("quizFeedback").textContent=
+      "Natija hisoblandi, lekin bazaga saqlanmadi. Admin test_results jadvali va ruxsatlarini sozlashi kerak.";
+  }
+}
+
+async function loadResults(){
+  $("resultList").textContent="Yuklanmoqda...";
+  const {data,error}=await db.from("test_results")
+    .select("subject,score,total,percentage,created_at")
+    .eq("user_id",currentUser.id)
+    .order("created_at",{ascending:false})
+    .limit(100);
+
+  if(error){
+    $("resultList").textContent="Natijalar jadvali yoki RLS ruxsatlarini sozlash kerak.";
+    return;
+  }
+  if(!data?.length){
+    $("resultList").textContent="Hozircha natijalar yo‘q.";
+    return;
+  }
+  $("resultList").replaceChildren();
+  data.forEach(r=>{
+    const p=document.createElement("p");
+    p.textContent=`${r.subject}: ${r.score}/${r.total} (${r.percentage}%)`;
+    $("resultList").append(p);
+  });
+}
+
+async function showStaff(){
+  $("staffContent").replaceChildren();
+  if(!profile||!["teacher","admin"].includes(profile.role)){
+    $("staffMessage").textContent="Bu bo‘lim faqat o‘qituvchi va administratorlar uchun.";
+    return;
+  }
+
+  $("staffMessage").textContent=
+    profile.role==="admin"
+    ? "Administrator paneli"
+    : "O‘qituvchi paneli";
+
+  const p=document.createElement("p");
+  p.textContent=profile.role==="admin"
+    ? "Foydalanuvchi rollari va platforma sozlamalarini server tomonda himoyalangan tarzda boshqarish mumkin."
+    : "O‘quvchilar va test natijalarini ko‘rish uchun tegishli bazaviy ruxsatlar sozlangan bo‘lishi kerak.";
+  $("staffContent").append(p);
+
+  if(profile.role==="admin"){
+    const btn=document.createElement("button");
+    btn.textContent="Foydalanuvchilarni ko‘rish";
+    btn.addEventListener("click",loadUsers);
+    $("staffContent").append(btn);
+  }
+}
+
+async function loadUsers(){
+  $("staffContent").replaceChildren();
+  const {data,error}=await db.from("profiles")
+    .select("full_name,username,role,school_name,grade")
+    .limit(100);
+
+  if(error){
+    message("Foydalanuvchilarni ko‘rishga ruxsat yo‘q yoki RLS sozlanmagan.","error");
+    return;
+  }
+  data.forEach(u=>{
+    const p=document.createElement("p");
+    p.textContent=`${u.full_name||"Nomsiz"} — ${u.username||""} — ${u.role}`;
+    $("staffContent").append(p);
+  });
 }
 
 async function logout(){
-  if(db)await db.auth.signOut();
-  currentUser=null;currentProfile=null;
-  setSignedIn(false);
-  $("password").value="";
-  show("auth");
-}
-
-/* 100 ta test: 6 fan, har savolda 4 variant. */
-const raw=[
-["Matematika","x + 7 = 19 bo‘lsa, x?","10","11","12","13",2],
-["Matematika","3x = 27. x ni toping.","6","9","8","7",1],
-["Matematika","(a+b)² formulasi?","a²+b²","a²−2ab+b²","a²+2ab+b²","2a+2b",2],
-["Matematika","√144 nechaga teng?","10","11","12","14",2],
-["Matematika","2⁵ qiymati?","10","16","25","32",3],
-["Matematika","5x−4=16. x?","2","4","5","6",1],
-["Matematika","Uchburchak ichki burchaklari yig‘indisi?","90°","180°","270°","360°",1],
-["Matematika","Radiusi 7 doira uzunligi (π=22/7)?","22","44","49","154",1],
-["Matematika","Tomoni 6 cm kvadrat yuzasi?","12 cm²","24 cm²","36 cm²","18 cm²",2],
-["Matematika","4, 8, 12 sonlarining o‘rta arifmetigi?","6","8","10","12",1],
-["Matematika","x²=49 tenglamaning musbat yechimi?","5","6","7","8",2],
-["Matematika","200 ning 15 foizi?","15","20","30","35",2],
-["Matematika","(x−3)(x+3) ifodasi?","x²+9","x²−9","x²−6x+9","2x−9",1],
-["Matematika","To‘g‘ri burchak?","45°","60°","90°","180°",2],
-["Matematika","3/4 + 1/4 = ?","1/2","1","4/8","3/8",1],
-["Matematika","5²−3²=?","4","8","16","34",2],
-["Matematika","y=2x+1, x=3 bo‘lsa y?","5","6","7","8",2],
-["Fizika","Kuchning SI birligi?","Joul","Nyuton","Vatt","Paskal",1],
-["Fizika","Tezlik formulasi?","v=s/t","v=st","v=t/s","v=s+t",0],
-["Fizika","Massa birligi?","Metr","Sekund","Kilogramm","Nyuton",2],
-["Fizika","Elektr toki kuchi birligi?","Volt","Amper","Om","Vatt",1],
-["Fizika","Quvvatning SI birligi?","Joul","Nyuton","Vatt","Paskal",2],
-["Fizika","Yer jismlarni qaysi kuch bilan tortadi?","Ishqalanish","Elastiklik","Gravitatsiya","Arximed",2],
-["Fizika","Suv normal bosimda qaysi haroratda qaynaydi?","0°C","50°C","100°C","150°C",2],
-["Fizika","I=U/R qaysi qonun?","Nyuton","Om","Arximed","Boyl",1],
-["Fizika","Yorug‘lik vakuumda taxminan qanday tezlikda tarqaladi?","300 km/s","3 000 km/s","30 000 km/s","300 000 km/s",3],
-["Fizika","Kuch siljish yo‘nalishida bo‘lsa, ish formulasi?","A=Fs","A=F/s","A=s/F","A=F+s",0],
-["Fizika","Zichlik formulasi?","ρ=m/V","ρ=V/m","ρ=mV","ρ=m+V",0],
-["Fizika","Kuchlanish birligi?","Amper","Volt","Om","Tesla",1],
-["Fizika","Tovush qaysi muhitda tarqalmaydi?","Suv","Havo","Po‘lat","Vakuum",3],
-["Fizika","Jism inertligi nimaga bog‘liq?","Rangiga","Massasiga","Haroratiga","Shakliga",1],
-["Fizika","Energiya birligi?","Joul","Amper","Metr","Sekund",0],
-["Fizika","Magnit qutblari qanday ataladi?","Musbat/manfiy","Shimoliy/janubiy","Issiq/sovuq","Katta/kichik",1],
-["Fizika","Bosim formulasi?","p=F/S","p=FS","p=S/F","p=F+S",0],
-["Tarix","Amir Temur qachon tug‘ilgan?","1336-yil","1405-yil","1220-yil","1501-yil",0],
-["Tarix","Amir Temur davlatining poytaxti?","Buxoro","Xiva","Samarqand","Qo‘qon",2],
-["Tarix","O‘zbekiston mustaqilligi qachon e’lon qilingan?","1990-yil 21-mart","1991-yil 31-avgust","1992-yil 8-dekabr","1991-yil 1-sentabr",1],
-["Tarix","O‘zbekiston Konstitutsiyasi dastlab qachon qabul qilingan?","1991-yil 31-avgust","1992-yil 8-dekabr","1993-yil 1-sentabr","1995-yil 9-may",1],
-["Tarix","Buyuk Ipak yo‘lining muhim vazifasi?","Faqat urush","Savdo va madaniy aloqa","Faqat dehqonchilik","Faqat dengiz qatnovi",1],
-["Tarix","Jadidchilik asosan nimani targ‘ib qilgan?","Ma’rifat va ta’lim islohoti","Ko‘chmanchilik","Tanga yig‘ish","Dengiz urushlari",0],
-["Tarix","Mirzo Ulug‘bek qaysi sohada mashhur?","Astronomiya","Kimyo","Jarrohlik","Dengizchilik",0],
-["Tarix","Bobur yozgan mashhur asar?","Boburnoma","Qutadg‘u bilig","Temur tuzuklari","Devonu lug‘otit turk",0],
-["Tarix","Qadimgi Misr qaysi daryo bo‘yida rivojlangan?","Amudaryo","Nil","Volga","Dunay",1],
-["Tarix","Qadimgi Rim qaysi qit’ada shakllangan?","Janubiy Amerika","Avstraliya","Yevropa","Antarktida",2],
-["Tarix","Ikkinchi jahon urushi yillari?","1914–1918","1939–1945","1946–1950","1900–1905",1],
-["Tarix","Birinchi jahon urushi yillari?","1914–1918","1939–1945","1929–1933","1905–1910",0],
-["Tarix","Qadimgi Yunonistonda demokratiya bilan mashhur shahar?","Sparta","Afina","Troya","Korinf",1],
-["Tarix","Jaloliddin Manguberdi kim bo‘lgan?","Xorazmshohlar hukmdori","Rim imperatori","Misr fir’avni","Xitoy imperatori",0],
-["Tarix","Ibn Sino qaysi sohalarda mashhur?","Tibbiyot va falsafa","Musiqa","Rassomlik","Dengizchilik",0],
-["Tarix","Qog‘oz tayyorlash texnologiyasi ilk rivojlangan mamlakat?","Xitoy","Ispaniya","Braziliya","Kanada",0],
-["Tarix","BMT qachon tashkil etilgan?","1919-yil","1945-yil","1961-yil","1991-yil",1],
-["Kimyo","Suvning kimyoviy formulasi?","CO₂","H₂O","O₂","NaCl",1],
-["Kimyo","Kislorodning kimyoviy belgisi?","K","C","O","N",2],
-["Kimyo","Osh tuzining formulasi?","NaCl","HCl","H₂SO₄","CaCO₃",0],
-["Kimyo","Karbonat angidrid formulasi?","CO","CO₂","CaO","CH₄",1],
-["Kimyo","Atom yadrosida nimalar bo‘ladi?","Faqat elektronlar","Proton va neytronlar","Faqat molekulalar","Faqat ionlar",1],
-["Kimyo","pH=7 eritma qanday?","Kislotali","Neytral","Ishqoriy","Metall",1],
-["Kimyo","Davriy jadvalni kim yaratgan?","Mendeleyev","Nyuton","Darvin","Faradey",0],
-["Kimyo","Kislorodning odatdagi molekula formulasi?","O","O₂","O₃","OH",1],
-["Kimyo","Temirning kimyoviy belgisi?","Te","Ir","Fe","F",2],
-["Kimyo","Oltinning kimyoviy belgisi?","Ag","Au","Al","Gd",1],
-["Kimyo","Kislota eritmasida xos ion?","H⁺","OH⁻","Na⁺","Cl⁻",0],
-["Kimyo","Ishqoriy eritmalarda xos ion?","H⁺","OH⁻","He","Ne",1],
-["Kimyo","Metanning formulasi?","CH₄","C₂H₆","CO₂","NH₃",0],
-["Kimyo","Ammiakning formulasi?","NH₃","NO₂","N₂O","HNO₃",0],
-["Kimyo","Kalsiyning kimyoviy belgisi?","Cl","C","Ca","Cu",2],
-["Kimyo","Kimyoviy reaksiyada atomlar odatda nima qiladi?","Butunlay yo‘qoladi","Qayta joylashadi","Protonlari yo‘qoladi","Massasi yo‘q bo‘ladi",1],
-["Kimyo","Havoda eng ko‘p uchraydigan gaz?","Kislorod","Azot","Karbonat angidrid","Vodorod",1],
-["Biologiya","Hujayraning boshqaruv markazi?","Yadro","Vakuola","Membrana","Sitoplazma",0],
-["Biologiya","Fotosintez qaysi organoidda kechadi?","Mitoxondriya","Xloroplast","Ribosoma","Yadro",1],
-["Biologiya","Qonni haydaydigan organ?","O‘pka","Jigar","Yurak","Buyrak",2],
-["Biologiya","Odam nafas olishda qaysi gazni yutadi?","Karbonat angidrid","Kislorod","Metan","Vodorod",1],
-["Biologiya","Irsiy axborotning asosiy tashuvchisi?","DNK","Suv","Kraxmal","Yog‘",0],
-["Biologiya","O‘simlik ildizining vazifasi?","Yorug‘lik chiqarish","Suv va mineral moddalarni shimish","Changlatish","Tovush chiqarish",1],
-["Biologiya","Skeletning muhim vazifasi?","Qonni hazm qilish","Tanaga tayanch berish","Oziq ishlab chiqarish","Havo tozalash",1],
-["Biologiya","Qonda kislorod tashishda muhim modda?","Gemoglobin","Insulin","Keratin","Pepsin",0],
-["Biologiya","Hazm qilish qayerdan boshlanadi?","Oshqozon","Og‘iz bo‘shlig‘i","Ingichka ichak","Yo‘g‘on ichak",1],
-["Biologiya","Ekotizim nimani o‘z ichiga oladi?","Faqat hayvonlar","Faqat o‘simliklar","Tirik organizmlar va muhit","Faqat tuproq",2],
-["Biologiya","Odamning asosiy nafas olish organi?","Yurak","O‘pka","Buyrak","Oshqozon",1],
-["Biologiya","Immun himoyada qaysi qon hujayralari qatnashadi?","Leykotsitlar","Eritrotsitlar","Trombotsitlar","Neyronlar",0],
-["Biologiya","Oziq zanjiridagi ishlab chiqaruvchilar?","Yirtqichlar","Yashil o‘simliklar","Parazitlar","Barcha zamburug‘lar",1],
-["Biologiya","Mitoz natijasida odatda nechta qiz hujayra hosil bo‘ladi?","1","2","3","4",1],
-["Biologiya","Buyrakning muhim vazifasi?","Qonni filtrlash","Ovqatni maydalash","Ovoz chiqarish","Ko‘rish",0],
-["Biologiya","Asab tizimining asosiy hujayrasi?","Neyron","Eritrotsit","Osteotsit","Trombotsit",0],
-["Informatika","Kompyuterning asosiy hisoblash qurilmasi?","Protsessor","Printer","Sichqoncha","Monitor",0],
-["Informatika","1 bayt necha bit?","2","4","8","16",2],
-["Informatika","Operatsion tizimga misol?","Windows","HTML","USB","JPEG",0],
-["Informatika","Internet sahifalarini ko‘rish dasturi?","Brauzer","Kalkulyator","Arxivator","Drayver",0],
-["Informatika","Algoritm nima?","Amallar ketma-ketligi","Kompyuter qismi","Rasm formati","Elektr toki",0],
-["Informatika","Ikkilik sanoq sistemasida qaysi raqamlar ishlatiladi?","0 va 1","0 dan 7 gacha","1 dan 9 gacha","1 va 2",0],
-["Informatika","Matnli hujjat yaratish dasturi?","Word","Paint","Calculator","BIOS",0],
-["Informatika","Elektron jadval dasturi?","Excel","Notepad","VLC","Chrome",0],
-["Informatika","HTML asosan nima uchun ishlatiladi?","Veb-sahifa tuzilishi","Kompyuterni sovitish","Video karta ishlab chiqarish","Virusni davolash",0],
-["Informatika","Ma’lumotni saqlaydigan qurilma?","SSD","RAM","Registr","Kesh",0],
-["Informatika","RAM qanday xotira?","Doimiy","Tezkor, vaqtinchalik","Faqat tashqi","Optik",1],
-["Informatika","Qaysi parol xavfsizroq?","123456","password","Uzun va noyob parol","Faqat ism",2],
-["Informatika","Kompyuter virusi nima?","Zarar yetkazishi mumkin bo‘lgan dastur","Monitor turi","Tarmoq kabeli","Matn muharriri",0],
-["Informatika","URL nimani bildiradi?","Veb-resurs manzili","Protsessor tezligi","Xotira turi","Rasm o‘lchami",0],
-["Informatika","Fayllarni kichraytirish amali?","Arxivlash","Formatlash","Chop etish","Skanerlash",0],
-["Informatika","Ma’lumotlar bazasi nima uchun xizmat qiladi?","Ma’lumotlarni tartibli saqlash","Faqat rasm chizish","Musiqa tinglash","Ekranni yoritish",0]
-];
-
-const allQuestions=raw.map((r,i)=>({
- id:i+1,subject:r[0],question:r[1],options:r.slice(2,6),answer:r[6]
-}));
-
-function shuffle(arr){
- const a=[...arr];
- for(let i=a.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [a[i],a[j]]=[a[j],a[i]];
- }
- return a;
-}
-function startTest(){
- const subject=$("testSubject").value;
- testQuestions=shuffle(allQuestions.filter(q=>subject==="all"||q.subject===subject));
- testIndex=0;testScore=0;testLocked=false;testAnswers=[];testStartedAt=Date.now();
- hide("testResult");show("quizBox");renderQuestion();
-}
-function renderQuestion(){
- const q=testQuestions[testIndex];
- testLocked=false;
- $("testLabel").textContent=q.subject;
- $("counter").textContent=`Savol ${testIndex+1} / ${testQuestions.length}`;
- $("progress").style.width=(testIndex/testQuestions.length*100)+"%";
- $("question").textContent=q.question;
- $("feedback").textContent="";
- $("options").innerHTML="";
- q.options.forEach((text,i)=>{
-  const label=document.createElement("label");
-  label.className="option";
-  const input=document.createElement("input");
-  input.type="radio";input.name="answer";input.value=i;
-  label.append(input,document.createTextNode(text));
-  $("options").append(label);
- });
- show("checkAnswer");hide("nextQuestion");
- $("checkAnswer").disabled=false;
-}
-function checkAnswer(){
- if(testLocked)return;
- const selected=document.querySelector('input[name="answer"]:checked');
- if(!selected){$("feedback").textContent="Avval javob variantini tanlang.";return;}
- testLocked=true;
- const q=testQuestions[testIndex],choice=Number(selected.value);
- const correct=choice===q.answer;
- if(correct)testScore++;
- testAnswers.push({id:q.id,subject:q.subject,question:q.question,choice,correctAnswer:q.answer,correct});
- $("feedback").textContent=correct?"✅ To‘g‘ri javob!":"❌ Noto‘g‘ri. To‘g‘ri javob: "+q.options[q.answer];
- document.querySelectorAll('input[name="answer"]').forEach(x=>x.disabled=true);
- hide("checkAnswer");show("nextQuestion");
- $("nextQuestion").textContent=testIndex===testQuestions.length-1?"Natijani yakunlash":"Keyingi savol";
-}
-function nextQuestion(){
- if(!testLocked)return;
- testIndex++;
- if(testIndex<testQuestions.length)renderQuestion();
- else finishTest();
-}
-function finishTest(){
- hide("quizBox");
- const total=testQuestions.length,pct=Math.round(testScore/total*100);
- const result={
-  date:new Date().toLocaleString("uz-UZ"),
-  subject:$("testSubject").value,
-  score:testScore,total,percent:pct,
-  details:testAnswers
- };
- const key="mm_results_"+(currentUser?.id||"guest");
- const results=JSON.parse(localStorage.getItem(key)||"[]");
- results.unshift(result);
- localStorage.setItem(key,JSON.stringify(results.slice(0,50)));
- $("testResult").textContent=`Test yakunlandi! Natija: ${testScore}/${total} ball (${pct}%). `+
-  (pct>=90?"A’lo natija!":pct>=70?"Yaxshi natija!":pct>=50?"Qoniqarli. Yana mashq qiling.":"Ko‘proq mashq qilib, qayta urinib ko‘ring.");
- show("testResult");
- $("progress").style.width="100%";
- renderResults();
-}
-function renderResults(){
- const key="mm_results_"+(currentUser?.id||"guest");
- const results=JSON.parse(localStorage.getItem(key)||"[]");
- $("resultsList").innerHTML="";
- if(!results.length){
-  $("resultsList").textContent="Hozircha test natijalari yo‘q.";
-  return;
- }
- results.forEach((r,i)=>{
-  const div=document.createElement("div");div.className="tile";
-  const title=document.createElement("h3");
-  title.textContent=`${i+1}. ${r.subject==="all"?"Barcha fanlar":r.subject}`;
-  const p=document.createElement("p");
-  p.textContent=`${r.score}/${r.total} ball · ${r.percent}% · ${r.date}`;
-  div.append(title,p);$("resultsList").append(div);
- });
-}
-async function saveProfile(){
- if(!db||!currentUser)return;
- const full_name=$("editName").value.trim();
- const school_name=$("editSchool").value.trim();
- const grade=$("editGrade").value;
- if(!full_name||!school_name){
-  message("profileMsg","Ism va maktab nomini kiriting.","error");return;
- }
- const {error}=await db.from("profiles").update({full_name,school_name,grade}).eq("id",currentUser.id);
- if(error){
-  message("profileMsg","Profilni saqlashda xatolik: "+error.message,"error");return;
- }
- message("profileMsg","Profil saqlandi.","success");
- await loadProfile();
-}
-async function sendAppeal(){
- if(!db||!currentUser)return;
- const title=$("appealTitle").value.trim();
- const body=$("appealText").value.trim();
- if(!title||!body){message("appealMsg","Mavzu va murojaat matnini kiriting.","error");return;}
- const {error}=await db.from("appeals").insert({
-  user_id:currentUser.id,title,body
- });
- if(error){
-  message("appealMsg","Murojaat jadvaliga yozib bo‘lmadi. Supabase’da appeals jadvali va RLS siyosati kerak. Xatolik: "+error.message,"error");
-  return;
- }
- $("appealTitle").value="";$("appealText").value="";
- message("appealMsg","Murojaat yuborildi.","success");
-}
-async function loadAdmin(){
- if(!db||currentProfile?.role!=="admin"){
-  message("adminMsg","Bu bo‘lim uchun administrator huquqi kerak.","error");return;
- }
- const {data,error}=await db.from("profiles")
-  .select("full_name,username,school_name,grade,role")
-  .order("full_name");
- if(error){message("adminMsg","Foydalanuvchilarni yuklab bo‘lmadi: "+error.message,"error");return;}
- $("adminUsers").innerHTML="";
- (data||[]).forEach(u=>{
-  const div=document.createElement("div");div.className="tile";
-  const h=document.createElement("h3");h.textContent=u.full_name||"Ismsiz";
-  const p=document.createElement("p");
-  p.textContent=`@${u.username||"—"} · ${u.school_name||"—"} · ${u.grade||"—"}-sinf · ${u.role||"—"}`;
-  div.append(h,p);$("adminUsers").append(div);
- });
- message("adminMsg",`${data.length} ta profil yuklandi.`,"success");
+  await db.auth.signOut();
+  currentUser=null;
+  profile=null;
+  showAuth();
 }
 
 $("loginBtn").addEventListener("click",signIn);
 $("signupBtn").addEventListener("click",signUp);
 $("forgotBtn").addEventListener("click",forgotPassword);
-$("showSignup").addEventListener("click",()=>show("signupBox"));
-$("hideSignup").addEventListener("click",()=>hide("signupBox"));
+$("showSignup").addEventListener("click",()=>$("signupBox").classList.remove("hidden"));
+$("hideSignup").addEventListener("click",()=>$("signupBox").classList.add("hidden"));
 $("logoutBtn").addEventListener("click",logout);
-$("startTest").addEventListener("click",startTest);
-$("checkAnswer").addEventListener("click",checkAnswer);
-$("nextQuestion").addEventListener("click",nextQuestion);
-$("saveProfile").addEventListener("click",saveProfile);
-$("sendAppeal").addEventListener("click",sendAppeal);
-$("reloadAdmin").addEventListener("click",loadAdmin);
-$("clearResults").addEventListener("click",()=>{
- if(confirm("Ushbu qurilmada saqlangan natijalar o‘chirilsinmi?")){
-  localStorage.removeItem("mm_results_"+(currentUser?.id||"guest"));
-  renderResults();
- }
-});
-document.querySelectorAll("#navigation button[data-tab]").forEach(btn=>{
- btn.addEventListener("click",()=>showTab(btn.dataset.tab));
-});
-document.querySelectorAll("[data-go]").forEach(btn=>{
- btn.addEventListener("click",()=>showTab(btn.dataset.go));
-});
-$("password").addEventListener("keydown",e=>{if(e.key==="Enter")signIn();});
+$("nextBtn").addEventListener("click",checkAnswer);
 
-connect();
+document.querySelectorAll("[data-page]").forEach(button=>{
+  button.addEventListener("click",()=>showPage(button.dataset.page));
+});
+
+(async function init(){
+  try{
+    const {data,error}=await db.auth.getSession();
+    if(error) throw error;
+    if(data.session){
+      currentUser=data.session.user;
+      await loadProfile();
+    }
+  }catch(e){
+    message("Ulanish xatosi: "+e.message,"error");
+  }
+})();
 </script>
 </body>
 </html>
