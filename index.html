@@ -3,357 +3,281 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mening Maktabim</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#f4f7ff;--card:#fff;--text:#17233e;--muted:#68758f;--primary:#4f46e5;--border:#e6eaf4}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:700}
-.primary{background:linear-gradient(120deg,#4f46e5,#7c3aed);color:white}
-.secondary{background:#eef0ff;color:#4438ca}
-header{background:linear-gradient(120deg,#171c4b,#4338ca,#7c3aed);color:white;padding:24px max(20px,calc((100% - 1100px)/2))}
-.brand{font-size:24px;font-weight:900;letter-spacing:-.7px}
-.tagline{opacity:.8;margin-top:7px}
-main{max-width:1100px;margin:25px auto;padding:0 18px}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:0 12px 36px #27366b0a;margin-bottom:20px}
-h1,h2,h3,p{margin-top:0}
-h1{font-size:clamp(25px,4vw,38px);letter-spacing:-1px}
-.muted{color:var(--muted);line-height:1.6}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
-.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-label{font-size:13px;font-weight:800;color:var(--muted)}
-input,select{width:100%;padding:13px;border:1px solid var(--border);border-radius:12px;background:white;color:var(--text);outline:none}
-input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px #4f46e51c}
-.subject{padding:20px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(145deg,#fff,#f8f9ff);transition:.2s}
-.subject:hover{transform:translateY(-3px);box-shadow:0 12px 25px #25346b12}
-.emoji{font-size:32px;margin-bottom:14px}
-.subject h3{margin-bottom:7px}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.row>*{flex:1}
-.hidden{display:none!important}
-.notice{padding:12px 14px;border-radius:12px;background:#f0f3ff;color:#3730a3;margin:12px 0;line-height:1.5}
+body{margin:0;background:#f3f5ff;color:#20264a;font-family:Arial,sans-serif}
+header{padding:28px 7%;background:linear-gradient(120deg,#171c4b,#5145e5);color:white}
+header h1{margin:0;font-size:30px}
+header p{opacity:.85}
+main{max-width:1000px;margin:28px auto;padding:0 16px}
+.card{background:white;padding:24px;border-radius:20px;box-shadow:0 8px 30px #20264a0d;margin-bottom:20px}
+input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:11px;font:inherit}
+input,select{border:1px solid #dfe3f2}
+button{border:0;background:#5145e5;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+.secondary{background:#eceeff;color:#4338ca}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.subject{padding:20px;border:1px solid #e3e6f4;border-radius:16px;background:linear-gradient(145deg,#fff,#f1f0ff)}
+.subject .icon{font-size:32px}
+.hidden{display:none}
+.msg{padding:12px;border-radius:10px;background:#eef0ff;line-height:1.5;overflow-wrap:anywhere}
 .error{background:#fff0f0;color:#b42318}
-.success{background:#ecfdf3;color:#067647}
-.question{font-size:21px;line-height:1.5;font-weight:800}
-.answer{display:block;width:100%;text-align:left;margin:9px 0;background:#f7f8ff;border:1px solid var(--border);color:var(--text)}
-.answer:hover{border-color:var(--primary)}
-.answer.selected{background:#e9eaff;border-color:var(--primary)}
-.progress{height:8px;background:#e9eaf4;border-radius:9px;overflow:hidden;margin:16px 0}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#4f46e5,#a78bfa)}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
-.small{font-size:13px}
-@media(max-width:560px){.panel{padding:18px}header{padding:22px 18px}.row{flex-direction:column;align-items:stretch}}
+h2{margin-top:0}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">🎓 Mening Maktabim</div>
-  <div class="tagline">Bilim ol. Sinovdan o‘t. Natijangni ko‘r.</div>
+<h1>🎓 Mening Maktabim</h1>
+<p>Bilimingni sinab ko‘r. Kelajagingni yarat.</p>
 </header>
-
 <main>
-  <section id="auth" class="panel">
-    <h1>Bilim sari yangi qadam!</h1>
-    <p class="muted">Hisobingga kir yoki yangi hisob yaratib, fanlarni o‘rganishni boshlagin.</p>
-    <div class="row">
-      <button id="loginTab" class="primary" onclick="authMode('login')">Kirish</button>
-      <button id="signupTab" class="secondary" onclick="authMode('signup')">Ro‘yxatdan o‘tish</button>
-    </div>
-    <div id="message" class="notice hidden"></div>
-    <form id="loginForm">
-      <div class="field"><label>FOYDALANUVCHI NOMI</label><input id="loginUsername" autocomplete="username" required placeholder="Masalan: ali_2011"></div>
-      <div class="field"><label>PAROL</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Paroling"></div>
-      <button class="primary" style="width:100%">Hisobga kirish →</button>
-      <button type="button" class="secondary" style="width:100%;margin-top:10px" onclick="resetPassword()">Parolni tiklash</button>
-    </form>
-    <form id="signupForm" class="hidden">
-      <div class="grid">
-        <div class="field"><label>ISM-FAMILIYA</label><input id="fullName" required maxlength="100" placeholder="Ism va familiya"></div>
-        <div class="field"><label>FOYDALANUVCHI NOMI</label><input id="username" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" placeholder="ali_2011"></div>
-        <div class="field"><label>EMAIL</label><input id="email" type="email" required placeholder="email@example.com"></div>
-        <div class="field"><label>PAROL (kamida 6 belgi)</label><input id="password" type="password" required minlength="6" autocomplete="new-password"></div>
-        <div class="field"><label>MAKTAB NOMI</label><input id="schoolName" required placeholder="Maktab nomi"></div>
-        <div class="field"><label>MAKTAB RAQAMI</label><input id="schoolNumber" placeholder="Masalan: 12"></div>
-        <div class="field"><label>SINF</label><select id="grade" required><option value="">Sinfni tanla</option></select></div>
-        <div class="field"><label>HISOB TURI</label><select id="requestedRole"><option value="student">O‘quvchi</option><option value="teacher">O‘qituvchi — tasdiq talab qilinadi</option></select></div>
-      </div>
-      <button class="primary" style="width:100%">Hisob yaratish</button>
-    </form>
-  </section>
+<section class="card" id="auth">
+<h2 id="formTitle">Hisobga kirish</h2>
+<div id="msg" class="msg hidden"></div>
+<form id="loginForm">
+<input id="loginName" placeholder="Email yoki username" required>
+<input id="loginPass" type="password" placeholder="Parol" required>
+<button id="loginBtn">Kirish →</button>
+</form>
+<form id="registerForm" class="hidden">
+<input id="fullName" placeholder="Ism-familiya" required>
+<input id="newUsername" placeholder="Username (masalan ali_2011)" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+">
+<input id="newEmail" type="email" placeholder="Email manziling" required>
+<input id="newPass" type="password" placeholder="Parol (kamida 6 belgi)" required minlength="6">
+<input id="school" placeholder="Maktab nomi" required>
+<input id="schoolNo" placeholder="Maktab raqami">
+<select id="grade" required></select>
+<button id="registerBtn">Ro‘yxatdan o‘tish</button>
+</form>
+<button class="secondary" id="switchBtn" type="button" onclick="switchMode()">Ro‘yxatdan o‘tish</button>
+</section>
 
-  <section id="dashboard" class="hidden">
-    <div class="panel">
-      <div class="row">
-        <div><p class="muted small">SHAXSIY KABINET</p><h1 id="welcome">Xush kelibsiz!</h1><p id="accountInfo" class="muted"></p></div>
-        <button class="secondary" style="flex:0 0 auto" onclick="logout()">Chiqish</button>
-      </div>
-      <div class="grid">
-        <div class="field"><label>SINFNI TANLA</label><select id="gradeSelect"></select></div>
-        <div class="field"><label>TEST SAVOLLARI</label><select id="countSelect"><option value="10">10 ta savol</option><option value="20">20 ta savol</option><option value="100">100 ta savol</option></select></div>
-      </div>
-      <p class="muted small">Fan tanla, savollarga javob ber va yakuniy natijangni ko‘r.</p>
-    </div>
-    <h2>📚 Fanlar</h2>
-    <div id="subjects" class="grid"></div>
-    <div id="quiz" class="panel hidden"></div>
-    <div id="staff" class="panel hidden"></div>
-    <div id="history" class="panel"></div>
-  </section>
+<section id="home" class="hidden">
+<div class="card">
+<button style="float:right;width:auto" onclick="logout()">Chiqish</button>
+<h2 id="welcome">Xush kelibsiz!</h2>
+<p>Sinflar va fanlarni tanlang.</p>
+<label for="classSelect">Sinf</label>
+<select id="classSelect"></select>
+</div>
+<div class="grid" id="subjects"></div>
+<div class="card hidden" id="testBox"></div>
+<div class="card" id="results"><h2>Natijalar</h2><p>Hali test ishlamadingiz.</p></div>
+</section>
 </main>
-<footer>© Mening Maktabim · Ta’lim va bilim uchun</footer>
-
 <script>
-const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const URL="https://pkbhavmbudmyrmfhifmr.supabase.co";
+const KEY="sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
+const db=supabase.createClient(URL,KEY);
+const $=id=>document.getElementById(id);
 
-const $ = id => document.getElementById(id);
-const subjects = [
-  {id:"kimyo",name:"Kimyo",icon:"🧪",color:"#e0f2fe"},
-  {id:"fizika",name:"Fizika",icon:"⚡",color:"#fef3c7"},
-  {id:"algebra",name:"Algebra",icon:"📐",color:"#ede9fe"},
-  {id:"informatika",name:"Informatika",icon:"💻",color:"#dcfce7"},
-  {id:"biologiya",name:"Biologiya",icon:"🌱",color:"#d1fae5"},
-  {id:"tarix",name:"Tarix",icon:"🏛️",color:"#ffedd5"},
-  {id:"rus",name:"Rus tili",icon:"📖",color:"#dbeafe"},
-  {id:"ingliz",name:"Ingliz tili",icon:"🌍",color:"#fce7f3"}
-];
 for(let i=1;i<=11;i++){
-  $("grade").add(new Option(i+"-sinf",i));
-  $("gradeSelect").add(new Option(i+"-sinf",i));
+ $("grade").add(new Option(i+"-sinf",i));
+ $("classSelect").add(new Option(i+"-sinf",i));
 }
 
-function notice(message,type=""){
-  $("message").textContent=message;
-  $("message").className="notice "+type;
+let mode="login",activeUser=null,activeSubject="",qIndex=0,points=0,questions=[];
+const subjects=[
+["kimyo","🧪","Kimyo"],["fizika","⚡","Fizika"],
+["algebra","📐","Algebra"],["informatika","💻","Informatika"],
+["biologiya","🌱","Biologiya"],["tarix","🏛️","Tarix"],
+["rus","📘","Rus tili"],["ingliz","🌍","Ingliz tili"]
+];
+
+function message(text,error=false){
+ $("msg").textContent=text;
+ $("msg").className="msg"+(error?" error":"");
+ $("msg").classList.remove("hidden");
 }
-function authMode(mode){
-  $("loginForm").classList.toggle("hidden",mode!=="login");
-  $("signupForm").classList.toggle("hidden",mode!=="signup");
-  $("loginTab").className=mode==="login"?"primary":"secondary";
-  $("signupTab").className=mode==="signup"?"primary":"secondary";
-  $("message").classList.add("hidden");
+function switchMode(){
+ mode=mode==="login"?"register":"login";
+ $("loginForm").classList.toggle("hidden",mode!=="login");
+ $("registerForm").classList.toggle("hidden",mode!=="register");
+ $("formTitle").textContent=mode==="login"?"Hisobga kirish":"Yangi hisob yaratish";
+ $("switchBtn").textContent=mode==="login"?"Ro‘yxatdan o‘tish":"Kirishga qaytish";
+ $("msg").classList.add("hidden");
 }
-function cleanUsername(value){return value.trim().toLowerCase()}
-function showDashboard(user,profile={}){
-  $("auth").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
-  $("welcome").textContent="Salom, "+(profile.full_name||user.user_metadata?.full_name||"o‘quvchi")+"!";
-  $("accountInfo").textContent=(profile.school_name||user.user_metadata?.school_name||"Mening Maktabim")+" · "+(profile.grade||user.user_metadata?.grade||"Sinf belgilanmagan")+"-sinf";
-  renderSubjects();
-  loadHistory();
-  const role=profile.role||"student";
-  if(role==="teacher"||role==="admin"){
-    $("staff").classList.remove("hidden");
-    $("staff").innerHTML="<h2>🛡️ Xodimlar paneli</h2><p class='muted'>Sizning hisob rolingiz: "+role+". Bu boshlang‘ich interfeys; ma’lumotlarni boshqarish uchun alohida, RLS bilan himoyalangan server funksiyalari kerak.</p>";
-  }else $("staff").classList.add("hidden");
+async function profileFor(user){
+ const {data,error}=await db.from("profiles")
+ .select("full_name,role,school_name,grade,username")
+ .eq("id",user.id).maybeSingle();
+ if(error)console.warn("Profil:",error.message);
+ return data||{};
 }
-async function getProfile(user){
-  const {data,error}=await db.from("profiles").select("full_name,role,school_name,grade,username").eq("id",user.id).maybeSingle();
-  if(error) console.warn("Profilni o‘qish:",error.message);
-  return data||{};
-}
-async function restoreSession(){
-  const {data:{session}}=await db.auth.getSession();
-  if(session){
-    const profile=await getProfile(session.user);
-    showDashboard(session.user,profile);
-  }
+async function enter(user,profile={}){
+ activeUser=user;
+ $("auth").classList.add("hidden");
+ $("home").classList.remove("hidden");
+ $("welcome").textContent="Salom, "+(profile.full_name||user.user_metadata?.full_name||"o‘quvchi")+"!";
+ renderSubjects();
+ showResults();
 }
 $("loginForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const username=cleanUsername($("loginUsername").value);
-  const password=$("loginPassword").value;
-  const btn=e.submitter; if(btn)btn.disabled=true;
-  notice("Hisob tekshirilmoqda...");
-  try{ const emailOrUsername = $("loginUsername").value.trim();
+ e.preventDefault();
+ const btn=$("loginBtn");btn.disabled=true;
+ message("Kirilmoqda...");
+ try{
+   const name=$("loginName").value.trim();
+   const password=$("loginPass").value;
+   let data,error;
 
-const { data, error } = await db.auth.signInWithPassword({
-  email: emailOrUsername,
-  password: $("loginPassword").value
+   if(name.includes("@")){
+     ({data,error}=await db.auth.signInWithPassword({email:name,password}));
+   }else{
+     const result=await db.functions.invoke("username-login",{
+       body:{username:name.toLowerCase(),password}
+     });
+     if(result.error)throw new Error(
+       "Username orqali kirish serveri ishlamayapti. Email bilan kirib ko‘ring."
+     );
+     if(result.data?.error)throw new Error(result.data.error);
+     if(!result.data?.access_token||!result.data?.refresh_token)
+       throw new Error("Server sessiya qaytarmadi. Edge Function sozlamasini tekshirish kerak.");
+     ({data,error}=await db.auth.setSession({
+       access_token:result.data.access_token,
+       refresh_token:result.data.refresh_token
+     }));
+   }
+   if(error)throw error;
+   const profile=await profileFor(data.user);
+   await enter(data.user,profile);
+ }catch(err){
+   message("Kirish xatosi: "+(err.message||"Ma’lumotlarni tekshiring."),true);
+ }finally{btn.disabled=false}
+});
+$("registerForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const btn=$("registerBtn");btn.disabled=true;
+ try{
+   const username=$("newUsername").value.trim().toLowerCase();
+   if(!/^[a-z0-9_]{3,20}$/.test(username))
+     throw new Error("Username 3–20 belgi, faqat harf, raqam va _ bo‘lishi kerak.");
+   const {data,error}=await db.auth.signUp({
+     email:$("newEmail").value.trim(),
+     password:$("newPass").value,
+     options:{data:{
+       full_name:$("fullName").value.trim(),
+       username,
+       school_name:$("school").value.trim(),
+       school_number:$("schoolNo").value.trim(),
+       grade:$("grade").value,
+       requested_role:"student"
+     }}
+   });
+   if(error)throw error;
+   if(data.session){
+     await enter(data.user,await profileFor(data.user));
+   }else{
+     message("Hisob yaratildi! Email tasdiqlash talab qilinsa, pochtangni tekshir. Keyin email va parol bilan kir.");
+     switchMode();
+   }
+ }catch(err){
+   message("Ro‘yxatdan o‘tish xatosi: "+err.message,true);
+ }finally{btn.disabled=false}
 });
 
-if (error) throw error;
-const profile = await getProfile(data.user);
-showDashboard(data.user, profile);
-    if(error)throw error;
-    if(data?.error)throw new Error(data.error);
-    if(!data?.access_token||!data?.refresh_token)throw new Error("Kirish xizmati sessiya qaytarmadi. username-login funksiyasini tekshirish kerak.");
-    const {data:sessionData,error:sessionError}=await db.auth.setSession({
-      access_token:data.access_token,refresh_token:data.refresh_token
-    });
-    if(sessionError)throw sessionError;
-    const profile=await getProfile(sessionData.user);
-    showDashboard(sessionData.user,profile);
-  }catch(err){
-    notice("Kirish amalga oshmadi: "+(err.message||"Xatolik")+". Username va parolni tekshir. Hisob oldin yaratilgan bo‘lsa, qayta ro‘yxatdan o‘tma.","error");
-  }finally{if(btn)btn.disabled=false}
-});
-$("signupForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const username=cleanUsername($("username").value);
-  if(!/^[a-z0-9_]{3,20}$/.test(username)){
-    notice("Username 3–20 belgidan iborat bo‘lsin; faqat lotin harflari, raqam va _ ishlat.","error");return;
-  }
-  const btn=e.submitter;if(btn)btn.disabled=true;
-  notice("Hisob yaratilmoqda...");
-  try{
-    const {data,error}=await db.auth.signUp({
-      email:$("email").value.trim(),
-      password:$("password").value,
-      options:{data:{
-        full_name:$("fullName").value.trim(),
-        username,
-        school_name:$("schoolName").value.trim(),
-        school_number:$("schoolNumber").value.trim(),
-        grade:$("grade").value,
-        requested_role:$("requestedRole").value
-      }}
-    });
-    if(error)throw error;
-    if(data.session){
-      const profile=await getProfile(data.user);
-      showDashboard(data.user,profile);
-    }else{
-      notice("Hisob yaratish so‘rovi yuborildi. Email tasdiqlash yoqilgan bo‘lsa, pochtangni tekshir. Tasdiqlashdan so‘ng kirish oynasidan foydalan.","success");
-      authMode("login");
-    }
-  }catch(err){
-    notice("Ro‘yxatdan o‘tish xatosi: "+err.message,"error");
-  }finally{if(btn)btn.disabled=false}
-});
-async function resetPassword(){
-  const email=prompt("Hisobga ulangan email manzilini yoz:");
-  if(!email)return;
-  const {error}=await db.auth.resetPasswordForEmail(email.trim());
-  notice(error?"Parolni tiklash xatosi: "+error.message:"Agar email mavjud bo‘lsa, parolni tiklash xabari yuboriladi.","success");
-}
-async function logout(){
-  const {error}=await db.auth.signOut();
-  if(error){alert("Chiqishda xatolik: "+error.message);return}
-  $("dashboard").classList.add("hidden");
-  $("auth").classList.remove("hidden");
-  $("quiz").classList.add("hidden");
-  authMode("login");
-}
 function renderSubjects(){
-  $("subjects").innerHTML=subjects.map(s=>`
-    <article class="subject" style="background:linear-gradient(145deg,#fff,${s.color})">
-      <div class="emoji">${s.icon}</div><h3>${s.name}</h3>
-      <p class="muted small">Tanlangan sinf: ${$("gradeSelect").value}-sinf</p>
-      <button class="primary" style="width:100%" onclick="startQuiz('${s.id}')">Testni boshlash →</button>
-    </article>`).join("");
+ $("subjects").innerHTML=subjects.map(s=>`
+ <div class="subject"><div class="icon">${s[1]}</div>
+ <h2>${s[2]}</h2><p>${$("classSelect").value}-sinf</p>
+ <button onclick="startTest('${s[0]}')">Testni boshlash</button></div>`).join("");
 }
-$("gradeSelect").addEventListener("change",renderSubjects);
+$("classSelect").addEventListener("change",renderSubjects);
 
-/* Namunaviy savollar. To‘liq 8 800 ta tekshirilgan savol bazasi keyin alohida import qilinishi kerak. */
 const bank={
 kimyo:[
-{q:"Suvning kimyoviy formulasi qaysi?",a:["H₂O","CO₂","O₂","NaCl"],c:0},
-{q:"Kislorodning kimyoviy belgisi qaysi?",a:["K","O","C","N"],c:1},
-{q:"Osh tuzining formulasi qaysi?",a:["HCl","H₂O","NaCl","CO₂"],c:2},
-{q:"Atom yadrosida nimalar joylashgan?",a:["Faqat elektronlar","Proton va neytronlar","Faqat molekulalar","Faqat ionlar"],c:1},
-{q:"pH qiymati 7 bo‘lgan eritma (25°C da) qanday?",a:["Kislotali","Ishqoriy","Neytral","Metall"],c:2}],
+["Suv formulasi qaysi?",["H₂O","CO₂","O₂","NaCl"],0],
+["Kislorod belgisi qaysi?",["K","O","C","N"],1],
+["Osh tuzi formulasi?",["HCl","H₂O","NaCl","CO₂"],2],
+["Atom yadrosida nimalar bor?",["Elektronlar","Proton va neytronlar","Molekulalar","Faqat ionlar"],1],
+["pH=7 bo‘lgan eritma qanday?",["Kislotali","Ishqoriy","Neytral","Metall"],2]],
 fizika:[
-{q:"Kuchning SI tizimidagi birligi nima?",a:["Joul","Nyuton","Vatt","Paskal"],c:1},
-{q:"Tezlikni topish formulasi qaysi?",a:["v=s/t","v=s×t","v=t/s","v=s+t"],c:0},
-{q:"Elektr tokining SI birligi qaysi?",a:["Volt","Om","Amper","Vatt"],c:2},
-{q:"Yer jismlarni qaysi kuch bilan tortadi?",a:["Ishqalanish","Magnitlanish","Gravitatsiya","Elastiklik"],c:2},
-{q:"Energiya birligi qaysi?",a:["Joul","Nyuton","Amper","Metr"],c:0}],
+["Kuch birligi nima?",["Joul","Nyuton","Vatt","Paskal"],1],
+["Tezlik formulasi?",["s/t","s×t","t/s","s+t"],0],
+["Tok kuchi birligi?",["Volt","Om","Amper","Vatt"],2],
+["Jismlarni Yerga tortuvchi kuch?",["Ishqalanish","Magnit","Gravitatsiya","Elastiklik"],2],
+["Energiya birligi?",["Joul","Nyuton","Amper","Metr"],0]],
 algebra:[
-{q:"x + 7 = 12. x ni top.",a:["3","4","5","7"],c:2},
-{q:"9 × 8 nechaga teng?",a:["63","72","81","64"],c:1},
-{q:"3x = 21. x ni top.",a:["6","7","8","9"],c:1},
-{q:"(a+b)² formulasi qaysi?",a:["a²+b²","a²+2ab+b²","a²−b²","2a+2b"],c:1},
-{q:"5² nechaga teng?",a:["10","15","20","25"],c:3}],
+["x+7=12. x=?",["3","4","5","7"],2],
+["9×8=?",["63","72","81","64"],1],
+["3x=21. x=?",["6","7","8","9"],1],
+["(a+b)²=?",["a²+b²","a²+2ab+b²","a²−b²","2a+2b"],1],
+["5²=?",["10","15","20","25"],3]],
 informatika:[
-{q:"Kompyuterning asosiy hisoblash qurilmasi qaysi?",a:["Protsessor","Monitor","Sichqoncha","Printer"],c:0},
-{q:"1 bayt necha bit?",a:["2","4","8","16"],c:2},
-{q:"HTML asosan nima uchun ishlatiladi?",a:["Veb-sahifa tuzilishi","Rasm chizish qurilmasi","Antivirus","Operatsion tizim"],c:0},
-{q:"Ma’lumotni uzoq muddat saqlaydigan qurilma qaysi?",a:["RAM","SSD","Protsessor","Klaviatura"],c:1},
-{q:"Algoritm nima?",a:["Muammoni yechish ketma-ketligi","Monitor turi","Fayl kengaytmasi","Internet kabeli"],c:0}],
+["Hisoblash qurilmasi?",["Protsessor","Monitor","Sichqoncha","Printer"],0],
+["1 bayt necha bit?",["2","4","8","16"],2],
+["HTML nimaga xizmat qiladi?",["Veb-sahifa tuzilishiga","Antivirusga","Operatsion tizimga","Hisob-kitobga"],0],
+["Fayllarni saqlash qurilmasi?",["RAM","SSD","Protsessor","Klaviatura"],1],
+["Algoritm nima?",["Amallar ketma-ketligi","Monitor turi","Fayl nomi","Internet kabeli"],0]],
 biologiya:[
-{q:"O‘simliklar fotosintezda qaysi gazni yutadi?",a:["Kislorod","Karbonat angidrid","Azot","Vodorod"],c:1},
-{q:"Inson yuragi nechta kameradan iborat?",a:["2","3","4","5"],c:2},
-{q:"Tirik organizmning asosiy tuzilish birligi nima?",a:["Atom","Hujayra","A’zo","To‘qima"],c:1},
-{q:"Qon tarkibida kislorod tashishda asosan nima qatnashadi?",a:["Eritrotsitlar","Trombotsitlar","Plazma tuzlari","Nervlar"],c:0},
-{q:"O‘simlik ildizining muhim vazifasi qaysi?",a:["Faqat urug‘ hosil qilish","Suv va mineral moddalarni so‘rish","Faqat fotosintez","Changlanish"],c:1}],
+["Fotosintezda o‘simlik qaysi gazni yutadi?",["Kislorod","CO₂","Azot","Vodorod"],1],
+["Inson yuragi nechta kamerali?",["2","3","4","5"],2],
+["Tiriklikning tuzilish birligi?",["Atom","Hujayra","A’zo","To‘qima"],1],
+["Kislorod tashuvchi qon hujayrasi?",["Eritrotsit","Trombotsit","Neyron","Leykotsit"],0],
+["Ildizning vazifasi?",["Faqat gul ochish","Suv va mineral so‘rish","Faqat fotosintez","Changlanish"],1]],
 tarix:[
-{q:"O‘zbekiston mustaqilligi qachon e’lon qilingan?",a:["1990-yil 1-sentabr","1991-yil 31-avgust","1992-yil 8-dekabr","1991-yil 8-dekabr"],c:1},
-{q:"Amir Temur davlatining poytaxti bo‘lgan shahar qaysi?",a:["Samarqand","Xiva","Qo‘qon","Termiz"],c:0},
-{q:"Buyuk Ipak yo‘li asosan nimaga xizmat qilgan?",a:["Faqat urushga","Savdo va madaniy aloqalarga","Faqat dehqonchilikka","Faqat dengiz sayohatiga"],c:1},
-{q:"O‘zbekiston Respublikasi Konstitutsiyasi ilk bor qachon qabul qilingan?",a:["1991-yil 31-avgust","1992-yil 8-dekabr","1993-yil 1-sentabr","1990-yil 20-iyun"],c:1},
-{q:"Qadimgi Misr sivilizatsiyasi qaysi daryo bo‘yida rivojlangan?",a:["Amudaryo","Nil","Dunay","Volga"],c:1}],
+["O‘zbekiston mustaqilligi qachon e’lon qilingan?",["1990-yil","1991-yil 31-avgust","1992-yil","1993-yil"],1],
+["Amir Temur davlatining poytaxti?",["Samarqand","Xiva","Qo‘qon","Termiz"],0],
+["Buyuk Ipak yo‘li nimaga xizmat qilgan?",["Faqat urushga","Savdo va madaniy aloqalarga","Faqat dehqonchilikka","Faqat dengizga"],1],
+["Konstitutsiya ilk bor qachon qabul qilingan?",["1991-yil","1992-yil 8-dekabr","1993-yil","1990-yil"],1],
+["Qadimgi Misr qaysi daryo bo‘yida rivojlangan?",["Amudaryo","Nil","Dunay","Volga"],1]],
 rus:[
-{q:"«Книга» so‘zining ko‘plik shakli qaysi?",a:["Книги","Книгой","Книге","Книжка"],c:0},
-{q:"«Здравствуйте» qanday ma’noni anglatadi?",a:["Xayr","Rahmat","Salom","Iltimos"],c:2},
-{q:"«Я ___ в школу» gapini to‘ldir.",a:["идёт","иду","идёшь","идут"],c:1},
-{q:"«Большой» so‘zining qarama-qarshi ma’nosi qaysi?",a:["Высокий","Маленький","Длинный","Широкий"],c:1},
-{q:"«Мы» olmoshi qaysi shaxsni bildiradi?",a:["1-shaxs ko‘plik","2-shaxs birlik","3-shaxs birlik","2-shaxs ko‘plik"],c:0}],
+["«Книга» so‘zining ko‘plik shakli?",["Книги","Книгой","Книге","Книжка"],0],
+["«Здравствуйте» ma’nosi?",["Xayr","Rahmat","Salom","Iltimos"],2],
+["«Я ___ в школу»",["идёт","иду","идёшь","идут"],1],
+["«Большой» so‘zining teskarisi?",["Высокий","Маленький","Длинный","Широкий"],1],
+["«Мы» qaysi shaxs?",["1-shaxs ko‘plik","2-shaxs birlik","3-shaxs birlik","2-shaxs ko‘plik"],0]],
 ingliz:[
-{q:"Choose the correct form: She ___ a student.",a:["am","are","is","be"],c:2},
-{q:"What is the plural of “child”?",a:["childs","children","childes","childrens"],c:1},
-{q:"Choose the past form: “go”.",a:["goed","gone","went","going"],c:2},
-{q:"“Beautiful” so‘zining ma’nosi nima?",a:["Chiroyli","Tez","Sovuq","Qiyin"],c:0},
-{q:"Choose the correct sentence.",a:["He play football.","He plays football.","He playing football.","He are play football."],c:1}]
+["She ___ a student.",["am","are","is","be"],2],
+["Plural of child?",["childs","children","childes","childrens"],1],
+["Past form of go?",["goed","gone","went","going"],2],
+["Beautiful ma’nosi?",["Chiroyli","Tez","Sovuq","Qiyin"],0],
+["Choose the correct sentence.",["He play football.","He plays football.","He playing football.","He are play football."],1]]
 };
-let currentQuestions=[],currentIndex=0,score=0,chosen=null,currentSubject="";
-function startQuiz(subjectId){
-  currentSubject=subjectId;
-  const all=bank[subjectId]||[];
-  const count=Number($("countSelect").value);
-  currentQuestions=Array.from({length:count},(_,i)=>({...all[i%all.length]}));
-  currentIndex=0;score=0;chosen=null;
-  $("quiz").classList.remove("hidden");
-  $("quiz").scrollIntoView({behavior:"smooth",block:"start"});
-  renderQuestion();
+function startTest(id){
+ activeSubject=id;questions=bank[id];qIndex=0;points=0;
+ $("testBox").classList.remove("hidden");
+ renderQuestion();$("testBox").scrollIntoView({behavior:"smooth"});
 }
 function renderQuestion(){
-  if(currentIndex>=currentQuestions.length){finishQuiz();return}
-  const item=currentQuestions[currentIndex];
-  $("quiz").innerHTML=`
-    <div class="row"><div><p class="muted small">${subjects.find(s=>s.id===currentSubject).name} · ${$("gradeSelect").value}-sinf</p><h2>Savol ${currentIndex+1} / ${currentQuestions.length}</h2></div><strong>${score} ball</strong></div>
-    <div class="progress"><span style="width:${currentIndex/currentQuestions.length*100}%"></span></div>
-    <div class="question">${item.q}</div>
-    <div id="answers">${item.a.map((a,i)=>`<button class="answer" onclick="chooseAnswer(${i})">${["A","B","C","D"][i]}. ${a}</button>`).join("")}</div>
-    <button id="nextBtn" class="primary" style="width:100%;margin-top:12px" disabled onclick="nextQuestion()">Keyingi savol →</button>
-    <button class="secondary" style="width:100%;margin-top:8px" onclick="cancelQuiz()">Testni to‘xtatish</button>`;
+ if(qIndex>=questions.length){
+  const percent=Math.round(points/questions.length*100);
+  const key="mm_results",arr=JSON.parse(localStorage.getItem(key)||"[]");
+  arr.unshift({subject:subjects.find(s=>s[0]===activeSubject)[2],grade:$("classSelect").value,points,total:questions.length,percent});
+  localStorage.setItem(key,JSON.stringify(arr.slice(0,30)));
+  $("testBox").innerHTML=`<h2>🏆 Test tugadi!</h2><h1>${points}/${questions.length} — ${percent}%</h1><button onclick="startTest('${activeSubject}')">Qayta ishlash</button>`;
+  showResults();return;
+ }
+ const q=questions[qIndex];
+ $("testBox").innerHTML=`<p>Savol ${qIndex+1}/${questions.length}</p><h2>${q[0]}</h2>`+
+ q[1].map((a,i)=>`<button class="secondary" onclick="answer(${i})">${["A","B","C","D"][i]}. ${a}</button>`).join("")+
+ `<p id="feedback"></p>`;
 }
-function chooseAnswer(i){
-  chosen=i;
-  document.querySelectorAll(".answer").forEach((b,j)=>b.classList.toggle("selected",i===j));
-  $("nextBtn").disabled=false;
+function answer(i){
+ const q=questions[qIndex];
+ document.querySelectorAll("#testBox button").forEach(b=>b.disabled=true);
+ if(i===q[2])points++;
+ $("feedback").textContent=i===q[2]?"To‘g‘ri javob!":"To‘g‘ri javob: "+q[1][q[2]];
+ const b=document.createElement("button");b.textContent="Keyingi savol →";b.onclick=()=>{qIndex++;renderQuestion()};
+ $("testBox").appendChild(b);
 }
-function nextQuestion(){
-  if(chosen===null)return;
-  if(chosen===currentQuestions[currentIndex].c)score++;
-  currentIndex++;chosen=null;renderQuestion();
+function showResults(){
+ const arr=JSON.parse(localStorage.getItem("mm_results")||"[]");
+ $("results").innerHTML="<h2>📊 Natijalar</h2>"+(arr.length?arr.slice(0,10).map(r=>`<p>${r.subject} · ${r.grade}-sinf: <b>${r.points}/${r.total} (${r.percent}%)</b></p>`).join(""):"<p>Hali test ishlamadingiz.</p>");
 }
-function cancelQuiz(){$("quiz").classList.add("hidden")}
-async function finishQuiz(){
-  const total=currentQuestions.length;
-  const percent=Math.round(score/total*100);
-  const result={subject:subjects.find(s=>s.id===currentSubject).name,grade:$("gradeSelect").value,score,total,percent,date:new Date().toLocaleString("uz-UZ")};
-  const key="mm_results";
-  const results=JSON.parse(localStorage.getItem(key)||"[]");
-  results.unshift(result);localStorage.setItem(key,JSON.stringify(results.slice(0,50)));
-  $("quiz").innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:55px">${percent>=80?"🏆":percent>=50?"👏":"📘"}</div><h1>Test yakunlandi!</h1><p class="muted">${result.subject} · ${result.grade}-sinf</p><h1>${score} / ${total}</h1><p class="muted">Natija: ${percent}%</p><button class="primary" onclick="startQuiz('${currentSubject}')">Qayta ishlash</button> <button class="secondary" onclick="cancelQuiz()">Fanlarga qaytish</button></div>`;
-  loadHistory();
+async function logout(){
+ const {error}=await db.auth.signOut();
+ if(error){alert(error.message);return}
+ activeUser=null;$("home").classList.add("hidden");$("auth").classList.remove("hidden");
+ $("loginForm").reset();$("testBox").classList.add("hidden");
 }
-function loadHistory(){
-  const results=JSON.parse(localStorage.getItem("mm_results")||"[]");
-  $("history").innerHTML="<h2>📊 So‘nggi natijalar</h2>"+(results.length?results.slice(0,8).map(r=>`<div class="row" style="padding:12px 0;border-bottom:1px solid var(--border)"><div><b>${r.subject}</b><div class="muted small">${r.grade}-sinf · ${r.date}</div></div><strong>${r.score}/${r.total} · ${r.percent}%</strong></div>`).join(""):"<p class='muted'>Hozircha natija yo‘q. Birinchi testingni boshlagin!</p>");
-}
-db.auth.onAuthStateChange((event,session)=>{
-  if(event==="SIGNED_OUT"){
-    $("dashboard").classList.add("hidden");
-    $("auth").classList.remove("hidden");
-  }
-});
-restoreSession();
+(async()=>{
+ const {data:{session}}=await db.auth.getSession();
+ if(session)enter(session.user,await profileFor(session.user));
+})();
 </script>
 </body>
 </html>
