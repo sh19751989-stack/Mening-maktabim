@@ -223,7 +223,8 @@ a{color:var(--blue)}
   let user = null;
   let profile = null;
   let subjects = [];
-
+const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
   $("year").textContent = new Date().getFullYear();
 
   function message(id, text, type="notice") {
@@ -271,8 +272,8 @@ a{color:var(--blue)}
   }
 
   async function connect() {
-    const url = $("projectUrl").value.trim().replace(/\/+$/, "");
-    const key = $("projectKey").value.trim();
+  const url = SUPABASE_URL;
+  const key = SUPABASE_KEY;
     if (!url || !key || !/^https:\/\/[a-zA-Z0-9.-]+$/.test(url)) {
       message("setupMsg", "Supabase URL va kalitni to‘g‘ri kiriting.", "error");
       return;
@@ -599,13 +600,9 @@ a{color:var(--blue)}
   });
 
   async function init() {
-    const url = localStorage.getItem("mm_url");
-    const key = localStorage.getItem("mm_key");
-    if (url && key) {
-      $("projectUrl").value = url;
-      $("projectKey").value = key;
-      await connect();
-    }
+    $("projectUrl").value = SUPABASE_URL;
+    $("projectKey").value = SUPABASE_KEY;
+    await connect();
   }
 
   init();
