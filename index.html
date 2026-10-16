@@ -251,6 +251,100 @@ form .btn{margin-top:14px}
 </main>
 </div>
 <div id="toast"></div>
+  
+async function refreshAuth() {
+  const { data, error } = await supabaseClient.auth.getSession();
+
+  if (error) {
+    document.getElementById("authStatus").textContent =
+      "Sessiyani tekshirishda xatolik: " + error.message;
+    return;
+  }
+
+  currentUser = data.session?.user || null;
+  authRole = null;
+
+  if (currentUser) {
+    const { data: profile, error: profileError } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+    if (profileError) {
+      document.getElementById("authStatus").textContent =
+        "Rolni aniqlab bo‘lmadi: " + profileError.message;
+    } else {
+      authRole = profile?.role || null;
+    }
+  }
+
+  document.getElementById("authStatus").textContent =
+    currentUser
+      ? "Hisob: " + currentUser.email +
+        " | Rol: " + (authRole || "aniqlanmadi")
+      : "Tizimga kirmagansiz.";
+
+  document.getElementById("loginEmail").disabled = !!currentUser;
+  document.getElementById("loginPassword").disabled = !!currentUser;
+
+  document.querySelector(
+    '#loginForm button[type="submit"]'
+  ).style.display = currentUser ? "none" : "";
+
+  document.getElementById("logoutButton").style.display =
+    currentUser ? "inline-flex" : "none";
+
+  document.querySelectorAll('[data-page="admin"]').forEach(el => {
+    el.style.display =
+      ["admin", "teacher"].includes(authRole) ? "" : "none";
+  });
+}
+
+document.getElementById("loginForm").addEventListener(
+  "submit",
+  async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const status = document.getElementById("authStatus");
+
+    status.textContent = "Kirilmoqda...";
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      status.textContent = "Kirishda xatolik: " + error.message;
+      return;
+    }
+
+    await refreshAuth();
+  }
+);
+
+document.getElementById("logoutButton").addEventListener(
+  "click",
+  async function () {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      document.getElementById("authStatus").textContent =
+        "Chiqishda xatolik: " + error.message;
+      return;
+    }
+
+    document.getElementById("loginForm").reset();
+    await refreshAuth();
+  }
+);
+
+refreshAuth();
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
