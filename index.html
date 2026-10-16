@@ -79,17 +79,33 @@ a{color:var(--blue)}
     <p class="muted">O‘quvchi sifatida ro‘yxatdan o‘tish yoki mavjud hisobga kirish.</p>
     <div class="grid">
       <div>
-        <label>Ism va familiya</label>
-        <input id="fullName" placeholder="Ism Familiya">
-      </div>
-      <div>
-        <label>Email</label>
-        <input id="email" type="email" placeholder="email@example.com" autocomplete="email">
-      </div>
-    </div>
-    <label>Parol (kamida 6 belgi)</label>
-    <input id="password" type="password" minlength="6" autocomplete="current-password" placeholder="Parolingiz">
-    <div class="actions">
+<div>
+  <label>Ism va familiya</label>
+  <input id="fullName" placeholder="Ism Familiya" required>
+</div>
+<div>
+  <label>Email</label>
+  <input id="email" type="email" placeholder="email@example.com" autocomplete="email" required>
+</div>
+<div>
+  <label>Kim sifatida kirasiz?</label>
+  <select id="userRole" required>
+    <option value="">Tanlang</option>
+    <option value="student">O‘quvchi</option>
+    <option value="teacher">O‘qituvchi</option>
+  </select>
+</div>
+<div>
+  <label>Maktab nomi</label>
+  <input id="schoolName" placeholder="Masalan, 12-maktab" required>
+</div>
+<div>
+  <label>Maktab raqami</label>
+  <input id="schoolNumber" type="number" min="1" placeholder="12" required>
+</div>
+<label>Parol (kamida 6 belgi)</label>
+<input id="password" type="password" minlength="6" autocomplete="current-password" placeholder="Parolingiz" required>
+<div class="actions">
       <button id="login" class="btn">Kirish</button>
       <button id="signup" class="btn light">Ro‘yxatdan o‘tish</button>
     </div>
@@ -313,29 +329,52 @@ const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
     }
   }
 
-  async function signUp() {
-    if (!db) return;
-    const name = $("fullName").value.trim();
-    const email = $("email").value.trim();
-    const password = $("password").value;
-    if (!name || !email || password.length < 6) {
-      message("authMsg", "Ism, email va kamida 6 belgili parolni kiriting.", "error");
-      return;
-    }
-    const { data, error } = await db.auth.signUp({
-      email, password, options: { data: { full_name: name } }
-    });
-    if (error) {
-      message("authMsg", error.message, "error");
-      return;
-    }
-    if (data.session) {
-      user = data.user;
-      await loadProfile();
-    } else {
-      message("authMsg", "Ro‘yxatdan o‘tish so‘rovi qabul qilindi. Emailingizni tasdiqlang, keyin tizimga kiring.", "success");
-    }
+async function signUp() {
+  if (!db) return;
+
+  const name = $("fullName").value.trim();
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  const role = $("userRole").value;
+  const schoolName = $("schoolName").value.trim();
+  const schoolNumber = $("schoolNumber").value.trim();
+
+  if (!name || !email || password.length < 6 ||
+      !role || !schoolName || !schoolNumber ||
+      Number(schoolNumber) < 1) {
+    message("authMsg", "Barcha maydonlarni to‘g‘ri to‘ldiring.", "error");
+    return;
   }
+
+  const { data, error } = await db.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: name,
+        requested_role: role,
+        school_name: schoolName,
+        school_number: schoolNumber
+      }
+    }
+  });
+
+  if (error) {
+    message("authMsg", error.message, "error");
+    return;
+  }
+
+  if (data.session) {
+    user = data.user;
+    await loadProfile();
+  } else {
+    message(
+      "authMsg",
+      "Ro‘yxatdan o‘tish qabul qilindi. Emailingizni tasdiqlang, keyin tizimga kiring.",
+      "success"
+    );
+  }
+}
 
   async function signIn() {
     if (!db) return;
