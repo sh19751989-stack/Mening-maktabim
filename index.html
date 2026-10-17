@@ -1,101 +1,339 @@
-a := (ans+1)::text; b := (ans+2)::text; c := ans::text; d := (ans-1)::text;
-          else
-            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Agar x + '||y||' = '||(x+y)||' bo‘lsa, x ni toping.';
-            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := (ans+y)::text;
-          end if;
-          -- Place correct answer at option B for subtraction, C otherwise.
-          if n % 4 = 1 then correct := 'B'; else correct := 'C'; end if;
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mening Maktabim</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+    header{background:#101d3b;color:white;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    .logo{font-size:24px;font-weight:bold}
+    nav{display:flex;gap:10px;flex-wrap:wrap}
+    button{border:0;border-radius:10px;padding:12px 17px;font-weight:bold;cursor:pointer;background:#315efb;color:white}
+    button:hover{filter:brightness(.92)}
+    .secondary{background:#e8edff;color:#2446b8}
+    .hero{margin:25px auto;padding:35px 25px;max-width:1150px;background:linear-gradient(120deg,#183b8e,#4978ff);border-radius:22px;color:white}
+    .hero h1{font-size:clamp(28px,5vw,45px);margin:0 0 12px}
+    .container{max-width:1150px;margin:25px auto;padding:0 18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+    .card{background:white;border:1px solid #e4eaf3;border-radius:16px;padding:20px;box-shadow:0 5px 18px #1720330b}
+    .card h3{margin-top:0}
+    .muted{color:#68748a}
+    input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccd5e5;border-radius:9px;font:inherit}
+    textarea{min-height:120px;resize:vertical}
+    label{font-weight:bold;font-size:14px}
+    .hidden{display:none!important}
+    .option{display:block;width:100%;text-align:left;background:#f0f4ff;color:#172033;margin:9px 0;border:1px solid #dce5ff}
+    .option:hover{background:#dfe8ff}
+    .notice{padding:13px;border-radius:10px;background:#fff5d9;margin:12px 0}
+    footer{text-align:center;padding:30px;color:#718096}
+    video{width:100%;max-height:400px;border-radius:12px;background:#111}
+    .news-item{margin:15px 0}
+    @media(max-width:600px){header{padding:16px}.logo{font-size:20px}.hero{margin:16px;border-radius:15px}.container{padding:0 12px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">🎓 Mening Maktabim</div>
+  <nav>
+    <button class="secondary" onclick="showSection('home')">Bosh sahifa</button>
+    <button class="secondary" onclick="showSection('tests')">Testlar</button>
+    <button class="secondary" onclick="showSection('news')">Yangiliklar</button>
+    <button onclick="showSection('account')">Kirish</button>
+  </nav>
+</header>
 
-        elsif s = 'Fizika' then
-          if n % 3 = 0 then
-            ans := x * y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Jism  '||x||' m/s tezlikda '||y||' s harakatlandi. Masofa qancha?';
-            a := (ans+5)::text; b := (ans-5)::text; c := ans::text; d := (x+y)::text; correct := 'C';
-          elsif n % 3 = 1 then
-            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' N va '||y||' N bir yo‘nalishda ta’sir etsa, natijaviy kuch qancha?';
-            a := (ans+2)::text; b := ans::text; c := (ans-2)::text; d := abs(x-y)::text; correct := 'B';
-          else
-            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tezlik '||x||' m/s, vaqt '||y||' s. Masofani topish uchun qaysi amal bajariladi?';
-            a := (x+y)::text; b := (x*y)::text; c := x::text; d := abs(x-y)::text; correct := 'C';
-          end if;
+<main>
+  <section id="home" class="container">
+    <div class="hero">
+      <h1>Bilim sari yangi qadam!</h1>
+      <p>Testlarni ishlang, bilimlaringizni tekshiring va maktab yangiliklarini kuzating.</p>
+      <button onclick="showSection('tests')">Test boshlash →</button>
+      <button class="secondary" onclick="showSection('news')">Yangiliklarni ko‘rish</button>
+    </div>
+    <h2>📚 Fanlar</h2>
+    <div id="subjects" class="grid"></div>
+  </section>
 
-        elsif s = 'Kimyo' then
-          if n % 4 = 0 then
-            ans := 2*x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Shartli ravishda bitta zarracha massasi '||x||' birlik. Shunday 2 zarracha massasi qancha?';
-            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := x::text; correct := 'C';
-          elsif n % 4 = 1 then
-            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Aralashmada '||x||' g birinchi modda va '||y||' g ikkinchi modda bor. Umumiy massa qancha?';
-            a := (ans+1)::text; b := ans::text; c := (ans-1)::text; d := abs(x-y)::text; correct := 'B';
-          elsif n % 4 = 2 then
-            ans := x-y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' g namunadan '||y||' g ajratildi. Qolgan massa qancha?';
-            a := (ans+2)::text; b := (ans-2)::text; c := ans::text; d := (x+y)::text; correct := 'C';
-          else
-            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Kimyoviy tajribada o‘lchangan qiymat '||x||' birlik. Shu qiymatning ikki baravari qancha?';
-            a := (ans+2)::text; b := (ans*2)::text; c := ans::text; d := (ans-2)::text; correct := 'C';
-          end if;
+  <section id="tests" class="container hidden">
+    <h2>📝 Test ishlash</h2>
+    <div class="card">
+      <label for="grade">Sinf</label>
+      <select id="grade">
+        <option value="">Sinfni tanlang</option>
+        <option>5</option><option>6</option><option>7</option>
+        <option>8</option><option>9</option><option>10</option><option>11</option>
+      </select>
+      <label for="subject">Fan</label>
+      <select id="subject"></select>
+      <button onclick="startTest()">Testni boshlash</button>
+    </div>
+    <div id="testArea" class="card hidden" style="margin-top:18px"></div>
+  </section>
 
-        elsif s = 'Informatika' then
-          if n % 4 = 0 then
-            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Algoritmda x='||x||' va y='||y||'. x + y natijasi nima?';
-            a := (ans+1)::text; b := ans::text; c := (ans-1)::text; d := (x*y)::text; correct := 'B';
-          elsif n % 4 = 1 then
-            ans := x * 2; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Dastur x='||x||' qiymatini 2 ga ko‘paytiradi. Natija?';
-            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := x::text; correct := 'C';
-          elsif n % 4 = 2 then
-            ans := x % 2; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' sonini 2 ga bo‘lgandagi qoldiqni toping.';
-            a := '0'; b := '2'; c := ans::text; d := '1'; correct := 'C';
-          else
-            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — O‘zgaruvchi x ga '||x||' qiymati berilgan. x ning qiymati nechaga teng?';
-            a := (x+1)::text; b := (x-1)::text; c := x::text; d := (x*2)::text; correct := 'C';
-          end if;
+  <section id="news" class="container hidden">
+    <h2>📰 Maktab yangiliklari</h2>
+    <p class="muted">E'lonlar, axborotlar, matnlar va videolar.</p>
+    <div id="newsList"></div>
+    <div id="newsEditor" class="card hidden">
+      <h3>➕ Yangi yangilik qo‘shish</h3>
+      <div class="notice">Yangilik joylash uchun administrator tizimiga kirish kerak. Ushbu sodda demo versiyada yangiliklar faqat shu brauzerda saqlanadi.</div>
+      <label for="newsTitle">Sarlavha</label>
+      <input id="newsTitle" placeholder="Yangilik sarlavhasi">
+      <label for="newsType">Axborot turi</label>
+      <select id="newsType">
+        <option value="text">Matnli axborot</option>
+        <option value="video">Video havolasi</option>
+      </select>
+      <label for="newsBody">Matn yoki axborot</label>
+      <textarea id="newsBody" placeholder="Yangilik matnini kiriting..."></textarea>
+      <label for="newsVideo">Video havolasi (ixtiyoriy)</label>
+      <input id="newsVideo" type="url" placeholder="https://www.youtube.com/watch?v=...">
+      <button onclick="publishNews()">Yangilikni joylash</button>
+    </div>
+  </section>
 
-        elsif s = 'Biologiya' then
-          topics := array['O‘simlikda suv va mineral moddalarni asosan qaysi qism shimadi?','Fotosintez jarayoni uchun qaysi energiya manbai kerak?','Inson nafas olishida qaysi gaz yutiladi?','Qonning asosiy vazifalaridan biri nima?'];
-          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[1]; a:='Barg'; b:='Ildiz'; c:='Gul'; d:='Meva'; correct:='B';
-          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[2]; a:='Oy nuri'; b:='Tovush'; c:='Quyosh nuri'; d:='Shamol'; correct:='C';
-          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[3]; a:='Azot'; b:='Kislorod'; c:='Karbonat angidrid'; d:='Vodorod'; correct:='B';
-          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[4]; a:='Ovqat hazm qilish'; b:='Moddalarni tashish'; c:='Faqat harakat'; d:='Faqat ko‘rish'; correct:='B';
-          end if;
+  <section id="account" class="container hidden">
+    <h2>👤 Hisob</h2>
+    <div class="card">
+      <p>Bu boshlang‘ich demo versiyada hisob yaratish va xavfsiz kirish hali ulanmagan.</p>
+      <p class="muted">Haqiqiy ro‘yxatdan o‘tish va administrator huquqlari uchun Supabase Auth hamda ma’lumotlar bazasini ulash lozim.</p>
+    </div>
+  </section>
+</main>
 
-        elsif s = 'Tarix' then
-          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tarix fani asosan nimani o‘rganadi?'; a:='Faqat kelajakni'; b:='O‘tgan davrlar va insoniyat hayotini'; c:='Faqat tabiatni'; d:='Faqat hisoblashni'; correct:='B';
-          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tarixiy manbaga qaysi biri misol bo‘la oladi?'; a:='Faqat taxmin'; b:='Qadimiy yozuv yoki hujjat'; c:='Tasodifiy raqam'; d:='Ob-havo bashorati'; correct:='B';
-          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Arxeologlar ko‘pincha nimani tadqiq qiladi?'; a:='Faqat yulduzlarni'; b:='Yer ostidan topilgan tarixiy buyumlarni'; c:='Faqat o‘simlik urug‘ini'; d:='Kompyuter kodini'; correct:='B';
-          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Voqealarni vaqt bo‘yicha tartiblash nima uchun kerak?'; a:='Ularni chalkashtirish uchun'; b:='Tarixiy ketma-ketlikni tushunish uchun'; c:='Sanalarni yashirish uchun'; d:='Manbalarni yo‘qotish uchun'; correct:='B';
-          end if;
+<footer>© 2026 Mening Maktabim · Ta'lim va bilim platformasi</footer>
 
-        elsif s = 'Rus tili' then
-          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Книга» so‘zining ko‘plik shaklini toping.'; a:='Книги'; b:='Книгой'; c:='Книгу'; d:='Книге'; correct:='A';
-          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Большой» so‘zining antonimini toping.'; a:='Высокий'; b:='Маленький'; c:='Длинный'; d:='Широкий'; correct:='B';
-          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Я ___ в школу каждый день». To‘g‘ri fe’lni tanlang.'; a:='идёшь'; b:='идут'; c:='иду'; d:='идём'; correct:='C';
-          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Молоко» qaysi so‘z turkumiga kiradi?'; a:='Глагол'; b:='Существительное'; c:='Прилагательное'; d:='Наречие'; correct:='B';
-          end if;
+<script>
+"use strict";
 
-        else -- Ingliz tili
-          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct plural: one book, two ___.';
-            a:='book'; b:='books'; c:='bookes'; d:='booking'; correct:='B';
-          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct verb: She ___ to school every day.';
-            a:='go'; b:='going'; c:='goes'; d:='gone'; correct:='C';
-          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — What is the opposite of “hot”?';
-            a:='warm'; b:='cold'; c:='high'; d:='bright'; correct:='B';
-          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct article: ___ apple.';
-            a:='A'; b:='An'; c:='Thee'; d:='No article ever'; correct:='B';
-          end if;
-        end if;
+const subjectNames = [
+  "Kimyo", "Fizika", "Algebra", "Informatika",
+  "Biologiya", "Tarix", "Rus tili", "Ingliz tili"
+];
 
-        -- Replace generator tags with a clean, human-readable question label.
-        q := regexp_replace(q, '^\[MM-AUTO\] N=[0-9]+;G=[0-9]+;S=[^ ]+ — ', '');
-        insert into public.questions(subject,grade,question,option_a,option_b,option_c,option_d,correct_option)
-        values(s,g,q,a,b,c,d,correct);
-      end loop;
-      end if;
-    end loop;
-  end loop;
-end $$;
+const demoQuestions = {
+  "Kimyo": [
+    {q:"Suvning kimyoviy formulasi qaysi?",a:["H₂O","CO₂","O₂","NaCl"],c:0},
+    {q:"Kislorodning kimyoviy belgisi qaysi?",a:["K","O","N","H"],c:1}
+  ],
+  "Fizika": [
+    {q:"Kuchning SI sistemasidagi birligi qaysi?",a:["Joul","Vatt","Nyuton","Paskal"],c:2},
+    {q:"Tezlikni topish formulasi qaysi?",a:["v=s/t","s=v/t","t=s×v","v=s×t"],c:0}
+  ],
+  "Algebra": [
+    {q:"5 + 7 nechaga teng?",a:["10","11","12","13"],c:2},
+    {q:"3x = 12 bo‘lsa, x nechaga teng?",a:["3","4","6","9"],c:1}
+  ],
+  "Informatika": [
+    {q:"Kompyuterning asosiy hisoblash qurilmasi qaysi?",a:["Protsessor","Monitor","Klaviatura","Sichqoncha"],c:0}
+  ],
+  "Biologiya": [
+    {q:"O‘simlikning fotosintez qiluvchi asosiy organi qaysi?",a:["Ildiz","Barg","Gul","Urug‘"],c:1}
+  ],
+  "Tarix": [
+    {q:"Amir Temur davlatining poytaxti qaysi shahar bo‘lgan?",a:["Buxoro","Xiva","Samarqand","Qo‘qon"],c:2}
+  ],
+  "Rus tili": [
+    {q:"«Книга» so‘zining o‘zbekcha ma’nosi qaysi?",a:["Daftar","Kitob","Qalam","Maktab"],c:1}
+  ],
+  "Ingliz tili": [
+    {q:"«Book» so‘zining ma’nosi qaysi?",a:["Kitob","Qalam","Stol","Deraza"],c:0}
+  ]
+};
 
--- Helpful indexes
-create index if not exists questions_subject_grade_idx on public.questions(subject, grade);
-create index if not exists test_results_user_created_idx on public.test_results(user_id, created_at desc);
-create index if not exists feedback_created_idx on public.student_feedback(created_at desc);
+function showSection(id) {
+  document.querySelectorAll("main > section").forEach(s => s.classList.add("hidden"));
+  const section = document.getElementById(id);
+  if (section) section.classList.remove("hidden");
+  if (id === "news") renderNews();
+}
 
--- Reload PostgREST schema cache
-notify pgrst, 'reload schema';
+function renderSubjects() {
+  const grid = document.getElementById("subjects");
+  const select = document.getElementById("subject");
+  subjectNames.forEach(name => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const title = document.createElement("h3");
+    title.textContent = "📘 " + name;
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.textContent = "Bilimingizni sinab ko‘ring.";
+    const btn = document.createElement("button");
+    btn.textContent = "Testni tanlash";
+    btn.onclick = () => {
+      select.value = name;
+      showSection("tests");
+    };
+    card.append(title, p, btn);
+    grid.appendChild(card);
+
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    select.appendChild(option);
+  });
+}
+
+let currentQuestions = [];
+let questionIndex = 0;
+let score = 0;
+let answered = false;
+
+function startTest() {
+  const grade = document.getElementById("grade").value;
+  const subject = document.getElementById("subject").value;
+  const area = document.getElementById("testArea");
+
+  if (!grade || !subject) {
+    alert("Iltimos, sinf va fanni tanlang.");
+    return;
+  }
+
+  currentQuestions = demoQuestions[subject] || [];
+  if (!currentQuestions.length) {
+    alert("Bu fan uchun demo savollar hali mavjud emas.");
+    return;
+  }
+
+  questionIndex = 0;
+  score = 0;
+  area.classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  const area = document.getElementById("testArea");
+  const q = currentQuestions[questionIndex];
+  answered = false;
+  area.replaceChildren();
+
+  const heading = document.createElement("h3");
+  heading.textContent = `Savol ${questionIndex + 1}/${currentQuestions.length}`;
+  const text = document.createElement("p");
+  text.textContent = q.q;
+  area.append(heading, text);
+
+  q.a.forEach((answer, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = String.fromCharCode(65 + i) + ". " + answer;
+    btn.onclick = () => {
+      if (answered) return;
+      answered = true;
+      if (i === q.c) score++;
+      btn.textContent += i === q.c ? " ✓ To‘g‘ri" : " — Tanlandi";
+      const next = document.createElement("button");
+      next.style.marginTop = "12px";
+      next.textContent = questionIndex + 1 < currentQuestions.length ? "Keyingi savol →" : "Natijani ko‘rish";
+      next.onclick = () => {
+        questionIndex++;
+        if (questionIndex < currentQuestions.length) showQuestion();
+        else showResult();
+      };
+      area.appendChild(next);
+    };
+    area.appendChild(btn);
+  });
+}
+
+function showResult() {
+  const area = document.getElementById("testArea");
+  area.replaceChildren();
+  const h = document.createElement("h3");
+  h.textContent = "Test yakunlandi!";
+  const p = document.createElement("p");
+  p.textContent = `Natija: ${score}/${currentQuestions.length}`;
+  const btn = document.createElement("button");
+  btn.textContent = "Yana test ishlash";
+  btn.onclick = startTest;
+  area.append(h, p, btn);
+}
+
+function getNews() {
+  try {
+    const value = JSON.parse(localStorage.getItem("mm_news") || "[]");
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
+
+function renderNews() {
+  const list = document.getElementById("newsList");
+  list.replaceChildren();
+  const news = getNews();
+
+  if (!news.length) {
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.textContent = "Hozircha yangiliklar yo‘q.";
+    list.appendChild(p);
+  }
+
+  news.slice().reverse().forEach(item => {
+    const card = document.createElement("article");
+    card.className = "card news-item";
+    const h = document.createElement("h3");
+    h.textContent = item.title;
+    const p = document.createElement("p");
+    p.textContent = item.body;
+    card.append(h, p);
+
+    if (item.video) {
+      const link = document.createElement("a");
+      link.href = item.video;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "▶ Videoni ochish";
+      card.appendChild(link);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+function publishNews() {
+  const title = document.getElementById("newsTitle").value.trim();
+  const body = document.getElementById("newsBody").value.trim();
+  const video = document.getElementById("newsVideo").value.trim();
+
+  if (!title || (!body && !video)) {
+    alert("Sarlavha va matn yoki video havolasini kiriting.");
+    return;
+  }
+
+  if (video) {
+    try {
+      const u = new URL(video);
+      if (!["http:", "https:"].includes(u.protocol)) throw new Error();
+    } catch {
+      alert("Video havolasi noto‘g‘ri.");
+      return;
+    }
+  }
+
+  const news = getNews();
+  news.push({title, body, video, date: new Date().toISOString()});
+
+  try {
+    localStorage.setItem("mm_news", JSON.stringify(news));
+  } catch {
+    alert("Yangilikni saqlab bo‘lmadi. Brauzer xotirasini tekshiring.");
+    return;
+  }
+
+  document.getElementById("newsTitle").value = "";
+  document.getElementById("newsBody").value = "";
+  document.getElementById("newsVideo").value = "";
+  renderNews();
+  alert("Yangilik ushbu brauzerda saqlandi.");
+}
+
+renderSubjects();
+renderNews();
+</script>
+</body>
+</html>
