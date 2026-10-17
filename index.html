@@ -1,39 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mening Maktabim</title>
-  <style>
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
-    header{background:#101d3b;color:white;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-    .logo{font-size:24px;font-weight:bold}
-    nav{display:flex;gap:10px;flex-wrap:wrap}
-    button{border:0;border-radius:10px;padding:12px 17px;font-weight:bold;cursor:pointer;background:#315efb;color:white}
-    button:hover{filter:brightness(.92)}
-    .secondary{background:#e8edff;color:#2446b8}
-    .hero{margin:25px auto;padding:35px 25px;max-width:1150px;background:linear-gradient(120deg,#183b8e,#4978ff);border-radius:22px;color:white}
-    .hero h1{font-size:clamp(28px,5vw,45px);margin:0 0 12px}
-    .container{max-width:1150px;margin:25px auto;padding:0 18px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-    .card{background:white;border:1px solid #e4eaf3;border-radius:16px;padding:20px;box-shadow:0 5px 18px #1720330b}
-    .card h3{margin-top:0}
-    .muted{color:#68748a}
-    input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccd5e5;border-radius:9px;font:inherit}
-    textarea{min-height:120px;resize:vertical}
-    label{font-weight:bold;font-size:14px}
-    .hidden{display:none!important}
-    .option{display:block;width:100%;text-align:left;background:#f0f4ff;color:#172033;margin:9px 0;border:1px solid #dce5ff}
-    .option:hover{background:#dfe8ff}
-    .notice{padding:13px;border-radius:10px;background:#fff5d9;margin:12px 0}
-    footer{text-align:center;padding:30px;color:#718096}
-    video{width:100%;max-height:400px;border-radius:12px;background:#111}
-    .news-item{margin:15px 0}
-    @media(max-width:600px){header{padding:16px}.logo{font-size:20px}.hero{margin:16px;border-radius:15px}.container{padding:0 12px}}
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
-<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mening Maktabim</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6fc;color:#172033}
+header{background:#101d3b;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:bold}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:12px 16px;background:#315efb;color:white;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(.92)}
+button:disabled{opacity:.6;cursor:wait}
+.secondary{background:#e8edff;color:#2446b8}
+.container{max-width:1150px;margin:24px auto;padding:0 16px}
+.hero{padding:36px 25px;border-radius:22px;color:white;background:linear-gradient(120deg,#183b8e,#5684ff)}
+.hero h1{font-size:clamp(29px,5vw,46px);margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.card{background:white;border:1px solid #e3eaf5;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 5px 18px #1720330a}
+.card h3{margin-top:0}
+.muted{color:#68748a}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccd5e5;border-radius:9px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+label{font-weight:bold;font-size:14px}
+.hidden{display:none!important}
+.option{display:block;width:100%;text-align:left;background:#f0f4ff;color:#172033;margin:9px 0;border:1px solid #dce5ff}
+.notice{padding:12px;background:#fff5d9;border-radius:10px}
+.news-item img,.news-item video{display:block;width:100%;max-height:450px;object-fit:contain;margin:12px 0;border-radius:12px;background:#111}
+.news-item p{white-space:pre-wrap;overflow-wrap:anywhere}
+footer{text-align:center;padding:30px;color:#718096}
+@media(max-width:600px){header{padding:15px}.logo{font-size:20px}.hero{padding:25px 18px}.container{padding:0 12px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header>
@@ -42,79 +42,79 @@
     <button class="secondary" onclick="showSection('home')">Bosh sahifa</button>
     <button class="secondary" onclick="showSection('tests')">Testlar</button>
     <button class="secondary" onclick="showSection('news')">Yangiliklar</button>
- <button id="accountNavBtn" onclick="openProfile()">Kirish</button>
+    <button id="accountNavBtn" onclick="openProfile()">Kirish</button>
   </nav>
 </header>
 
 <main>
-  <section id="home" class="container">
-    <div class="hero">
-      <h1>Bilim sari yangi qadam!</h1>
-      <p>Testlarni ishlang, bilimlaringizni tekshiring va maktab yangiliklarini kuzating.</p>
-      <button onclick="showSection('tests')">Test boshlash →</button>
-      <button class="secondary" onclick="showSection('news')">Yangiliklarni ko‘rish</button>
-    </div>
-    <h2>📚 Fanlar</h2>
-    <div id="subjects" class="grid"></div>
-  </section>
+<section id="home" class="container">
+  <div class="hero">
+    <h1>Bilim sari yangi qadam!</h1>
+    <p>Bilimingizni sinang va maktab yangiliklarini kuzating.</p>
+    <button onclick="showSection('tests')">Test boshlash →</button>
+    <button class="secondary" onclick="showSection('news')">Yangiliklar</button>
+  </div>
+  <h2>📚 Fanlar</h2>
+  <div id="subjects" class="grid"></div>
+</section>
 
-  <section id="tests" class="container hidden">
-    <h2>📝 Test ishlash</h2>
-    <div class="card">
-      <label for="grade">Sinf</label>
-      <select id="grade">
-        <option value="">Sinfni tanlang</option>
-        <option>5</option><option>6</option><option>7</option>
-        <option>8</option><option>9</option><option>10</option><option>11</option>
-      </select>
-      <label for="subject">Fan</label>
-      <select id="subject"></select>
-      <button onclick="startTest()">Testni boshlash</button>
-    </div>
-    <div id="testArea" class="card hidden" style="margin-top:18px"></div>
-  </section>
+<section id="tests" class="container hidden">
+  <h2>📝 Test ishlash</h2>
+  <div class="card">
+    <label for="grade">Sinf</label>
+    <select id="grade">
+      <option value="">Sinfni tanlang</option>
+      <option value="5">5-sinf</option><option value="6">6-sinf</option>
+      <option value="7">7-sinf</option><option value="8">8-sinf</option>
+      <option value="9">9-sinf</option><option value="10">10-sinf</option>
+      <option value="11">11-sinf</option>
+    </select>
+    <label for="subject">Fan</label>
+    <select id="subject"><option value="">Fanni tanlang</option></select>
+    <button onclick="startTest()">Testni boshlash</button>
+  </div>
+  <div id="testArea" class="card hidden"></div>
+</section>
 
-  <section id="news" class="container hidden">
-   
-<div id="newsEditor" class="card hidden">
+<section id="news" class="container hidden">
+  <h2>📰 Maktab yangiliklari</h2>
+  <p class="muted">Maktabdan e'lonlar, rasmlar va videolar.</p>
 
-<div id="newsEditor" class="card hidden">
-  <h3>➕ Yangi yangilik qo‘shish</h3>
-  <p class="muted">Rasm, video yoki matnli axborot joylang.</p>
+  <div id="newsEditor" class="card hidden">
+    <h3>➕ Yangi yangilik joylash</h3>
+    <label for="newsTitle">Sarlavha</label>
+    <input id="newsTitle" placeholder="Yangilik sarlavhasi">
 
-  <label for="newsTitle">Sarlavha</label>
-  <input id="newsTitle" placeholder="Yangilik sarlavhasi">
+    <label for="newsBody">Matn</label>
+    <textarea id="newsBody" placeholder="Yangilik matni..."></textarea>
 
-  <label for="newsBody">Matn yoki axborot</label>
-  <textarea id="newsBody" placeholder="Yangilik matnini yozing..."></textarea>
+    <label for="newsImageFile">📷 Rasm tanlash</label>
+    <input id="newsImageFile" type="file" accept="image/*">
 
-  <label for="newsImageFile">📷 Kompyuterdan rasm tanlash</label>
-  <input id="newsImageFile" type="file" accept="image/*">
+    <label for="newsVideoFile">🎬 Video tanlash</label>
+    <input id="newsVideoFile" type="file" accept="video/mp4,video/webm,video/quicktime">
 
-  <label for="newsVideoFile">🎬 Kompyuterdan video tanlash</label>
-  <input id="newsVideoFile" type="file" accept="video/mp4,video/webm,video/quicktime">
+    <label for="newsVideo">Yoki video havolasi</label>
+    <input id="newsVideo" type="url" placeholder="https://...">
 
-  <label for="newsVideo">Yoki video havolasi</label>
-  <input id="newsVideo" type="url" placeholder="https://...">
+    <p id="newsUploadStatus" class="muted" role="status"></p>
+    <button id="publishNewsBtn" onclick="publishNews()">📢 Yangilikni joylash</button>
+  </div>
 
-  <p id="newsUploadStatus" class="muted"></p>
-  <button id="publishNewsBtn" onclick="publishNews()">📢 Yangilikni joylash</button>
-</div>
-
-
-  </section>
+  <div id="newsList"><p>Yangiliklar yuklanmoqda...</p></div>
+</section>
 
 <section id="account" class="container hidden">
-  <h2>👤 Hisobga kirish</h2>
-  <div class="card">
+  <h2>👤 Hisob</h2>
+  <div id="accountCard" class="card">
     <label for="authName">To‘liq ism</label>
-    <input id="authName" placeholder="Ism va familiya">
+    <input id="authName" autocomplete="name" placeholder="Ism va familiya">
 
     <label for="authEmail">Email</label>
-    <input id="authEmail" type="email" placeholder="Email manzilingiz">
+    <input id="authEmail" type="email" autocomplete="email" placeholder="Email">
 
     <label for="authPassword">Parol</label>
-    <input id="authPassword" type="password" placeholder="Kamida 6 ta belgi">
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="Kamida 6 ta belgi">
 
     <label for="authSchool">Maktab nomi</label>
     <input id="authSchool" placeholder="Masalan, 12-maktab">
@@ -125,19 +125,14 @@
     <label for="authGrade">Sinf</label>
     <select id="authGrade">
       <option value="">Sinfni tanlang</option>
-      <option value="5">5-sinf</option>
-      <option value="6">6-sinf</option>
-      <option value="7">7-sinf</option>
-      <option value="8">8-sinf</option>
-      <option value="9">9-sinf</option>
-      <option value="10">10-sinf</option>
+      <option value="5">5-sinf</option><option value="6">6-sinf</option>
+      <option value="7">7-sinf</option><option value="8">8-sinf</option>
+      <option value="9">9-sinf</option><option value="10">10-sinf</option>
       <option value="11">11-sinf</option>
     </select>
 
     <button onclick="registerUser()">Ro‘yxatdan o‘tish</button>
     <button onclick="loginUser()">Kirish</button>
-    <button onclick="logoutUser()">Chiqish</button>
-
     <p id="authMessage" role="status"></p>
   </div>
 </section>
@@ -148,43 +143,52 @@
 <script>
 "use strict";
 
+/* SUPABASE */
+const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* FANLAR */
 const subjectNames = [
-  "Kimyo", "Fizika", "Algebra", "Informatika",
-  "Biologiya", "Tarix", "Rus tili", "Ingliz tili"
+  "Kimyo","Fizika","Algebra","Informatika",
+  "Biologiya","Tarix","Rus tili","Ingliz tili"
 ];
 
+/* DEMO SAVOLLAR: hozircha sinflar bo‘yicha alohida emas */
 const demoQuestions = {
-  "Kimyo": [
-    {q:"Suvning kimyoviy formulasi qaysi?",a:["H₂O","CO₂","O₂","NaCl"],c:0},
-    {q:"Kislorodning kimyoviy belgisi qaysi?",a:["K","O","N","H"],c:1}
+  "Kimyo":[
+    {q:"Suvning formulasi qaysi?",a:["H₂O","CO₂","O₂","NaCl"],c:0},
+    {q:"Kislorod belgisi qaysi?",a:["K","O","N","H"],c:1}
   ],
-  "Fizika": [
-    {q:"Kuchning SI sistemasidagi birligi qaysi?",a:["Joul","Vatt","Nyuton","Paskal"],c:2},
-    {q:"Tezlikni topish formulasi qaysi?",a:["v=s/t","s=v/t","t=s×v","v=s×t"],c:0}
+  "Fizika":[
+    {q:"Kuch birligi qaysi?",a:["Joul","Vatt","Nyuton","Paskal"],c:2},
+    {q:"Tezlik formulasi qaysi?",a:["v=s/t","s=v/t","t=s×v","v=s×t"],c:0}
   ],
-  "Algebra": [
+  "Algebra":[
     {q:"5 + 7 nechaga teng?",a:["10","11","12","13"],c:2},
     {q:"3x = 12 bo‘lsa, x nechaga teng?",a:["3","4","6","9"],c:1}
   ],
-  "Informatika": [
-    {q:"Kompyuterning asosiy hisoblash qurilmasi qaysi?",a:["Protsessor","Monitor","Klaviatura","Sichqoncha"],c:0}
+  "Informatika":[
+    {q:"Asosiy hisoblash qurilmasi qaysi?",a:["Protsessor","Monitor","Klaviatura","Sichqoncha"],c:0}
   ],
-  "Biologiya": [
-    {q:"O‘simlikning fotosintez qiluvchi asosiy organi qaysi?",a:["Ildiz","Barg","Gul","Urug‘"],c:1}
+  "Biologiya":[
+    {q:"Fotosintez asosan qayerda sodir bo‘ladi?",a:["Ildiz","Barg","Gul","Urug‘"],c:1}
   ],
-  "Tarix": [
-    {q:"Amir Temur davlatining poytaxti qaysi shahar bo‘lgan?",a:["Buxoro","Xiva","Samarqand","Qo‘qon"],c:2}
+  "Tarix":[
+    {q:"Amir Temur davlatining poytaxti qaysi?",a:["Buxoro","Xiva","Samarqand","Qo‘qon"],c:2}
   ],
-  "Rus tili": [
-    {q:"«Книга» so‘zining o‘zbekcha ma’nosi qaysi?",a:["Daftar","Kitob","Qalam","Maktab"],c:1}
+  "Rus tili":[
+    {q:"«Книга» so‘zining ma'nosi?",a:["Daftar","Kitob","Qalam","Maktab"],c:1}
   ],
-  "Ingliz tili": [
-    {q:"«Book» so‘zining ma’nosi qaysi?",a:["Kitob","Qalam","Stol","Deraza"],c:0}
+  "Ingliz tili":[
+    {q:"«Book» so‘zining ma'nosi?",a:["Kitob","Qalam","Stol","Deraza"],c:0}
   ]
 };
 
 function showSection(id) {
-  document.querySelectorAll("main > section").forEach(s => s.classList.add("hidden"));
+  document.querySelectorAll("main > section").forEach(section => {
+    section.classList.add("hidden");
+  });
   const section = document.getElementById(id);
   if (section) section.classList.remove("hidden");
   if (id === "news") renderNews();
@@ -193,21 +197,31 @@ function showSection(id) {
 function renderSubjects() {
   const grid = document.getElementById("subjects");
   const select = document.getElementById("subject");
+  if (!grid || !select) return;
+
+  grid.replaceChildren();
+  select.replaceChildren();
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Fanni tanlang";
+  select.appendChild(placeholder);
+
   subjectNames.forEach(name => {
-    const card = document.createElement("div");
+    const card = document.createElement("article");
     card.className = "card";
     const title = document.createElement("h3");
     title.textContent = "📘 " + name;
-    const p = document.createElement("p");
-    p.className = "muted";
-    p.textContent = "Bilimingizni sinab ko‘ring.";
-    const btn = document.createElement("button");
-    btn.textContent = "Testni tanlash";
-    btn.onclick = () => {
+    const desc = document.createElement("p");
+    desc.className = "muted";
+    desc.textContent = "Bilimingizni sinab ko‘ring.";
+    const button = document.createElement("button");
+    button.textContent = "Testni tanlash";
+    button.onclick = () => {
       select.value = name;
       showSection("tests");
     };
-    card.append(title, p, btn);
+    card.append(title, desc, button);
     grid.appendChild(card);
 
     const option = document.createElement("option");
@@ -217,11 +231,11 @@ function renderSubjects() {
   });
 }
 
+/* TEST */
 let currentQuestions = [];
 let questionIndex = 0;
 let score = 0;
 let answered = false;
-
 
 function startTest() {
   const grade = document.getElementById("grade").value;
@@ -229,20 +243,14 @@ function startTest() {
   const area = document.getElementById("testArea");
 
   if (!grade || !subject) {
-    alert("Iltimos, sinf va fanni tanlang.");
+    alert("Sinf va fanni tanlang.");
     return;
   }
 
-  // Tanlangan sinf va fan uchun savollar
-  const gradeQuestions = demoQuestions[grade];
-  currentQuestions = gradeQuestions
-    ? (gradeQuestions[subject] || [])
-    : [];
+  currentQuestions = demoQuestions[subject] || [];
 
   if (!currentQuestions.length) {
-    alert(
-      `${grade}-sinf uchun ${subject} fanidan savollar hali qo‘shilmagan.`
-    );
+    alert("Bu fan uchun savollar hali qo‘shilmagan.");
     return;
   }
 
@@ -260,22 +268,26 @@ function showQuestion() {
 
   const heading = document.createElement("h3");
   heading.textContent = `Savol ${questionIndex + 1}/${currentQuestions.length}`;
-  const text = document.createElement("p");
-  text.textContent = q.q;
-  area.append(heading, text);
+  const question = document.createElement("p");
+  question.textContent = q.q;
+  area.append(heading, question);
 
-  q.a.forEach((answer, i) => {
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.textContent = String.fromCharCode(65 + i) + ". " + answer;
-    btn.onclick = () => {
+  q.a.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.textContent = String.fromCharCode(65 + index) + ". " + answer;
+    button.onclick = () => {
       if (answered) return;
       answered = true;
-      if (i === q.c) score++;
-      btn.textContent += i === q.c ? " ✓ To‘g‘ri" : " — Tanlandi";
+      if (index === q.c) score++;
+
+      const feedback = document.createElement("p");
+      feedback.textContent = index === q.c ? "✅ To‘g‘ri javob!" : "Javob tanlandi.";
+      area.appendChild(feedback);
+
       const next = document.createElement("button");
-      next.style.marginTop = "12px";
-      next.textContent = questionIndex + 1 < currentQuestions.length ? "Keyingi savol →" : "Natijani ko‘rish";
+      next.textContent = questionIndex + 1 < currentQuestions.length
+        ? "Keyingi savol →" : "Natijani ko‘rish";
       next.onclick = () => {
         questionIndex++;
         if (questionIndex < currentQuestions.length) showQuestion();
@@ -283,103 +295,113 @@ function showQuestion() {
       };
       area.appendChild(next);
     };
-    area.appendChild(btn);
+    area.appendChild(button);
   });
 }
 
 function showResult() {
   const area = document.getElementById("testArea");
   area.replaceChildren();
-  const h = document.createElement("h3");
-  h.textContent = "Test yakunlandi!";
-  const p = document.createElement("p");
-  p.textContent = `Natija: ${score}/${currentQuestions.length}`;
-  const btn = document.createElement("button");
-  btn.textContent = "Yana test ishlash";
-  btn.onclick = startTest;
-  area.append(h, p, btn);
+  const title = document.createElement("h3");
+  title.textContent = "Test yakunlandi!";
+  const result = document.createElement("p");
+  result.textContent = `Natija: ${score}/${currentQuestions.length}`;
+  const again = document.createElement("button");
+  again.textContent = "Yana test ishlash";
+  again.onclick = startTest;
+  area.append(title, result, again);
 }
 
-function getNews() {
-  try {
-    const value = JSON.parse(localStorage.getItem("mm_news") || "[]");
-    return Array.isArray(value) ? value : [];
-  } catch {
-    return [];
-  }
-}
-
-
+/* YANGILIKLAR */
 async function renderNews() {
   const list = document.getElementById("newsList");
   if (!list) return;
 
   list.replaceChildren();
-
   const loading = document.createElement("p");
   loading.textContent = "Yangiliklar yuklanmoqda...";
   list.appendChild(loading);
 
-  const { data: news, error } = await db
-    .from("news")
-    .select("id, title, body, video_url, created_at")
-    .eq("is_published", true)
-    .order("created_at", { ascending: false });
+  try {
+    const { data: news, error } = await db
+      .from("news")
+      .select("id,title,body,image_url,video_url,created_at")
+      .eq("is_published", true)
+      .order("created_at", { ascending: false });
 
-  list.replaceChildren();
+    list.replaceChildren();
 
-  if (error) {
-    const p = document.createElement("p");
-    p.textContent = "Yangiliklarni yuklashda xatolik: " + error.message;
-    list.appendChild(p);
-    return;
-  }
+    if (error) throw error;
 
-  if (!news || news.length === 0) {
-    const p = document.createElement("p");
-    p.className = "muted";
-    p.textContent = "Hozircha yangiliklar yo‘q.";
-    list.appendChild(p);
-    return;
-  }
-
-  news.forEach(item => {
-    const card = document.createElement("article");
-    card.className = "card news-item";
-
-    const h = document.createElement("h3");
-    h.textContent = item.title;
-
-    const p = document.createElement("p");
-    p.textContent = item.body || "";
-
-    const date = document.createElement("small");
-    date.textContent = new Date(item.created_at).toLocaleString("uz-UZ");
-
-    card.append(h, p, date);
-
-    if (item.video_url) {
-      const link = document.createElement("a");
-      link.href = item.video_url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = "▶ Videoni ochish";
-      card.appendChild(link);
+    if (!news || news.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "Hozircha yangiliklar yo‘q.";
+      list.appendChild(empty);
+      return;
     }
 
-    list.appendChild(card);
-  });
+    news.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "card news-item";
+
+      const title = document.createElement("h3");
+      title.textContent = item.title;
+
+      const body = document.createElement("p");
+      body.textContent = item.body || "";
+
+      card.append(title);
+
+      if (item.image_url) {
+        const img = document.createElement("img");
+        img.src = item.image_url;
+        img.alt = item.title;
+        img.loading = "lazy";
+        card.appendChild(img);
+      }
+
+      card.appendChild(body);
+
+      if (item.video_url) {
+        const url = item.video_url;
+        if (url.includes("/storage/v1/object/public/school-news-media/")) {
+          const video = document.createElement("video");
+          video.src = url;
+          video.controls = true;
+          video.preload = "metadata";
+          card.appendChild(video);
+        } else {
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "▶ Videoni ochish";
+          card.appendChild(link);
+        }
+      }
+
+      const date = document.createElement("small");
+      date.className = "muted";
+      date.textContent = new Date(item.created_at).toLocaleString("uz-UZ");
+      card.appendChild(date);
+      list.appendChild(card);
+    });
+  } catch (error) {
+    list.replaceChildren();
+    const message = document.createElement("p");
+    message.textContent = "Yangiliklarni yuklashda xatolik: " + error.message;
+    list.appendChild(message);
+    console.error("renderNews:", error);
+  }
 }
 
-
-async function publishNews() {
- 
 async function publishNews() {
   const title = document.getElementById("newsTitle").value.trim();
   const body = document.getElementById("newsBody").value.trim();
   const videoLink = document.getElementById("newsVideo").value.trim();
-  const imageFile = document.getElementById("newsImageFile")?.files[0];
-  const videoFile = document.getElementById("newsVideoFile")?.files[0];
+  const imageFile = document.getElementById("newsImageFile").files[0];
+  const videoFile = document.getElementById("newsVideoFile").files[0];
   const status = document.getElementById("newsUploadStatus");
   const button = document.getElementById("publishNewsBtn");
 
@@ -427,8 +449,7 @@ async function publishNews() {
     async function uploadFile(file) {
       if (!file) return null;
 
-      if (status) status.textContent = `${file.name} yuklanmoqda...`;
-
+      status.textContent = `${file.name} yuklanmoqda...`;
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
       const path = `${user.id}/${Date.now()}-${safeName}`;
 
@@ -441,11 +462,7 @@ async function publishNews() {
 
       if (error) throw error;
 
-      const { data } = db.storage
-        .from("school-news-media")
-        .getPublicUrl(path);
-
-      return data.publicUrl;
+      return db.storage.from("school-news-media").getPublicUrl(path).data.publicUrl;
     }
 
     const imageUrl = await uploadFile(imageFile);
@@ -468,23 +485,17 @@ async function publishNews() {
     document.getElementById("newsImageFile").value = "";
     document.getElementById("newsVideoFile").value = "";
 
-    if (status) status.textContent = "Yangilik muvaffaqiyatli joylandi!";
+    status.textContent = "Yangilik muvaffaqiyatli joylandi!";
     await renderNews();
   } catch (error) {
-    if (status) status.textContent = "Xatolik: " + error.message;
-    else alert("Xatolik: " + error.message);
+    status.textContent = "Xatolik: " + error.message;
+    console.error("publishNews:", error);
   } finally {
     button.disabled = false;
   }
 }
 
-
-  const SUPABASE_URL = "https://pkbhavmbudmyrmfhifmr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
-
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+/* RO‘YXATDAN O‘TISH */
 async function registerUser() {
   const full_name = document.getElementById("authName").value.trim();
   const email = document.getElementById("authEmail").value.trim();
@@ -499,133 +510,119 @@ async function registerUser() {
     return;
   }
 
+  if (password.length < 6) {
+    msg.textContent = "Parol kamida 6 ta belgidan iborat bo‘lsin.";
+    return;
+  }
+
   msg.textContent = "Ro‘yxatdan o‘tilmoqda...";
 
-  const { error } = await db.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: window.location.origin,
-      data: { full_name, school_name, school_number, grade }
-    }
-  });
+  try {
+    const { error } = await db.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name, school_name, school_number, grade }
+      }
+    });
 
-  msg.textContent = error
-    ? "Xatolik: " + error.message
-    : "Hisob yaratildi. Emailingizni tasdiqlang, agar tasdiqlash talab qilinsa.";
+    msg.textContent = error
+      ? "Xatolik: " + error.message
+      : "Hisob yaratildi. Zarur bo‘lsa emailingizni tasdiqlang.";
+  } catch (error) {
+    msg.textContent = "Xatolik: " + error.message;
+  }
 }
 
+/* KIRISH */
 async function loginUser() {
   const email = document.getElementById("authEmail").value.trim();
   const password = document.getElementById("authPassword").value;
   const msg = document.getElementById("authMessage");
 
-  const { data, error } = await db.auth.signInWithPassword({
-    email,
-    password
-  });
+  if (!email || !password) {
+    msg.textContent = "Email va parolni kiriting.";
+    return;
+  }
 
-  if (error) {
+  msg.textContent = "Hisobga kirilmoqda...";
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+
+    await showProfile(data.user);
+    await updateAccountButton();
+    await updateNewsEditor();
+  } catch (error) {
     msg.textContent = "Kirish xatosi: " + error.message;
-    return;
   }
-
-  const { data: profile } = await db
-    .from("profiles")
-    .select("full_name, role, school_name, school_number, grade")
-    .eq("id", data.user.id)
-    .maybeSingle();
-
-  showSection("account");
-
-  const card = document.querySelector("#account .card");
-  card.replaceChildren();
-
-  const title = document.createElement("h3");
-  title.textContent = "👤 Mening profilim";
-  card.appendChild(title);
-
-  const fields = [
-    ["Email", data.user.email],
-    ["Ism", profile?.full_name || data.user.user_metadata.full_name],
-    ["Maktab", profile?.school_name],
-    ["Maktab raqami", profile?.school_number],
-    ["Sinf", profile?.grade],
-    ["Rol", profile?.role]
-  ];
-
-  fields.forEach(([label, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      const p = document.createElement("p");
-      p.textContent = `${label}: ${value}`;
-      card.appendChild(p);
-    }
-  });
-
-  const button = document.createElement("button");
-  button.textContent = "Hisobdan chiqish";
-  button.onclick = logoutUser;
-  card.appendChild(button);
-
-  msg.textContent = "Muvaffaqiyatli kirdingiz!";
 }
+
+/* PROFIL */
 async function openProfile() {
-  const { data: { user } } = await db.auth.getUser();
-
-  if (!user) {
-    showSection("account");
-    return;
-  }
-
   showSection("account");
 
-  const card = document.querySelector("#account .card");
+  try {
+    const { data: { user }, error } = await db.auth.getUser();
+    if (error) throw error;
+
+    if (!user) {
+      document.getElementById("authMessage").textContent =
+        "Profilni ko‘rish uchun hisobingizga kiring yoki ro‘yxatdan o‘ting.";
+      return;
+    }
+
+    await showProfile(user);
+  } catch (error) {
+    document.getElementById("authMessage").textContent =
+      "Profil xatosi: " + error.message;
+  }
+}
+
+async function showProfile(user) {
+  const card = document.getElementById("accountCard");
   card.replaceChildren();
 
-  const title = document.createElement("h3");
-  title.textContent = "👤 Mening profilim";
-  card.appendChild(title);
+  const heading = document.createElement("h3");
+  heading.textContent = "👤 Mening profilim";
+  card.appendChild(heading);
 
-  const { data: p, error } = await db
+  const { data: profile, error } = await db
     .from("profiles")
-    .select("full_name, school_name, school_number, grade, role")
+    .select("full_name,role,school_name,school_number,grade")
     .eq("id", user.id)
     .maybeSingle();
 
   if (error) {
-    const err = document.createElement("p");
-    err.textContent = "Profilni yuklashda xatolik: " + error.message;
-    card.appendChild(err);
+    const p = document.createElement("p");
+    p.textContent = "Profilni yuklashda xatolik: " + error.message;
+    card.appendChild(p);
   }
 
-  [
-    ["Ism", p?.full_name || user.user_metadata.full_name],
+  const fields = [
+    ["Ism", profile?.full_name || user.user_metadata?.full_name],
     ["Email", user.email],
-    ["Maktab", p?.school_name || user.user_metadata.school_name],
-    ["Maktab raqami", p?.school_number || user.user_metadata.school_number],
-    ["Sinf", p?.grade || user.user_metadata.grade],
-    ["Rol", p?.role || "student"]
-  ].forEach(([label, value]) => {
-    const row = document.createElement("p");
-    row.textContent = `${label}: ${value ?? "Kiritilmagan"}`;
-    card.appendChild(row);
+    ["Maktab", profile?.school_name || user.user_metadata?.school_name],
+    ["Maktab raqami", profile?.school_number || user.user_metadata?.school_number],
+    ["Sinf", profile?.grade || user.user_metadata?.grade],
+    ["Rol", profile?.role || "student"]
+  ];
+
+  fields.forEach(([label, value]) => {
+    const p = document.createElement("p");
+    p.textContent = `${label}: ${value ?? "Kiritilmagan"}`;
+    card.appendChild(p);
   });
 
-  const btn = document.createElement("button");
-  btn.textContent = "Chiqish";
-  btn.onclick = logoutUser;
-  card.appendChild(btn);
-}
-
-async function updateAccountButton() {
-  const { data: { user } } = await db.auth.getUser();
-  const btn = document.getElementById("accountNavBtn");
-  if (btn) btn.textContent = user ? "Profil" : "Kirish";
+  const logout = document.createElement("button");
+  logout.textContent = "Hisobdan chiqish";
+  logout.onclick = logoutUser;
+  card.appendChild(logout);
 }
 
 async function logoutUser() {
   const { error } = await db.auth.signOut();
-
   if (error) {
     alert("Chiqishda xatolik: " + error.message);
     return;
@@ -634,44 +631,57 @@ async function logoutUser() {
   location.reload();
 }
 
-updateAccountButton();
-db.auth.onAuthStateChange(() => updateAccountButton());
-  
+/* HISOB TUGMASI VA ADMIN FORMA */
+async function updateAccountButton() {
+  const btn = document.getElementById("accountNavBtn");
+  if (!btn) return;
+
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    btn.textContent = user ? "Profil" : "Kirish";
+  } catch (error) {
+    console.error("updateAccountButton:", error);
+  }
+}
+
 async function updateNewsEditor() {
   const editor = document.getElementById("newsEditor");
   if (!editor) return;
 
   editor.classList.add("hidden");
 
-  const { data: { user } } = await db.auth.getUser();
-  if (!user) return;
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    if (!user) return;
 
-  const { data: profile, error } = await db
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
+    const { data: profile, error } = await db
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
 
-  if (!error && profile?.role === "admin") {
-    editor.classList.remove("hidden");
+    if (!error && profile?.role === "admin") {
+      editor.classList.remove("hidden");
+    }
+  } catch (error) {
+    console.error("updateNewsEditor:", error);
   }
 }
 
+/* SAYTNI ISHGA TUSHIRISH */
+async function initApp() {
+  renderSubjects();
+  await renderNews();
+  await updateAccountButton();
+  await updateNewsEditor();
+}
+
 db.auth.onAuthStateChange(() => {
-  updateNewsEditor();
   updateAccountButton();
+  updateNewsEditor();
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await renderSubjects();
-    await renderNews();
-    await updateAccountButton();
-    await updateNewsEditor();
-  } catch (error) {
-    console.error("Sayt xatosi:", error);
-  }
-});
+initApp().catch(error => console.error("Saytni ishga tushirish xatosi:", error));
 </script>
 </body>
 </html>
