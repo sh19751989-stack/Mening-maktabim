@@ -1,341 +1,101 @@
+a := (ans+1)::text; b := (ans+2)::text; c := ans::text; d := (ans-1)::text;
+          else
+            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Agar x + '||y||' = '||(x+y)||' bo‘lsa, x ni toping.';
+            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := (ans+y)::text;
+          end if;
+          -- Place correct answer at option B for subtraction, C otherwise.
+          if n % 4 = 1 then correct := 'B'; else correct := 'C'; end if;
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mening Maktabim — Bilim sari!</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    :root {
-      --blue: #3867ff;
-      --purple: #7957ff;
-      --ink: #182448;
-      --muted: #78839f;
-      --bg: #f4f7ff;
-      --white: #fff;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(ellipse at 85% 5%, #e0e7ff 0, transparent 36%),
-        var(--bg);
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .nav {
-      max-width: 1180px;
-      margin: auto;
-      padding: 22px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-    .brand { font-weight: 850; font-size: 21px; letter-spacing: -.6px; }
-    .brand span { color: var(--blue); }
-    .nav-actions { display: flex; gap: 10px; }
-    .btn {
-      border: 0; border-radius: 12px; padding: 12px 19px;
-      font-weight: 700; transition: .2s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .primary {
-      color: white;
-      background: linear-gradient(120deg, var(--blue), var(--purple));
-      box-shadow: 0 8px 22px #3867ff38;
-    }
-    .light { background: white; color: var(--ink); border: 1px solid #e2e8fa; }
-    .hero {
-      max-width: 1180px; margin: 35px auto 55px; padding: 24px;
-      display: grid; grid-template-columns: 1.1fr .9fr;
-      gap: 30px; align-items: center;
-    }
-    .hero-copy { padding: 22px 0; }
-    .pill {
-      display: inline-block; background: #e6ebff; color: var(--blue);
-      padding: 9px 14px; border-radius: 30px; font-weight: 750; font-size: 13px;
-    }
-    h1 { font-size: clamp(38px, 5vw, 65px); line-height: 1.08; letter-spacing: -2px; margin: 22px 0; }
-    h1 span { color: var(--blue); }
-    .lead { max-width: 550px; color: var(--muted); line-height: 1.9; font-size: 17px; }
-    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 27px; }
-    .art {
-      min-height: 370px; border-radius: 32px; padding: 25px;
-      display: grid; place-items: center; position: relative; overflow: hidden;
-      background: linear-gradient(145deg, #dce7ff, #eee7ff);
-    }
-    .orb { position: absolute; border-radius: 50%; background: #ffffff75; }
-    .orb.one { width: 220px; height: 220px; top: -55px; right: -30px; }
-    .orb.two { width: 130px; height: 130px; bottom: -45px; left: -20px; }
-    .student {
-      position: relative; text-align: center; width: 100%;
-      padding: 34px 20px; border-radius: 25px;
-      background: #ffffffd9; box-shadow: 0 20px 50px #354c9b18;
-    }
-    .student .emoji { font-size: 100px; }
-    .student h2 { margin: 8px 0; font-size: 25px; }
-    .student p { color: var(--muted); }
-    .float {
-      position: absolute; background: white; border-radius: 16px;
-      padding: 13px 16px; font-size: 14px; font-weight: 800;
-      box-shadow: 0 12px 30px #33447720;
-    }
-    .f1 { top: 35px; left: 15px; }
-    .f2 { bottom: 35px; right: 12px; }
-    .features { max-width: 1180px; margin: 0 auto; padding: 20px 24px 70px; }
-    .section-title { text-align: center; font-size: 34px; letter-spacing: -1px; }
-    .section-sub { text-align: center; color: var(--muted); margin-bottom: 30px; }
-    .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-    .card {
-      background: white; padding: 25px; border: 1px solid #e8edfa;
-      border-radius: 23px; box-shadow: 0 10px 35px #243c7610;
-      transition: .2s;
-    }
-    .card:hover { transform: translateY(-5px); }
-    .card-icon {
-      width: 54px; height: 54px; display: grid; place-items: center;
-      border-radius: 17px; background: #eaf0ff; font-size: 26px;
-    }
-    .card p { color: var(--muted); line-height: 1.7; }
-    footer { text-align: center; padding: 28px; color: var(--muted); }
-    .modal {
-      position: fixed; inset: 0; z-index: 10; display: none;
-      place-items: center; padding: 18px; background: #101b3a9c;
-      backdrop-filter: blur(7px);
-    }
-    .modal.show { display: grid; }
-    .dialog {
-      width: min(100%, 430px); background: white; padding: 30px;
-      border-radius: 25px; box-shadow: 0 30px 100px #111b4730;
-      position: relative;
-    }
-    .close {
-      position: absolute; right: 17px; top: 13px; border: 0;
-      background: #f0f3fb; border-radius: 10px; padding: 8px 12px;
-    }
-    .dialog h2 { margin-top: 5px; font-size: 27px; }
-    .dialog p { color: var(--muted); line-height: 1.6; }
-    .field { display: grid; gap: 7px; margin: 15px 0; }
-    .field label { font-size: 13px; font-weight: 750; }
-    .field input {
-      width: 100%; padding: 14px; border: 1px solid #dfe5f4;
-      border-radius: 12px; outline: none;
-    }
-    .field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #3867ff18; }
-    .full { width: 100%; margin-top: 8px; }
-    #message { font-size: 13px; overflow-wrap: anywhere; }
-    .switch { color: var(--blue); font-weight: 750; cursor: pointer; }
-    @media(max-width:760px) {
-      .hero { grid-template-columns: 1fr; margin-top: 10px; }
-      .hero-copy { padding: 10px 0; }
-      .art { min-height: 310px; }
-      .cards { grid-template-columns: 1fr; }
-      .nav { padding: 17px; }
-      .nav-actions .btn { padding: 10px; }
-      h1 { letter-spacing: -1px; }
-    }
-  </style>
-</head>
-<body>
-  <header class="nav">
-    <div class="brand">🎓 Mening <span>Maktabim</span></div>
-    <div class="nav-actions">
-      <button class="btn light" onclick="openAuth('login')">Kirish</button>
-      <button class="btn primary" onclick="openAuth('signup')">Ro‘yxatdan o‘tish</button>
-    </div>
-  </header>
+        elsif s = 'Fizika' then
+          if n % 3 = 0 then
+            ans := x * y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Jism  '||x||' m/s tezlikda '||y||' s harakatlandi. Masofa qancha?';
+            a := (ans+5)::text; b := (ans-5)::text; c := ans::text; d := (x+y)::text; correct := 'C';
+          elsif n % 3 = 1 then
+            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' N va '||y||' N bir yo‘nalishda ta’sir etsa, natijaviy kuch qancha?';
+            a := (ans+2)::text; b := ans::text; c := (ans-2)::text; d := abs(x-y)::text; correct := 'B';
+          else
+            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tezlik '||x||' m/s, vaqt '||y||' s. Masofani topish uchun qaysi amal bajariladi?';
+            a := (x+y)::text; b := (x*y)::text; c := x::text; d := abs(x-y)::text; correct := 'C';
+          end if;
 
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="pill">✦ Zamonaviy ta’lim platformasi</span>
-        <h1>Bilim —<br><span>kelajak kaliti!</span></h1>
-        <p class="lead">
-          Testlar ishlang, bilimingizni sinang va natijalaringizni kuzating.
-          Mening Maktabim — o‘quvchilar va o‘qituvchilar uchun yagona platforma.
-        </p>
-        <div class="hero-buttons">
-          <button class="btn primary" onclick="openAuth('signup')">🚀 Boshlash</button>
-          <button class="btn light" onclick="document.querySelector('#features').scrollIntoView({behavior:'smooth'})">Batafsil →</button>
-        </div>
-      </div>
-      <div class="art">
-        <div class="orb one"></div><div class="orb two"></div>
-        <div class="float f1">📚 Bilim sari!</div>
-        <div class="student">
-          <div class="emoji">🧑‍🎓</div>
-          <h2>Orzularing sari!</h2>
-          <p>Har kuni yangi bilim, har kuni yangi imkoniyat.</p>
-          <div style="font-size:30px">📘 🧪 💻</div>
-        </div>
-        <div class="float f2">⭐ O‘z ustingda ishla</div>
-      </div>
-    </section>
+        elsif s = 'Kimyo' then
+          if n % 4 = 0 then
+            ans := 2*x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Shartli ravishda bitta zarracha massasi '||x||' birlik. Shunday 2 zarracha massasi qancha?';
+            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := x::text; correct := 'C';
+          elsif n % 4 = 1 then
+            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Aralashmada '||x||' g birinchi modda va '||y||' g ikkinchi modda bor. Umumiy massa qancha?';
+            a := (ans+1)::text; b := ans::text; c := (ans-1)::text; d := abs(x-y)::text; correct := 'B';
+          elsif n % 4 = 2 then
+            ans := x-y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' g namunadan '||y||' g ajratildi. Qolgan massa qancha?';
+            a := (ans+2)::text; b := (ans-2)::text; c := ans::text; d := (x+y)::text; correct := 'C';
+          else
+            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Kimyoviy tajribada o‘lchangan qiymat '||x||' birlik. Shu qiymatning ikki baravari qancha?';
+            a := (ans+2)::text; b := (ans*2)::text; c := ans::text; d := (ans-2)::text; correct := 'C';
+          end if;
 
-    <section class="features" id="features">
-      <h2 class="section-title">Bitta platforma — ko‘p imkoniyat</h2>
-      <p class="section-sub">O‘qish va rivojlanish uchun kerakli vositalar.</p>
-      <div class="cards">
-        <article class="card">
-          <div class="card-icon">📝</div>
-          <h3>Onlayn testlar</h3>
-          <p>Fan va sinfni tanlab, bilimlaringizni testlar yordamida tekshiring.</p>
-        </article>
-        <article class="card">
-          <div class="card-icon">📈</div>
-          <h3>Natijalar</h3>
-          <p>Test natijalaringizni kuzating va qaysi fanlarda rivojlanayotganingizni biling.</p>
-        </article>
-        <article class="card">
-          <div class="card-icon">👨‍🏫</div>
-          <h3>O‘qituvchi va admin</h3>
-          <p>Vakolatli xodimlar savollarni boshqaradi, o‘quvchilar esa test ishlaydi.</p>
-        </article>
-      </div>
-    </section>
-  </main>
+        elsif s = 'Informatika' then
+          if n % 4 = 0 then
+            ans := x + y; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Algoritmda x='||x||' va y='||y||'. x + y natijasi nima?';
+            a := (ans+1)::text; b := ans::text; c := (ans-1)::text; d := (x*y)::text; correct := 'B';
+          elsif n % 4 = 1 then
+            ans := x * 2; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Dastur x='||x||' qiymatini 2 ga ko‘paytiradi. Natija?';
+            a := (ans+1)::text; b := (ans-1)::text; c := ans::text; d := x::text; correct := 'C';
+          elsif n % 4 = 2 then
+            ans := x % 2; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||x||' sonini 2 ga bo‘lgandagi qoldiqni toping.';
+            a := '0'; b := '2'; c := ans::text; d := '1'; correct := 'C';
+          else
+            ans := x; q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — O‘zgaruvchi x ga '||x||' qiymati berilgan. x ning qiymati nechaga teng?';
+            a := (x+1)::text; b := (x-1)::text; c := x::text; d := (x*2)::text; correct := 'C';
+          end if;
 
-  <footer>© 2026 Mening Maktabim · Bilim sari birgalikda</footer>
+        elsif s = 'Biologiya' then
+          topics := array['O‘simlikda suv va mineral moddalarni asosan qaysi qism shimadi?','Fotosintez jarayoni uchun qaysi energiya manbai kerak?','Inson nafas olishida qaysi gaz yutiladi?','Qonning asosiy vazifalaridan biri nima?'];
+          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[1]; a:='Barg'; b:='Ildiz'; c:='Gul'; d:='Meva'; correct:='B';
+          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[2]; a:='Oy nuri'; b:='Tovush'; c:='Quyosh nuri'; d:='Shamol'; correct:='C';
+          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[3]; a:='Azot'; b:='Kislorod'; c:='Karbonat angidrid'; d:='Vodorod'; correct:='B';
+          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — '||topics[4]; a:='Ovqat hazm qilish'; b:='Moddalarni tashish'; c:='Faqat harakat'; d:='Faqat ko‘rish'; correct:='B';
+          end if;
 
-  <div class="modal" id="authModal">
-    <div class="dialog">
-      <button class="close" onclick="closeAuth()">✕</button>
-      <div class="brand">🎓 Mening <span>Maktabim</span></div>
-      <h2 id="formTitle">Hisob yaratish</h2>
-      <p id="formDesc">Ma’lumotlaringizni kiriting.</p>
-      <form id="authForm">
-        <div class="field" id="nameField">
-          <label for="fullName">Ism va familiya</label>
-          <input id="fullName" autocomplete="name" placeholder="Ismingiz">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" required autocomplete="email" placeholder="siz@example.com">
-        </div>
-        <div class="field">
-          <label for="password">Parol</label>
-          <input id="password" type="password" required minlength="8" autocomplete="new-password" placeholder="Kamida 8 ta belgi">
-        </div>
-        <button class="btn primary full" id="submitBtn" type="submit">Ro‘yxatdan o‘tish</button>
-      </form>
-      <p id="message" role="status"></p>
-      <p id="switchText">Hisobingiz bormi? <span class="switch" onclick="openAuth('login')">Kirish</span></p>
-    </div>
-  </div>
+        elsif s = 'Tarix' then
+          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tarix fani asosan nimani o‘rganadi?'; a:='Faqat kelajakni'; b:='O‘tgan davrlar va insoniyat hayotini'; c:='Faqat tabiatni'; d:='Faqat hisoblashni'; correct:='B';
+          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Tarixiy manbaga qaysi biri misol bo‘la oladi?'; a:='Faqat taxmin'; b:='Qadimiy yozuv yoki hujjat'; c:='Tasodifiy raqam'; d:='Ob-havo bashorati'; correct:='B';
+          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Arxeologlar ko‘pincha nimani tadqiq qiladi?'; a:='Faqat yulduzlarni'; b:='Yer ostidan topilgan tarixiy buyumlarni'; c:='Faqat o‘simlik urug‘ini'; d:='Kompyuter kodini'; correct:='B';
+          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Voqealarni vaqt bo‘yicha tartiblash nima uchun kerak?'; a:='Ularni chalkashtirish uchun'; b:='Tarixiy ketma-ketlikni tushunish uchun'; c:='Sanalarni yashirish uchun'; d:='Manbalarni yo‘qotish uchun'; correct:='B';
+          end if;
 
-  <script>
-    // Supabase loyihang ma’lumotlarini shu yerga qo‘y.
-    // Faqat Project URL va publishable (ommaviy) kalit ishlat.
-    const SUPABASE_URL = "SUPABASE_PROJECT_URL";
-    const SUPABASE_PUBLISHABLE_KEY = "SUPABASE_PUBLISHABLE_KEY";
+        elsif s = 'Rus tili' then
+          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Книга» so‘zining ko‘plik shaklini toping.'; a:='Книги'; b:='Книгой'; c:='Книгу'; d:='Книге'; correct:='A';
+          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Большой» so‘zining antonimini toping.'; a:='Высокий'; b:='Маленький'; c:='Длинный'; d:='Широкий'; correct:='B';
+          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Я ___ в школу каждый день». To‘g‘ri fe’lni tanlang.'; a:='идёшь'; b:='идут'; c:='иду'; d:='идём'; correct:='C';
+          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — «Молоко» qaysi so‘z turkumiga kiradi?'; a:='Глагол'; b:='Существительное'; c:='Прилагательное'; d:='Наречие'; correct:='B';
+          end if;
 
-    let db = null;
-    if (
-      window.supabase &&
-      SUPABASE_URL.startsWith("https://") &&
-      !SUPABASE_URL.includes("SUPABASE_PROJECT_URL") &&
-      !SUPABASE_PUBLISHABLE_KEY.includes("SUPABASE_PUBLISHABLE_KEY")
-    ) {
-      db = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-    }
+        else -- Ingliz tili
+          if n % 4 = 1 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct plural: one book, two ___.';
+            a:='book'; b:='books'; c:='bookes'; d:='booking'; correct:='B';
+          elsif n % 4 = 2 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct verb: She ___ to school every day.';
+            a:='go'; b:='going'; c:='goes'; d:='gone'; correct:='C';
+          elsif n % 4 = 3 then q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — What is the opposite of “hot”?';
+            a:='warm'; b:='cold'; c:='high'; d:='bright'; correct:='B';
+          else q := '[MM-AUTO] N='||n||';G='||g||';S='||s||' — Choose the correct article: ___ apple.';
+            a:='A'; b:='An'; c:='Thee'; d:='No article ever'; correct:='B';
+          end if;
+        end if;
 
-    let mode = "signup";
-    const modal = document.getElementById("authModal");
-    const message = document.getElementById("message");
+        -- Replace generator tags with a clean, human-readable question label.
+        q := regexp_replace(q, '^\[MM-AUTO\] N=[0-9]+;G=[0-9]+;S=[^ ]+ — ', '');
+        insert into public.questions(subject,grade,question,option_a,option_b,option_c,option_d,correct_option)
+        values(s,g,q,a,b,c,d,correct);
+      end loop;
+      end if;
+    end loop;
+  end loop;
+end $$;
 
-    function openAuth(nextMode) {
-      mode = nextMode;
-      modal.classList.add("show");
-      message.textContent = "";
-      const signup = mode === "signup";
-      document.getElementById("formTitle").textContent =
-        signup ? "Yangi hisob yaratish" : "Xush kelibsiz!";
-      document.getElementById("formDesc").textContent =
-        signup ? "Platformaga qo‘shiling." : "Hisobingizga kiring.";
-      document.getElementById("nameField").style.display =
-        signup ? "grid" : "none";
-      document.getElementById("fullName").required = signup;
-      document.getElementById("password").autocomplete =
-        signup ? "new-password" : "current-password";
-      document.getElementById("submitBtn").textContent =
-        signup ? "Ro‘yxatdan o‘tish" : "Kirish";
-      document.getElementById("switchText").innerHTML = signup
-        ? 'Hisobingiz bormi? <span class="switch" onclick="openAuth(\\'login\\')">Kirish</span>'
-        : 'Hisobingiz yo‘qmi? <span class="switch" onclick="openAuth(\\'signup\\')">Ro‘yxatdan o‘tish</span>';
-    }
+-- Helpful indexes
+create index if not exists questions_subject_grade_idx on public.questions(subject, grade);
+create index if not exists test_results_user_created_idx on public.test_results(user_id, created_at desc);
+create index if not exists feedback_created_idx on public.student_feedback(created_at desc);
 
-    function closeAuth() {
-      modal.classList.remove("show");
-    }
-
-    modal.addEventListener("click", e => {
-      if (e.target === modal) closeAuth();
-    });
-
-    document.getElementById("authForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      message.textContent = "";
-      if (!db) {
-        message.textContent =
-          "Avval JavaScript ichidagi Supabase URL va publishable key qiymatlarini kiriting.";
-        return;
-      }
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const fullName = document.getElementById("fullName").value.trim();
-      const button = document.getElementById("submitBtn");
-
-      button.disabled = true;
-      button.textContent = "Kuting...";
-
-      try {
-        let result;
-
-        if (mode === "signup") {
-          result = await db.auth.signUp({
-            email,
-            password,
-            options: {
-              data: { full_name: fullName }
-            }
-          });
-        } else {
-          result = await db.auth.signInWithPassword({ email, password });
-        }
-
-        if (result.error) throw result.error;
-
-        if (mode === "signup" && !result.data.session) {
-          message.textContent =
-            "Ro‘yxatdan o‘tish so‘rovi yuborildi. Emailingizni tasdiqlang.";
-        } else {
-          message.textContent =
-            mode === "signup"
-              ? "Hisob yaratildi!"
-              : "Muvaffaqiyatli kirdingiz!";
-          setTimeout(() => {
-            closeAuth();
-            location.reload();
-          }, 1200);
-        }
-      } catch (err) {
-        console.error("Auth error:", err);
-        message.textContent =
-          "Xatolik: " + (err.message || "Amalni bajarib bo‘lmadi.");
-      } finally {
-        button.disabled = false;
-        button.textContent =
-          mode === "signup" ? "Ro‘yxatdan o‘tish" : "Kirish";
-      }
-    });
-  </script>
-</body>
-</html>
+-- Reload PostgREST schema cache
+notify pgrst, 'reload schema';
