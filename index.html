@@ -213,6 +213,7 @@ let questionIndex = 0;
 let score = 0;
 let answered = false;
 
+
 function startTest() {
   const grade = document.getElementById("grade").value;
   const subject = document.getElementById("subject").value;
@@ -223,9 +224,16 @@ function startTest() {
     return;
   }
 
-  currentQuestions = demoQuestions[subject] || [];
+  // Tanlangan sinf va fan uchun savollar
+  const gradeQuestions = demoQuestions[grade];
+  currentQuestions = gradeQuestions
+    ? (gradeQuestions[subject] || [])
+    : [];
+
   if (!currentQuestions.length) {
-    alert("Bu fan uchun demo savollar hali mavjud emas.");
+    alert(
+      `${grade}-sinf uchun ${subject} fanidan savollar hali qo‘shilmagan.`
+    );
     return;
   }
 
