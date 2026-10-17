@@ -1,222 +1,601 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101b3c">
-<title>Mening Maktabim — Bilim sari</title>
-
-<link rel="icon" type="image/png" href="./favicon.png">
-<link rel="icon" type="image/x-icon" href="./favicon.ico">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Mening Maktabim</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-:root{--navy:#101b3c;--blue:#4568f5;--blue2:#6f8cff;--ink:#18233d;--muted:#71809a;--line:#e4eaf5;--bg:#f4f7fc;--white:#fff;--green:#13865c;--red:#bd3347;--shadow:0 14px 40px #14224a0b}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;line-height:1.55}button,input,select,textarea{font:inherit}button{border:0;cursor:pointer;border-radius:12px;padding:11px 15px;background:var(--blue);color:#fff;font-weight:700;transition:.15s}button:hover{filter:brightness(.96);transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;transform:none}.secondary{background:#edf1ff;color:#2948bd}.darkbtn{background:var(--navy)}.danger{background:#fff0f2;color:var(--red)}.smallbtn{padding:8px 11px;font-size:13px}.hidden{display:none!important}.muted{color:var(--muted)}.wrap{width:min(1180px,calc(100% - 32px));margin:28px auto}.topbar{position:sticky;top:0;z-index:10;background:#101b3cf5;color:white;backdrop-filter:blur(12px);padding:13px max(16px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;box-shadow:0 6px 24px #0c15331c}.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;white-space:nowrap}.brandmark{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#6685ff,#3152df)}nav{display:flex;gap:7px;flex-wrap:wrap}nav button{padding:9px 12px;font-size:13px;background:transparent;color:#e5eaff}nav button:hover,nav button.active{background:#ffffff1b}.hero{position:relative;overflow:hidden;border-radius:27px;padding:clamp(26px,5vw,56px);color:white;background:radial-gradient(circle at 88% 12%,#8ca5ff66,transparent 28%),linear-gradient(125deg,#12234e,#2448b5 65%,#5478f6);box-shadow:0 20px 50px #1d3f9d26}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:800;color:#cbd6ff}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.08;letter-spacing:-1.5px;margin:13px 0}.hero p{max-width:620px;color:#e3e9ff}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.hero .secondary{background:#ffffff1e;color:#fff;border:1px solid #ffffff42}.hero-art{position:absolute;right:6%;top:18%;font-size:clamp(65px,10vw,125px);opacity:.17;pointer-events:none}.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:28px 0 12px}.section-title h2{margin:0;font-size:25px;letter-spacing:-.6px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:15px}.card{background:var(--white);border:1px solid var(--line);border-radius:19px;padding:21px;box-shadow:var(--shadow);margin:14px 0}.subject-card{margin:0;transition:.18s}.subject-card:hover{transform:translateY(-3px);border-color:#b8c6ff}.subject-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#edf1ff;font-size:22px;margin-bottom:13px}.subject-card h3{margin:0 0 5px}.subject-card p{margin:0 0 15px;font-size:13px;color:var(--muted)}.panel{max-width:850px}.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}.field{display:block;font-weight:700;font-size:13px;margin:10px 0 0}input,select,textarea{width:100%;border:1px solid #d7dfed;background:#fff;color:var(--ink);border-radius:11px;padding:12px 13px;margin:7px 0 13px;outline:none}input:focus,select:focus,textarea:focus{border-color:#8299ff;box-shadow:0 0 0 3px #4568f51a}textarea{min-height:105px;resize:vertical}.note{border-radius:12px;background:#fff7dd;color:#775b14;padding:12px 14px;font-size:13px}.status{min-height:24px;font-size:13px;overflow-wrap:anywhere}.success{color:var(--green)}.error{color:var(--red)}.pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:#edf1ff;color:#3452c7;font-size:12px;font-weight:800}.question-option{display:block;width:100%;text-align:left;background:#f6f8ff;color:var(--ink);border:1px solid #dce4fb;margin:9px 0;padding:13px 14px}.question-option.selected{background:#e9eeff;border-color:#6d88ff}.question-option:disabled{opacity:1}.progress{height:7px;background:#e9eef8;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#8ca4ff);width:0;transition:width .2s}.chatbox{height:370px;overflow:auto;background:#f7f9ff;border:1px solid var(--line);border-radius:15px;padding:13px;display:flex;flex-direction:column;gap:10px}.bubble{max-width:90%;background:#fff;border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;align-self:flex-start;overflow-wrap:anywhere}.bubble.mine{align-self:flex-end;background:#eaf0ff;border-color:#d3ddff;border-radius:14px 14px 4px 14px}.bubble small{display:block;color:var(--muted);font-size:11px;margin-top:5px}.chat-compose{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.chat-compose input{margin:0}.chat-compose button{white-space:nowrap}.feedback-item,.news-item{border:1px solid var(--line);border-radius:15px;background:white;padding:16px;margin:12px 0;overflow-wrap:anywhere}.news-item img,.news-item video{display:block;width:100%;max-height:430px;object-fit:contain;background:#101b3c;border-radius:12px;margin:12px 0}.news-item p{white-space:pre-wrap}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:13px}.empty{padding:25px;text-align:center;color:var(--muted);background:#f8faff;border:1px dashed #d8e0f0;border-radius:14px}
-@media(max-width:760px){.topbar{position:static;align-items:flex-start}.topbar nav{width:100%}nav button{flex:1 1 auto}.wrap{width:calc(100% - 24px);margin:20px auto}.hero-art{right:4%;top:40%;opacity:.1}.two-col{grid-template-columns:1fr}.card{padding:16px}}
-.answer-review{display:grid;gap:12px;margin:18px 0}.answer-review .card{padding:14px;border:1px solid var(--border,#ddd);border-radius:12px;margin:0}.answer-review .success{color:#15803d;font-weight:700}.answer-review .error{color:#b91c1c;font-weight:700}
-</style></head>
+:root{--navy:#101b3c;--blue:#4568f5;--bg:#f3f6fc;--text:#192544;--muted:#77839a;--line:#e2e8f3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif;line-height:1.6}
+button,input,select,textarea{font:inherit}
+button{border:0;border-radius:11px;padding:11px 15px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+button:hover{filter:brightness(.95)}
+.secondary{background:#e8edff;color:#2948bd}
+.danger{background:#fff0f1;color:#b42336}
+header{background:var(--navy);color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:21px;font-weight:800}
+nav{display:flex;gap:5px;flex-wrap:wrap}
+nav button{background:transparent;color:white;font-size:13px}
+main{max-width:1150px;margin:25px auto;padding:0 15px}
+.hidden{display:none!important}
+.hero{padding:38px;border-radius:23px;color:white;background:linear-gradient(125deg,#101b3c,#3456d7,#7190ff)}
+.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.15;margin:10px 0}
+.hero p{max-width:650px}
+.card{background:white;border:1px solid var(--line);padding:20px;border-radius:17px;margin:15px 0;box-shadow:0 7px 22px #15234c08}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+label{display:block;font-weight:700;font-size:13px;margin-top:12px}
+input,select,textarea{display:block;width:100%;padding:12px;border:1px solid #d5deed;border-radius:10px;margin:6px 0 12px;background:white;color:var(--text)}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.muted{color:var(--muted)}
+.status{overflow-wrap:anywhere;font-size:14px}
+.good{color:#13865c}.bad{color:#bd3347}
+.subject{margin:0}.emoji{font-size:28px}
+.progress{height:7px;background:#e5eaf5;border-radius:10px;overflow:hidden}
+.progress div{height:100%;background:var(--blue)}
+.option{display:block;width:100%;text-align:left;background:#f6f8ff;color:var(--text);border:1px solid var(--line);margin:9px 0}
+.option.chosen{background:#e8edff;border-color:var(--blue)}
+.chatbox{height:320px;overflow:auto;padding:12px;background:#f7f9ff;border:1px solid var(--line);border-radius:12px}
+.message{background:white;border:1px solid var(--line);padding:10px;border-radius:11px;margin:8px 0;overflow-wrap:anywhere}
+.message.mine{background:#e8edff;margin-left:10%}
+.message small{display:block;color:var(--muted)}
+.compose{display:flex;gap:8px;margin-top:10px}
+.compose input{margin:0}
+.news{background:white;border:1px solid var(--line);padding:15px;border-radius:14px;margin:12px 0;overflow-wrap:anywhere}
+.news img,.news video{display:block;max-width:100%;max-height:420px;border-radius:12px;margin:10px 0}
+.preview{max-width:100%;max-height:250px;border-radius:12px}
+footer{text-align:center;padding:25px;color:var(--muted)}
+@media(max-width:650px){header{align-items:flex-start}nav{width:100%}nav button{flex:1}.hero{padding:25px 20px}.row{grid-template-columns:1fr}.card{padding:15px}.compose{flex-direction:column}}
+</style>
+</head>
 <body>
-<header class="topbar"><div class="brand"><span class="brandmark">🎓</span><span>Mening Maktabim</span></div><nav id="mainNav"><button class="active" onclick="showSection('home',this)">Bosh sahifa</button><button onclick="showSection('tests',this)">Testlar</button><button onclick="showSection('chat',this)">Sinf chati</button><button onclick="showSection('feedback',this)">Fikr va shikoyat</button><button onclick="showSection('news',this)">Yangiliklar</button><button id="accountNavBtn" onclick="openProfile()">Kirish</button></nav></header>
+<header>
+  <div class="logo">🎓 Mening Maktabim</div>
+  <nav>
+    <button onclick="page('home')">Bosh sahifa</button>
+    <button onclick="page('tests')">Testlar</button>
+    <button onclick="page('chat')">Sinf chati</button>
+    <button onclick="page('feedback')">Fikrlar</button>
+    <button onclick="page('news')">Yangiliklar</button>
+    <button onclick="page('account')">Hisob</button>
+  </nav>
+</header>
+
 <main>
-<section id="home" class="wrap"><div class="hero"><div class="eyebrow">Bilim · Muloqot · Rivojlanish</div><h1>Bilim sari yangi qadam!</h1><p>Testlar orqali bilimingizni sinang, sinfdoshlaringiz bilan muloqot qiling va maktab hayotidagi yangiliklardan xabardor bo‘ling.</p><div class="hero-actions"><button onclick="showSection('tests')">Test boshlash <span aria-hidden="true">→</span></button><button class="secondary" onclick="showSection('chat')">Sinf chatiga kirish</button></div><div class="hero-art">📚</div></div>
-<div class="section-title"><h2>📚 Fanlar</h2><span class="muted">6–11-sinflar uchun</span></div><div id="subjects" class="grid"></div>
-<div class="grid" style="margin-top:18px"><article class="card"><div class="subject-icon">💬</div><h3>Sinf chati</h3><p class="muted">O‘z sinfingizdagi o‘quvchilar bilan muloqot qiling.</p><button class="secondary" onclick="showSection('chat')">Chatni ochish</button></article><article class="card"><div class="subject-icon">📝</div><h3>Taklif va shikoyatlar</h3><p class="muted">Fikringizni maktab jamoasiga yuboring.</p><button class="secondary" onclick="showSection('feedback')">Fikr bildirish</button></article><article class="card"><div class="subject-icon">📰</div><h3>Maktab yangiliklari</h3><p class="muted">E’lonlar, rasmlar va videolarni ko‘ring.</p><button class="secondary" onclick="showSection('news')">Yangiliklarni ko‘rish</button></article></div></section>
-<section id="tests" class="wrap hidden"><div class="section-title"><h2>📝 Test ishlash</h2><span id="testCount" class="pill">Savollar bazasi</span></div><div class="card panel"><div class="field-grid"><div><label class="field" for="grade">Sinf</label><select id="grade"><option value="">Sinfni tanlang</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div><label class="field" for="subject">Fan</label><select id="subject"><option value="">Fanni tanlang</option></select></div><div><label class="field" for="questionLimit">Savollar soni</label><select id="questionLimit"><option value="10">10 ta savol</option><option value="20">20 ta savol</option><option value="30">30 ta savol</option><option value="50">50 ta savol</option><option value="100">100 ta savol</option></select></div></div><button onclick="startTest()">Testni boshlash →</button><p id="testStatus" class="status muted" role="status"></p></div><div id="testArea" class="card hidden"></div>
-<div id="staffTestBox" class="card hidden"><div class="section-title"><h2>🛠️ O‘qituvchi / administrator</h2><span class="pill">Test qo‘shish</span></div><p class="muted">Bu yerda qo‘shilgan savollar bazaga saqlanadi va tizimga kirgan o‘quvchilar hamda o‘qituvchilarga ko‘rinadi.</p><div class="two-col"><div><h3>Yangi savol qo‘shish</h3><label class="field" for="newGrade">Sinf</label><select id="newGrade"><option value="">Sinf</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select><label class="field" for="newSubject">Fan</label><select id="newSubject"></select><label class="field" for="newQuestion">Savol</label><textarea id="newQuestion" placeholder="Savol matni"></textarea><div class="field-grid"><div><label class="field" for="newA">A javob</label><input id="newA"></div><div><label class="field" for="newB">B javob</label><input id="newB"></div><div><label class="field" for="newC">C javob</label><input id="newC"></div><div><label class="field" for="newD">D javob</label><input id="newD"></div></div><label class="field" for="newCorrect">To‘g‘ri javob</label><select id="newCorrect"><option value="">Tanlang</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select><button id="addQuestionBtn" onclick="addQuestion()">Savolni saqlash</button><p id="addQuestionStatus" class="status" role="status"></p></div><div><h3>📥 3000 ta savolni yuklash</h3><p class="muted">CSV faylni tanlang. Fayl ichida 6–11-sinflar va 10 ta fan bo‘yicha savollar mavjud.</p><label class="field" for="csvFile">CSV fayl</label><input id="csvFile" type="file" accept=".csv,text/csv"><button id="importCsvBtn" onclick="importCSV()">CSV savollarini bazaga yuklash</button><p id="csvStatus" class="status" role="status"></p><div class="note">Bir xil faylni qayta yuklasangiz, savollar takrorlanishi mumkin. Avval bir marta yuklang va jarayon tugaguncha sahifani yopmang.</div></div></div></div></section>
-<section id="chat" class="wrap hidden"><div class="section-title"><h2>💬 Sinf chati</h2><span class="pill">6–11-sinflar</span></div><div class="card"><p class="muted">O‘quvchi o‘z ro‘yxatdagi sinfini ko‘radi. O‘qituvchi va administrator sinfni tanlashi mumkin.</p><div class="field-grid"><div><label class="field" for="chatGrade">Sinf chatini tanlang</label><select id="chatGrade"><option value="">Sinf</option><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select></div><div style="align-self:end;margin-bottom:13px"><button class="secondary" onclick="loadChat()">Xabarlarni yangilash ↻</button></div></div><div id="chatMessages" class="chatbox"><div class="empty">Chatni ochish uchun tizimga kiring.</div></div><div class="chat-compose"><input id="chatMessage" maxlength="1000" placeholder="Xabaringizni yozing..." aria-label="Chat xabari"><button id="sendChatBtn" onclick="sendChat()">Yuborish</button></div><p id="chatStatus" class="status muted" role="status"></p><p class="muted" style="font-size:12px">Shaxsiy ma’lumot, telefon raqami yoki parolni chatga yozmang. Hurmat bilan muloqot qiling.</p></div></section>
-<section id="feedback" class="wrap hidden"><div class="section-title"><h2>📝 Shikoyat, taklif va fikr</h2></div><div class="card panel"><p class="muted">Yuborgan xabaringiz bazada saqlanadi. Uni faqat siz va vakolatli maktab xodimlari ko‘ra oladi.</p><label class="field" for="feedbackCategory">Xabar turi</label><select id="feedbackCategory"><option value="Taklif">Taklif</option><option value="Shikoyat">Shikoyat</option><option value="Fikr">Fikr bildirish</option></select><label class="field" for="feedbackMessage">Xabaringiz</label><textarea id="feedbackMessage" maxlength="3000" placeholder="Fikringizni aniq yozing (kamida 5 belgi)..."></textarea><button id="sendFeedbackBtn" onclick="sendFeedback()">Yuborish</button><p id="feedbackStatus" class="status" role="status"></p></div><div class="card"><div class="section-title"><h3>📬 Mening yuborgan xabarlarim</h3><button class="secondary smallbtn" onclick="loadMyFeedback()">Yangilash</button></div><div id="myFeedback"><p class="muted">Xabarlarni ko‘rish uchun tizimga kiring.</p></div><div id="staffFeedbackBox" class="hidden"><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>🛡️ Xodimlar uchun kelgan fikrlar</h3><button class="secondary smallbtn" onclick="loadStaffFeedback()">Barcha xabarlarni ko‘rish</button><div id="allFeedback"></div></div></div></section>
-<section id="news" class="wrap hidden"><div class="section-title"><h2>📰 Maktab yangiliklari</h2><button class="secondary smallbtn" onclick="renderNews()">Yangilash ↻</button></div><p class="muted">Maktabdan e’lonlar, rasmlar va videolar.</p><div id="newsEditor" class="card hidden"><h3>➕ Yangilik joylash</h3><label class="field" for="newsTitle">Sarlavha</label><input id="newsTitle" placeholder="Yangilik sarlavhasi"><label class="field" for="newsBody">Matn</label><textarea id="newsBody" placeholder="Yangilik matni"></textarea><label class="field" for="newsImageFile">📷 Rasm</label><input id="newsImageFile" type="file" accept="image/*"><label class="field" for="newsVideoFile">🎬 Video fayl</label><input id="newsVideoFile" type="file" accept="video/mp4,video/webm,video/quicktime"><label class="field" for="newsVideo">Yoki video havolasi</label><input id="newsVideo" type="url" placeholder="https://..."><button id="publishNewsBtn" onclick="publishNews()">Yangilikni joylash</button><p id="newsUploadStatus" class="status" role="status"></p></div><div id="newsList"><div class="empty">Yangiliklar yuklanmoqda...</div></div></section>
-<section id="account" class="wrap hidden"><div class="section-title"><h2>👤 Hisob</h2></div><div id="accountCard" class="card panel"><h3>Ro‘yxatdan o‘tish yoki kirish</h3><div class="note">Agar email tasdiqlash yoqilgan bo‘lsa, ro‘yxatdan keyin emailingizni tasdiqlang.</div><label class="field" for="authName">To‘liq ism</label><input id="authName" autocomplete="name" placeholder="Ism va familiya"><label class="field" for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="Email"><label class="field" for="authPassword">Parol</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="Kamida 6 ta belgi"><label class="field" for="authSchool">Maktab nomi</label><input id="authSchool" placeholder="Masalan, 12-maktab"><label class="field" for="authSchoolNumber">Maktab raqami</label><input id="authSchoolNumber" placeholder="Masalan, 12"><label class="field" for="authGrade">Sinf</label><select id="authGrade"><option value="">Sinfni tanlang</option><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select><div class="hero-actions"><button id="registerBtn" onclick="registerUser()">Ro‘yxatdan o‘tish</button><button class="secondary" onclick="loginUser()">Kirish</button></div><p id="authMessage" class="status" role="status"></p></div></section>
-</main><footer class="footer">© 2026 Mening Maktabim · Ta’lim va bilim platformasi</footer>
+<section id="home">
+  <div class="hero">
+    <p>📚 BILIM · TA'LIM · RIVOJLANISH</p>
+    <h1>Bilim sari yangi qadam!</h1>
+    <p>Test ishlang, bilimlaringizni tekshiring va maktab yangiliklaridan xabardor bo‘ling.</p>
+    <button onclick="page('tests')">Testni boshlash →</button>
+    <button class="secondary" onclick="page('news')">Yangiliklar</button>
+  </div>
+  <h2>📚 Fanlar</h2>
+  <div id="subjectsGrid" class="grid"></div>
+</section>
+
+<section id="tests" class="hidden">
+  <h2>📝 Test ishlash</h2>
+  <div class="card">
+    <div class="row">
+      <div><label>Sinf</label><select id="grade"></select></div>
+      <div><label>Fan</label><select id="subject"></select></div>
+    </div>
+    <label>Savollar soni</label>
+    <select id="testLimit">
+      <option>10</option><option>20</option><option>30</option>
+      <option>50</option><option>100</option>
+    </select>
+    <button id="startBtn" onclick="startTest()">Testni boshlash</button>
+    <p id="testStatus" class="status"></p>
+  </div>
+  <div id="testArea" class="card hidden"></div>
+
+  <div id="questionAdmin" class="card hidden">
+    <h3>➕ Test savoli qo‘shish</h3>
+    <p class="muted">Savolni bitta sinfga yoki 6–11-sinflarning barchasiga qo‘shishingiz mumkin.</p>
+    <label>Sinf</label><select id="qGrade"></select>
+    <label class="checkline"><input type="checkbox" id="allGrades" style="width:auto;display:inline"> Barcha sinflarga (6–11)</label>
+    <label>Fan</label><select id="qSubject"></select>
+    <label>Savol matni</label><textarea id="qText" maxlength="3000"></textarea>
+    <div class="row">
+      <div><label>A javob</label><input id="qA" maxlength="1000"></div>
+      <div><label>B javob</label><input id="qB" maxlength="1000"></div>
+      <div><label>C javob</label><input id="qC" maxlength="1000"></div>
+      <div><label>D javob</label><input id="qD" maxlength="1000"></div>
+    </div>
+    <label>To‘g‘ri javob</label>
+    <select id="qCorrect"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+    <button id="saveQuestionBtn" onclick="addQuestion()">Savolni saqlash</button>
+    <p id="addStatus" class="status"></p>
+  </div>
+</section>
+
+<section id="chat" class="hidden">
+  <h2>💬 Sinf chati</h2>
+  <div class="card">
+    <label>Sinf</label><select id="chatGrade" onchange="loadChat()"></select>
+    <button class="secondary" onclick="loadChat()">Yangilash ↻</button>
+    <div id="chatMessages" class="chatbox">Xabarlarni ko‘rish uchun tizimga kiring.</div>
+    <div class="compose">
+      <input id="chatInput" maxlength="1000" placeholder="Xabar yozing...">
+      <button id="sendChatBtn" onclick="sendChat()">Yuborish</button>
+    </div>
+    <p id="chatStatus" class="status"></p>
+  </div>
+</section>
+
+<section id="feedback" class="hidden">
+  <h2>📝 Taklif va shikoyatlar</h2>
+  <div class="card">
+    <label>Xabar turi</label>
+    <select id="feedbackCategory"><option>Taklif</option><option>Shikoyat</option><option>Fikr</option></select>
+    <label>Xabar</label><textarea id="feedbackText" maxlength="3000" placeholder="Fikringizni yozing..."></textarea>
+    <button onclick="sendFeedback()">Yuborish</button>
+    <p id="feedbackStatus" class="status"></p>
+  </div>
+</section>
+
+<section id="news" class="hidden">
+  <h2>📰 Maktab yangiliklari</h2>
+  <button class="secondary" onclick="loadNews()">Yangilash ↻</button>
+
+  <div id="newsEditor" class="card hidden">
+    <h3>Yangilik joylash</h3>
+    <label>Sarlavha</label><input id="newsTitle" maxlength="200">
+    <label>Yangilik matni</label><textarea id="newsBody" maxlength="10000"></textarea>
+
+    <h3>🖼️ Rasm joylash</h3>
+    <p class="muted">Kompyuteringizdan rasm tanlang.</p>
+    <input id="imageFile" type="file" accept="image/*">
+    <img id="imagePreview" class="preview hidden" alt="Rasm ko‘rinishi">
+    <p id="imageStatus" class="status"></p>
+
+    <h3>🎬 Video joylash</h3>
+    <p class="muted">Kompyuteringizdan video tanlang. Katta videolar uzoqroq yuklanishi mumkin.</p>
+    <input id="videoFile" type="file" accept="video/mp4,video/webm,video/quicktime">
+    <video id="videoPreview" class="preview hidden" controls></video>
+    <p id="videoStatus" class="status"></p>
+
+    <label>Video havolasi (ixtiyoriy)</label>
+    <input id="videoUrl" type="url" placeholder="https://...">
+    <button id="publishBtn" onclick="publishNews()">Yangilikni joylash</button>
+    <p id="newsStatus" class="status"></p>
+  </div>
+  <div id="newsList"></div>
+</section>
+
+<section id="account" class="hidden">
+  <h2>👤 Hisob</h2>
+  <div id="authBox" class="card">
+    <p class="muted">Ro‘yxatdan o‘ting yoki hisobingizga kiring.</p>
+    <label>Ism va familiya (ro‘yxatdan o‘tish uchun)</label><input id="fullName" autocomplete="name">
+    <label>Email</label><input id="email" type="email" autocomplete="email">
+    <label>Parol</label><input id="password" type="password" autocomplete="current-password">
+    <label>Maktab nomi</label><input id="schoolName">
+    <label>Maktab raqami</label><input id="schoolNumber">
+    <label>Sinf</label><select id="accountGrade"></select>
+    <button id="registerBtn" onclick="register()">Ro‘yxatdan o‘tish</button>
+    <button class="secondary" onclick="login()">Kirish</button>
+    <p id="authStatus" class="status"></p>
+  </div>
+  <div id="profileBox" class="card hidden"></div>
+</section>
+</main>
+<footer>© 2026 Mening Maktabim · Bilim sari</footer>
+
 <script>
 'use strict';
+
 const SUPABASE_URL='https://pkbhavmbudmyrmfhifmr.supabase.co';
-const SUPABASE_KEY='sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe';
+const SUPABASE_KEY='sb_publishable_GwVi5L67Yo5I7dVMIO_eCHw_WEZWDhRe';
+const STORAGE_BUCKET='school-news-media';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const subjectNames=['Ona tili','Matematika','Ingliz tili','Tarix','Fizika','Kimyo','Biologiya','Geografiya','Informatika','Huquq'];
-const subjectIcons={'Ona tili':'📖','Matematika':'➗','Ingliz tili':'🌐','Tarix':'🏛️','Fizika':'⚛️','Kimyo':'🧪','Biologiya':'🧬','Geografiya':'🌍','Informatika':'💻','Huquq':'⚖️'};
-let currentUser=null,currentProfile=null,currentQuestions=[],testAnswers=[],testIndex=0,testRunId=0;
+
+const subjects=['Ona tili','Matematika','Ingliz tili','Tarix','Fizika','Kimyo','Biologiya','Geografiya','Informatika','Huquq'];
+const icons=['📖','➗','🌐','🏛️','⚛️','🧪','🧬','🌍','💻','⚖️'];
+const grades=[6,7,8,9,10,11];
+let user=null,profile=null,questions=[],answers=[],questionIndex=0;
+
 const $=id=>document.getElementById(id);
-function setStatus(id,msg,type='muted'){const el=$(id);if(el){el.textContent=msg;el.className='status '+type;}}
-function safeText(v){return v==null?'':String(v)}
-function showSection(id,btn){document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));$(id)?.classList.remove('hidden');document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');else{const match=[...document.querySelectorAll('#mainNav button')].find(b=>b.getAttribute('onclick')?.includes("'"+id+"'"));match?.classList.add('active')};if(id==='news')renderNews();if(id==='chat')prepareChat();if(id==='feedback'){loadMyFeedback();if(isStaff())loadStaffFeedback()}}
-function isStaff(){return ['admin','teacher'].includes(currentProfile?.role)}
-function requireLogin(){if(!currentUser){alert('Bu bo‘lim uchun avval hisobingizga kiring.');openProfile();return false}return true}
-function renderSubjects(){const grid=$('subjects'),subject=$('subject'),newSubject=$('newSubject');grid.replaceChildren();[subject,newSubject].forEach(sel=>{sel.replaceChildren();const o=document.createElement('option');o.value='';o.textContent='Fanni tanlang';sel.append(o);subjectNames.forEach(n=>{const x=document.createElement('option');x.value=n;x.textContent=n;sel.append(x)})});subjectNames.forEach(name=>{const c=document.createElement('article');c.className='card subject-card';const icon=document.createElement('div');icon.className='subject-icon';icon.textContent=subjectIcons[name]||'📘';const h=document.createElement('h3');h.textContent=name;const p=document.createElement('p');p.textContent='6–11-sinflar uchun testlar';const b=document.createElement('button');b.className='secondary';b.textContent='Testni tanlash';b.onclick=()=>{subject.value=name;showSection('tests')};c.append(icon,h,p,b);grid.append(c)})}
-async function refreshSession(){const {data,error}=await db.auth.getUser();if(error)console.warn(error.message);currentUser=data?.user||null;currentProfile=null;if(currentUser){const {data:p,error:pe}=await db.from('profiles').select('full_name,role,school_name,school_number,grade').eq('id',currentUser.id).maybeSingle();if(!pe)currentProfile=p; if(!currentProfile)currentProfile={full_name:currentUser.user_metadata?.full_name,role:'student',school_name:currentUser.user_metadata?.school_name,school_number:currentUser.user_metadata?.school_number,grade:currentUser.user_metadata?.grade};}updateUI()}
-function updateUI(){ $('accountNavBtn').textContent=currentUser?'Profil':'Kirish';$('staffTestBox').classList.toggle('hidden',!isStaff());$('newsEditor').classList.toggle('hidden',currentProfile?.role!=='admin');$('staffFeedbackBox').classList.toggle('hidden',!isStaff());if(currentUser&&currentProfile?.grade&&$('chatGrade'))$('chatGrade').value=String(currentProfile.grade);}
-async function registerUser(){const full_name=$('authName').value.trim(),email=$('authEmail').value.trim(),password=$('authPassword').value,school_name=$('authSchool').value.trim(),school_number=$('authSchoolNumber').value.trim(),grade=$('authGrade').value;if(!full_name||!email||!password||!school_name||!school_number||!grade){setStatus('authMessage','Barcha maydonlarni to‘ldiring.','error');return}if(password.length<6){setStatus('authMessage','Parol kamida 6 ta belgidan iborat bo‘lsin.','error');return}setStatus('authMessage','Hisob yaratilmoqda...');$('registerBtn').disabled=true;try{const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name,school_name,school_number,grade:Number(grade)}}});if(error)throw error;if(data.session){await refreshSession();setStatus('authMessage','Hisob yaratildi va tizimga kirdingiz.','success')}else setStatus('authMessage','Hisob yaratildi. Email tasdiqlash so‘ralsa, emailingizni tekshiring.','success')}catch(e){setStatus('authMessage','Xatolik: '+e.message,'error')}finally{$('registerBtn').disabled=false}}
-async function loginUser(){const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password){setStatus('authMessage','Email va parolni kiriting.','error');return}setStatus('authMessage','Kirilmoqda...');try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await refreshSession();await showProfile();setStatus('authMessage','Muvaffaqiyatli kirdingiz.','success')}catch(e){setStatus('authMessage','Kirish xatosi: '+e.message,'error')}}
-function openProfile(){showSection('account');if(currentUser)showProfile()}
-async function showProfile(){const card=$('accountCard');card.replaceChildren();const h=document.createElement('h3');h.textContent='👤 Mening profilim';card.append(h);const details=[['Ism',currentProfile?.full_name||currentUser?.user_metadata?.full_name],['Email',currentUser?.email],['Maktab',currentProfile?.school_name||currentUser?.user_metadata?.school_name],['Maktab raqami',currentProfile?.school_number||currentUser?.user_metadata?.school_number],['Sinf',currentProfile?.grade||currentUser?.user_metadata?.grade],['Rol',currentProfile?.role||'student']];details.forEach(([k,v])=>{const p=document.createElement('p');p.textContent=k+': '+(v??'Kiritilmagan');card.append(p)});if(!isStaff()){const p=document.createElement('p');p.className='muted';p.textContent='O‘qituvchi/admin imkoniyatlari tegishli rol berilgandan keyin ochiladi.';card.append(p)}const b=document.createElement('button');b.className='danger';b.textContent='Hisobdan chiqish';b.onclick=logoutUser;card.append(b)}
-async function logoutUser(){const {error}=await db.auth.signOut();if(error){alert('Chiqishda xatolik: '+error.message);return}currentUser=null;currentProfile=null;location.reload()}
+const isStaff=()=>['admin','teacher'].includes(profile?.role);
 
-async function startTest() {
-  if (!requireLogin()) return;
+function setStatus(id,message,type=''){
+  const el=$(id);if(!el)return;
+  el.textContent=message;
+  el.className='status '+(type==='ok'?'good':type==='err'?'bad':'');
+}
+function addOptions(id,items,placeholder='Tanlang'){
+  const el=$(id);el.replaceChildren();
+  el.add(new Option(placeholder,''));
+  items.forEach(v=>el.add(new Option(String(v),String(v))));
+}
+function page(id){
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+  $(id).classList.remove('hidden');
+  if(id==='account')renderProfile();
+  if(id==='news')loadNews();
+  if(id==='chat')prepareChat();
+}
+function setup(){
+  ['grade','qGrade','chatGrade','accountGrade'].forEach(id=>addOptions(id,grades,'Sinfni tanlang'));
+  ['subject','qSubject'].forEach(id=>addOptions(id,subjects,'Fanni tanlang'));
+  subjects.forEach((s,i)=>{
+    const c=document.createElement('div');c.className='card subject';
+    const e=document.createElement('div');e.className='emoji';e.textContent=icons[i];
+    const h=document.createElement('h3');h.textContent=s;
+    const p=document.createElement('p');p.className='muted';p.textContent='6–11-sinflar uchun';
+    const b=document.createElement('button');b.className='secondary';b.textContent='Test tanlash';
+    b.onclick=()=>{page('tests');$('subject').value=s;};
+    c.append(e,h,p,b);$('subjectsGrid').append(c);
+  });
+}
+function requireLogin(){
+  if(user)return true;
+  alert('Avval hisobingizga kiring.');page('account');return false;
+}
 
-  const grade = Number($('grade').value);
-  const subject = $('subject').value;
-  const limit = Number($('questionLimit').value);
-
-  if (!grade || !subject) {
-    setStatus('testStatus', 'Sinf va fanni tanlang.', 'error');
-    return;
+async function refreshUser(){
+  const {data,error}=await db.auth.getUser();
+  if(error)console.warn(error.message);
+  user=data?.user||null;profile=null;
+  if(user){
+    const {data:p,error:pe}=await db.from('profiles')
+      .select('full_name,role,school_name,school_number,grade')
+      .eq('id',user.id).maybeSingle();
+    if(!pe)profile=p;
+    if(!profile)profile={
+      full_name:user.user_metadata?.full_name,
+      role:'student',
+      school_name:user.user_metadata?.school_name,
+      school_number:user.user_metadata?.school_number,
+      grade:user.user_metadata?.grade
+    };
   }
+  $('questionAdmin').classList.toggle('hidden',!isStaff());
+  $('newsEditor').classList.toggle('hidden',profile?.role!=='admin');
+  if(user&&profile?.grade){
+    $('chatGrade').value=String(profile.grade);
+    $('accountGrade').value=String(profile.grade);
+  }
+  renderProfile();
+}
+async function register(){
+  const name=$('fullName').value.trim(),email=$('email').value.trim();
+  const password=$('password').value,school=$('schoolName').value.trim();
+  const number=$('schoolNumber').value.trim(),grade=$('accountGrade').value;
+  if(!name||!email||!password||!school||!number||!grade){
+    setStatus('authStatus','Barcha maydonlarni to‘ldiring.','err');return;
+  }
+  if(password.length<6){setStatus('authStatus','Parol kamida 6 ta belgidan iborat bo‘lsin.','err');return;}
+  $('registerBtn').disabled=true;
+  try{
+    const {data,error}=await db.auth.signUp({email,password,options:{data:{
+      full_name:name,school_name:school,school_number:number,grade:Number(grade)
+    }}});
+    if(error)throw error;
+    await refreshUser();
+    setStatus('authStatus',data.session?'Hisob yaratildi.':'Hisob yaratildi. Email tasdiqlash talab qilinsa, pochtangizni tekshiring.','ok');
+  }catch(e){setStatus('authStatus','Xatolik: '+e.message,'err');}
+  finally{$('registerBtn').disabled=false;}
+}
+async function login(){
+  const email=$('email').value.trim(),password=$('password').value;
+  if(!email||!password){setStatus('authStatus','Email va parolni kiriting.','err');return;}
+  try{
+    const {error}=await db.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    await refreshUser();setStatus('authStatus','Muvaffaqiyatli kirdingiz.','ok');
+  }catch(e){setStatus('authStatus','Kirish xatosi: '+e.message,'err');}
+}
+function renderProfile(){
+  if(!user){$('authBox').classList.remove('hidden');$('profileBox').classList.add('hidden');return;}
+  $('authBox').classList.add('hidden');$('profileBox').classList.remove('hidden');
+  const box=$('profileBox');box.replaceChildren();
+  const h=document.createElement('h3');h.textContent='Mening profilim';box.append(h);
+  [['Ism',profile?.full_name],['Email',user.email],['Maktab',profile?.school_name],
+   ['Maktab raqami',profile?.school_number],['Sinf',profile?.grade],['Rol',profile?.role||'student']]
+   .forEach(([k,v])=>{const p=document.createElement('p');p.textContent=k+': '+(v??'Kiritilmagan');box.append(p);});
+  const b=document.createElement('button');b.className='danger';b.textContent='Hisobdan chiqish';
+  b.onclick=async()=>{
+    const {error}=await db.auth.signOut();
+    if(error){alert(error.message);return;}
+    user=null;profile=null;location.reload();
+  };box.append(b);
+}
 
-  const btn = document.querySelector(
-    '#tests .panel button[onclick="startTest()"]'
-  );
-
-  if (btn) btn.disabled = true;
-
-  setStatus('testStatus', 'Savollar yuklanmoqda...');
-  $('testArea').classList.add('hidden');
-
-  try {
-    let data = [];
-    const pageSize = 1000;
-
-    // Bazadagi barcha mos savollarni sahifalab olish
-    for (let from = 0; ; from += pageSize) {
-      const { data: page, error } = await db
-        .from('school_test_questions')
+/* TESTLAR */
+async function startTest(){
+  if(!requireLogin())return;
+  const grade=Number($('grade').value),subject=$('subject').value,limit=Number($('testLimit').value);
+  if(!grade||!subject){setStatus('testStatus','Sinf va fanni tanlang.','err');return;}
+  $('startBtn').disabled=true;$('testArea').classList.add('hidden');
+  setStatus('testStatus','Savollar yuklanmoqda...');
+  try{
+    let all=[];
+    for(let from=0;;from+=1000){
+      const {data,error}=await db.from('school_test_questions')
         .select('id,grade,subject,question,option_a,option_b,option_c,option_d')
-        .eq('grade', grade)
-        .eq('subject', subject)
-        .range(from, from + pageSize - 1);
-
-      if (error) throw error;
-      if (!page || page.length === 0) break;
-
-      data.push(...page);
-
-      if (page.length < pageSize) break;
+        .eq('grade',grade).eq('subject',subject).range(from,from+999);
+      if(error)throw error;
+      if(!data?.length)break;
+      all.push(...data);
+      if(data.length<1000)break;
     }
-
-    if (!data.length) {
-      setStatus(
-        'testStatus',
-        'Bu sinf va fan uchun bazada savollar yo‘q.',
-        'error'
-      );
-      return;
-    }
-
-    // Bir xil savol matnlarini takrorlamaslik
-    const seen = new Set();
-
-    data = data.filter(q => {
-      const key = String(q.question || '')
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, ' ');
-
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
+    const seen=new Set();
+    all=all.filter(q=>{
+      const k=String(q.question||'').trim().toLowerCase().replace(/\s+/g,' ');
+      if(!k||seen.has(k))return false;
+      seen.add(k);return true;
     });
-
-    // Savollarni tasodifiy aralashtirish
-    currentQuestions = [...data];
-
-    for (let i = currentQuestions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-
-      [currentQuestions[i], currentQuestions[j]] =
-        [currentQuestions[j], currentQuestions[i]];
+    if(!all.length){setStatus('testStatus','Bu sinf va fan uchun savollar topilmadi.','err');return;}
+    for(let i=all.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];
     }
-
-    currentQuestions = currentQuestions.slice(0, limit);
-
-    testAnswers = [];
-    testIndex = 0;
-    testRunId++;
-
+    questions=all.slice(0,Math.min(limit,all.length));answers=[];questionIndex=0;
     $('testArea').classList.remove('hidden');
-
-    setStatus(
-      'testStatus',
-      `${data.length} ta takrorlanmagan savol topildi. Test boshlandi.`,
-      'success'
-    );
-
+    setStatus('testStatus',`${all.length} ta takrorlanmagan savol topildi.`,'ok');
     showQuestion();
+  }catch(e){setStatus('testStatus','Xatolik: '+e.message,'err');}
+  finally{$('startBtn').disabled=false;}
+}
+function showQuestion(){
+  const box=$('testArea');box.replaceChildren();
+  if(questionIndex>=questions.length){finishTest();return;}
+  const q=questions[questionIndex];
+  const h=document.createElement('h3');h.textContent=`Savol ${questionIndex+1}/${questions.length}`;
+  const bar=document.createElement('div');bar.className='progress';
+  const fill=document.createElement('div');fill.style.width=((questionIndex+1)/questions.length*100)+'%';bar.append(fill);
+  const p=document.createElement('p');p.textContent=q.question;p.style.fontWeight='bold';box.append(h,bar,p);
+  let locked=false;
+  [['A',q.option_a],['B',q.option_b],['C',q.option_c],['D',q.option_d]].forEach(([letter,text])=>{
+    const b=document.createElement('button');b.className='option';b.textContent=letter+'. '+(text||'');
+    b.onclick=()=>{
+      if(locked)return;locked=true;answers[questionIndex]={question_id:q.id,answer:letter};
+      b.classList.add('chosen');box.querySelectorAll('.option').forEach(x=>x.disabled=true);
+      const next=document.createElement('button');next.textContent=questionIndex+1<questions.length?'Keyingi savol →':'Natijani ko‘rish';
+      next.onclick=()=>{questionIndex++;showQuestion();};box.append(next);
+    };box.append(b);
+  });
+  const skip=document.createElement('button');skip.className='secondary';skip.textContent='Savolni tashlab o‘tish';
+  skip.onclick=()=>{if(locked)return;answers[questionIndex]={question_id:q.id,answer:''};questionIndex++;showQuestion();};
+  box.append(skip);
+}
+async function finishTest(){
+  const box=$('testArea');box.replaceChildren();
+  const h=document.createElement('h3');h.textContent='Test yakunlandi';box.append(h);
+  const p=document.createElement('p');p.textContent='Natija hisoblanmoqda...';box.append(p);
+  try{
+    const {data,error}=await db.rpc('grade_school_test',{p_answers:answers.filter(Boolean)});
+    if(error)throw error;
+    const r=Array.isArray(data)?data[0]:data;
+    if(!r)throw new Error('Natija qaytmadi.');
+    p.textContent=`Natijangiz: ${r.correct_count} / ${r.total_count} ta to‘g‘ri.`;
+    p.className='good';
+    if(Array.isArray(r.details))r.details.forEach((d,i)=>{
+      const c=document.createElement('div');c.className='card';
+      const q=document.createElement('p');q.textContent=`${i+1}. ${d.question||'Savol'}`;
+      const a=document.createElement('p');a.textContent='Javobingiz: '+(d.selected_answer||'Javob berilmadi');
+      const correct=document.createElement('p');correct.textContent='To‘g‘ri javob: '+(d.correct_option||'—');
+      c.append(q,a,correct);box.append(c);
+    });
+  }catch(e){p.textContent='Natija xatosi: '+e.message;p.className='bad';}
+  const b=document.createElement('button');b.textContent='Yana test ishlash';b.onclick=startTest;box.append(b);
+}
 
-  } catch (e) {
-    console.error('Test xatosi:', e);
-
-    setStatus(
-      'testStatus',
-      'Savollarni yuklashda xatolik: ' + e.message,
-      'error'
-    );
-  } finally {
-    if (btn) btn.disabled = false;
+/* SAVOLNI BIR SINFLI YOKI BARCHA SINFLARGA QO‘SHISH */
+async function addQuestion(){
+  if(!requireLogin())return;
+  if(!isStaff()){setStatus('addStatus','Savol qo‘shish uchun teacher yoki admin huquqi kerak.','err');return;}
+  const allGrades=$('allGrades').checked;
+  const selectedGrade=Number($('qGrade').value),subject=$('qSubject').value;
+  const question=$('qText').value.trim();
+  const a=$('qA').value.trim(),b=$('qB').value.trim(),c=$('qC').value.trim(),d=$('qD').value.trim();
+  const correct=$('qCorrect').value;
+  if(!subject||!question||!a||!b||!c||!d||(!allGrades&&!selectedGrade)){
+    setStatus('addStatus','Barcha maydonlarni to‘ldiring.','err');return;
   }
+  const targetGrades=allGrades?grades:[selectedGrade];
+  $('saveQuestionBtn').disabled=true;
+  setStatus('addStatus','Savollar saqlanmoqda...');
+  try{
+    for(const g of targetGrades){
+      const {data,error}=await db.from('school_test_questions').insert({
+        grade:g,subject,question,option_a:a,option_b:b,option_c:c,option_d:d,created_by:user.id
+      }).select('id').single();
+      if(error)throw new Error(`${g}-sinf: ${error.message}`);
+      const {error:keyError}=await db.from('school_test_answer_keys').insert({
+        question_id:data.id,correct_option:correct,created_by:user.id
+      });
+      if(keyError)throw new Error(`${g}-sinf javob kaliti: ${keyError.message}`);
+    }
+    setStatus('addStatus',allGrades?'Savol 6 ta sinfga qo‘shildi!':'Savol saqlandi!','ok');
+    ['qText','qA','qB','qC','qD'].forEach(id=>$(id).value='');
+  }catch(e){setStatus('addStatus','Xatolik: '+e.message,'err');}
+  finally{$('saveQuestionBtn').disabled=false;}
 }
 
+/* CHAT */
+function prepareChat(){
+  if(!user){$('chatMessages').textContent='Chat uchun tizimga kiring.';return;}
+  $('chatGrade').disabled=!isStaff();
+  if(!isStaff()&&profile?.grade)$('chatGrade').value=String(profile.grade);
+  loadChat();
+}
+async function loadChat(){
+  if(!user)return;
+  const grade=Number($('chatGrade').value);if(!grade)return;
+  const box=$('chatMessages');box.textContent='Yuklanmoqda...';
+  try{
+    const {data,error}=await db.from('class_chat_messages')
+      .select('id,grade,user_id,display_name,message,created_at')
+      .eq('grade',grade).order('created_at',{ascending:true}).limit(150);
+    if(error)throw error;
+    box.replaceChildren();
+    if(!data?.length){box.textContent='Hozircha xabar yo‘q.';return;}
+    data.forEach(m=>{
+      const div=document.createElement('div');div.className='message'+(m.user_id===user.id?' mine':'');
+      const name=document.createElement('b');name.textContent=m.user_id===user.id?'Siz':(m.display_name||'O‘quvchi');
+      const text=document.createElement('div');text.textContent=m.message;
+      const date=document.createElement('small');date.textContent=new Date(m.created_at).toLocaleString('uz-UZ');
+      div.append(name,text,date);box.append(div);
+    });
+    box.scrollTop=box.scrollHeight;
+  }catch(e){box.textContent='Chat xatosi: '+e.message;}
+}
+async function sendChat(){
+  if(!requireLogin())return;
+  const message=$('chatInput').value.trim(),grade=Number($('chatGrade').value);
+  if(!message||!grade){setStatus('chatStatus','Sinfni tanlang va xabar yozing.','err');return;}
+  $('sendChatBtn').disabled=true;
+  try{
+    const {error}=await db.from('class_chat_messages').insert({
+      grade,user_id:user.id,display_name:profile?.full_name||user.user_metadata?.full_name||'O‘quvchi',message
+    });
+    if(error)throw error;
+    $('chatInput').value='';setStatus('chatStatus','Xabar yuborildi.','ok');await loadChat();
+  }catch(e){setStatus('chatStatus','Xatolik: '+e.message,'err');}
+  finally{$('sendChatBtn').disabled=false;}
+}
+$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChat();}});
 
-if (!data?.length) {
-  setStatus(
-    'testStatus',
-    'Bu sinf va fan uchun bazada savollar yo‘q.',
-    'error'
-  );
-  return;
+/* FIKR VA SHIKOYAT */
+async function sendFeedback(){
+  if(!requireLogin())return;
+  const message=$('feedbackText').value.trim();
+  if(message.length<5){setStatus('feedbackStatus','Kamida 5 ta belgi yozing.','err');return;}
+  try{
+    const {error}=await db.from('student_feedback').insert({
+      user_id:user.id,category:$('feedbackCategory').value,message
+    });
+    if(error)throw error;
+    $('feedbackText').value='';setStatus('feedbackStatus','Xabaringiz yuborildi.','ok');
+  }catch(e){setStatus('feedbackStatus','Xatolik: '+e.message,'err');}
 }
 
-currentQuestions = [...data];
-
-for (let i = currentQuestions.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [currentQuestions[i], currentQuestions[j]] =
-    [currentQuestions[j], currentQuestions[i]];
+/* KOMPYUTERDAN RASM VA VIDEO TANLASH */
+let selectedImage=null,selectedVideo=null,previewImageUrl=null,previewVideoUrl=null;
+$('imageFile').addEventListener('change',()=>{
+  selectedImage=$('imageFile').files[0]||null;
+  if(previewImageUrl)URL.revokeObjectURL(previewImageUrl);
+  $('imagePreview').classList.add('hidden');
+  if(!selectedImage){setStatus('imageStatus','Rasm tanlanmadi.');return;}
+  if(!selectedImage.type.startsWith('image/')){
+    selectedImage=null;$('imageFile').value='';setStatus('imageStatus','Rasm faylini tanlang.','err');return;
+  }
+  if(selectedImage.size>10*1024*1024){
+    selectedImage=null;$('imageFile').value='';setStatus('imageStatus','Rasm 10 MB dan kichik bo‘lsin.','err');return;
+  }
+  previewImageUrl=URL.createObjectURL(selectedImage);
+  $('imagePreview').src=previewImageUrl;$('imagePreview').classList.remove('hidden');
+  setStatus('imageStatus','Tanlandi: '+selectedImage.name,'ok');
+});
+$('videoFile').addEventListener('change',()=>{
+  selectedVideo=$('videoFile').files[0]||null;
+  if(previewVideoUrl)URL.revokeObjectURL(previewVideoUrl);
+  $('videoPreview').classList.add('hidden');
+  if(!selectedVideo){setStatus('videoStatus','Video tanlanmadi.');return;}
+  if(!selectedVideo.type.startsWith('video/')){
+    selectedVideo=null;$('videoFile').value='';setStatus('videoStatus','Video faylini tanlang.','err');return;
+  }
+  if(selectedVideo.size>50*1024*1024){
+    selectedVideo=null;$('videoFile').value='';setStatus('videoStatus','Video 50 MB dan kichik bo‘lsin.','err');return;
+  }
+  previewVideoUrl=URL.createObjectURL(selectedVideo);
+  $('videoPreview').src=previewVideoUrl;$('videoPreview').classList.remove('hidden');
+  setStatus('videoStatus','Tanlandi: '+selectedVideo.name,'ok');
+});
+function safeFileName(name){
+  return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]/g,'_').slice(-100)||'file';
+}
+async function uploadMedia(file,kind){
+  const ext=safeFileName(file.name).split('.').pop().toLowerCase();
+  const path=`${user.id}/${kind}/${Date.now()}_${crypto.randomUUID()}.${ext}`;
+  const {error}=await db.storage.from(STORAGE_BUCKET).upload(path,file,{
+    cacheControl:'3600',upsert:false,contentType:file.type
+  });
+  if(error)throw error;
+  const {data}=db.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  if(!data?.publicUrl)throw new Error('Fayl uchun ommaviy URL olinmadi.');
+  return data.publicUrl;
 }
 
-currentQuestions = currentQuestions.slice(0, limit);
-
-testAnswers = [];
-testIndex = 0;
-testRunId++;
-
-$('testArea').classList.remove('hidden');
-
-setStatus(
-  'testStatus',
-  `Jami ${data.length} ta savol topildi. Test boshlandi.`,
-  'success'
-);
-
-showQuestion();
-
-} catch (e) {
-  setStatus(
-    'testStatus',
-    'Savollarni yuklashda xatolik: ' + e.message,
-    'error'
-  );
+/* YANGILIKLAR */
+async function loadNews(){
+  const list=$('newsList');list.textContent='Yangiliklar yuklanmoqda...';
+  try{
+    const {data,error}=await db.from('news').select('id,title,body,image_url,video_url,created_at')
+      .eq('is_published',true).order('created_at',{ascending:false}).limit(50);
+    if(error)throw error;
+    list.replaceChildren();
+    if(!data?.length){list.textContent='Hozircha yangiliklar yo‘q.';return;}
+    data.forEach(n=>{
+      const card=document.createElement('article');card.className='news';
+      const h=document.createElement('h3');h.textContent=n.title;card.append(h);
+      if(n.image_url){
+        const img=document.createElement('img');img.src=n.image_url;img.alt=n.title;img.loading='lazy';
+        img.onerror=()=>{img.alt='Rasmni yuklab bo‘lmadi';};card.append(img);
+      }
+      const p=document.createElement('p');p.textContent=n.body||'';card.append(p);
+      if(n.video_url){
+        const v=document.createElement('video');v.controls=true;v.preload='metadata';v.src=n.video_url;
+        v.style.maxWidth='100%';v.style.maxHeight='420px';card.append(v);
+        const a=document.createElement('a');a.href=n.video_url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Videoni alohida ochish';
+        card.append(a);
+      }
+      const date=document.createElement('small');date.className='muted';date.textContent=new Date(n.created_at).toLocaleString('uz-UZ');card.append(date);
+      list.append(card);
+    });
+  }catch(e){list.textContent='Yangiliklarni yuklash xatosi: '+e.message;}
 }
+async function publishNews(){
+  if(!requireLogin())return;
+  if(profile?.role!=='admin'){setStatus('newsStatus','Faqat admin yangilik joylay oladi.','err');return;}
+  const title=$('newsTitle').value.trim(),body=$('newsBody').value.trim();
+  const externalVideo=$('videoUrl').value.trim();
+  if(!title){setStatus('newsStatus','Sarlavha kiriting.','err');return;}
+  if(!body&&!selectedImage&&!selectedVideo&&!externalVideo){
+    setStatus('newsStatus','Matn, rasm yoki video qo‘shing.','err');return;
+  }
+  $('publishBtn').disabled=true;
+  let image_url=null,video_url=externalVideo||null;
+  try{
+    if(selectedImage){
+      setStatus('newsStatus','Rasm yuklanmoqda...');
+      image_url=await uploadMedia(selectedImage,'images');
+    }
+    if(selectedVideo){
+      setStatus('newsStatus','Video yuklanmoqda. Iltimos, kuting...');
+      video_url=await uploadMedia(selectedVideo,'videos');
+    }
+    setStatus('newsStatus','Yangilik bazaga saqlanmoqda...');
+    const {error}=await db.from('news').insert({
+      title,body,image_url,video_url,created_by:user.id,is_published:true
+    });
+    if(error)throw error;
+    $('newsTitle').value='';$('newsBody').value='';$('videoUrl').value='';
+    $('imageFile').value='';$('videoFile').value='';
+    selectedImage=null;selectedVideo=null;
+    $('imagePreview').classList.add('hidden');$('videoPreview').classList.add('hidden');
+    setStatus('newsStatus','Yangilik muvaffaqiyatli joylandi!','ok');
+    await loadNews();
+  }catch(e){
+    setStatus('newsStatus','Xatolik: '+e.message+' Agar fayl yuklash xatosi bo‘lsa, Storage bucket va ruxsatlarni tekshiring.','err');
+  }finally{$('publishBtn').disabled=false;}
 }
-function showQuestion(){const area=$('testArea');area.replaceChildren();if(testIndex>=currentQuestions.length){finishTest();return}const q=currentQuestions[testIndex];const h=document.createElement('h3');h.textContent=`Savol ${testIndex+1} / ${currentQuestions.length}`;const progress=document.createElement('div');progress.className='progress';const bar=document.createElement('span');bar.style.width=(testIndex/currentQuestions.length*100)+'%';progress.append(bar);const p=document.createElement('p');p.style.fontWeight='700';p.textContent=q.question;area.append(h,progress,p);const opts=[['A',q.option_a],['B',q.option_b],['C',q.option_c],['D',q.option_d]];opts.forEach(([letter,txt])=>{const b=document.createElement('button');b.className='question-option';b.textContent=letter+'. '+txt;b.onclick=()=>{if(testAnswers[testIndex])return;testAnswers[testIndex]={question_id:q.id,answer:letter};b.classList.add('selected');[...area.querySelectorAll('.question-option')].forEach(x=>x.disabled=true);const next=document.createElement('button');next.style.marginTop='12px';next.textContent=testIndex+1<currentQuestions.length?'Keyingi savol →':'Natijani ko‘rish';next.onclick=()=>{testIndex++;showQuestion()};area.append(next)};area.append(b)});const skip=document.createElement('button');skip.className='secondary smallbtn';skip.style.marginTop='8px';skip.textContent='Savolni tashlab o‘tish';skip.onclick=()=>{if(!testAnswers[testIndex])testAnswers[testIndex]={question_id:q.id,answer:''};testIndex++;showQuestion()};area.append(skip)}
-async function finishTest(){const area=$('testArea');area.replaceChildren();const h=document.createElement('h3');h.textContent='Test yakunlandi!';area.append(h);const chosen=testAnswers.filter(Boolean);if(!chosen.length){const p=document.createElement('p');p.textContent='Javob tanlanmadi.';area.append(p);return}const p=document.createElement('p');p.textContent='Natija tekshirilmoqda...';area.append(p);try{const {data,error}=await db.rpc('grade_school_test',{p_answers:chosen});if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result)throw new Error('Natija olinmadi.');p.textContent=`Natija: ${result.correct_count} / ${result.total_count} ta to‘g‘ri (${Math.round(result.correct_count/Math.max(1,result.total_count)*100)}%).`;p.className='success';if(Array.isArray(result.details)){const review=document.createElement('div');review.className='answer-review';const title=document.createElement('h3');title.textContent='Javoblar tahlili';review.append(title);result.details.forEach((d,i)=>{const card=document.createElement('article');card.className='card';const q=document.createElement('p');q.style.fontWeight='700';q.textContent=`${i+1}. ${d.question||'Savol'}`;const your=document.createElement('p');your.textContent='Sizning javobingiz: '+(d.selected_answer||'Javob berilmadi')+(d.selected_text?' — '+d.selected_text:'');const correct=document.createElement('p');correct.textContent='To‘g‘ri javob: '+d.correct_option+(d.correct_text?' — '+d.correct_text:'');const status=document.createElement('p');status.className=d.is_correct?'success':'error';status.textContent=d.is_correct?'✓ To‘g‘ri':'✗ Noto‘g‘ri';card.append(q,your,correct,status);review.append(card)});area.append(review)}const again=document.createElement('button');again.textContent='Yana test ishlash';again.onclick=startTest;area.append(again)}catch(e){p.textContent='Natijani tekshirishda xatolik: '+e.message;p.className='error';const again=document.createElement('button');again.textContent='Qayta urinish';again.onclick=startTest;area.append(again)}}
-async function addQuestion(){if(!requireLogin())return;if(!isStaff()){setStatus('addQuestionStatus','Faqat o‘qituvchi yoki administrator test qo‘sha oladi.','error');return}const grade=Number($('newGrade').value),subject=$('newSubject').value,question=$('newQuestion').value.trim(),a=$('newA').value.trim(),b=$('newB').value.trim(),c=$('newC').value.trim(),d=$('newD').value.trim(),correct=$('newCorrect').value;if(!grade||!subject||!question||!a||!b||!c||!d||!correct){setStatus('addQuestionStatus','Barcha maydonlarni to‘ldiring.','error');return}const btn=$('addQuestionBtn');btn.disabled=true;try{const {data:q,error}=await db.from('school_test_questions').insert({grade,subject,question,option_a:a,option_b:b,option_c:c,option_d:d,created_by:currentUser.id}).select('id').single();if(error)throw error;const {error:keyError}=await db.from('school_test_answer_keys').insert({question_id:q.id,correct_option:correct,created_by:currentUser.id});if(keyError)throw keyError;setStatus('addQuestionStatus','Savol saqlandi. Tizimga kirgan foydalanuvchilar uni testlarda ko‘ra oladi.','success');['newQuestion','newA','newB','newC','newD'].forEach(id=>$(id).value='');$('newCorrect').value=''}catch(e){setStatus('addQuestionStatus','Xatolik: '+e.message,'error')}finally{btn.disabled=false}}
-async function importCSV(){if(!requireLogin())return;if(!isStaff()){setStatus('csvStatus','Faqat o‘qituvchi yoki administrator CSV yuklay oladi.','error');return}const file=$('csvFile').files[0];if(!file){setStatus('csvStatus','Avval CSV faylni tanlang.','error');return}if(!window.Papa){setStatus('csvStatus','CSV kutubxonasi yuklanmadi. Internetni tekshiring.','error');return}const btn=$('importCsvBtn');btn.disabled=true;try{const parsed=await new Promise((resolve,reject)=>Papa.parse(file,{header:true,skipEmptyLines:true,transformHeader:h=>h.trim().toLowerCase(),complete:r=>r.errors?.length?reject(new Error(r.errors[0].message)):resolve(r.data),error:reject}));const rows=parsed.map(r=>({subject:(r.subject||'').trim(),grade:Number(r.grade),question:(r.question||'').trim(),option_a:(r.option_a||'').trim(),option_b:(r.option_b||'').trim(),option_c:(r.option_c||'').trim(),option_d:(r.option_d||'').trim(),correct_option:(r.correct_option||r.correct_answer||'').trim().toUpperCase()})).filter(r=>r.subject&&r.grade>=6&&r.grade<=11&&r.question&&r.option_a&&r.option_b&&r.option_c&&r.option_d&&['A','B','C','D'].includes(r.correct_option));if(!rows.length)throw new Error('Yaroqli savol topilmadi. CSV ustunlari subject, grade, question, option_a, option_b, option_c, option_d, correct_option bo‘lishi kerak.');let done=0;for(let i=0;i<rows.length;i+=100){const batch=rows.slice(i,i+100);setStatus('csvStatus',`Yuklanmoqda: ${done}/${rows.length} savol...`);const qRows=batch.map(r=>({subject:r.subject,grade:r.grade,question:r.question,option_a:r.option_a,option_b:r.option_b,option_c:r.option_c,option_d:r.option_d,created_by:currentUser.id}));const {data:inserted,error}=await db.from('school_test_questions').insert(qRows).select('id');if(error)throw new Error(`Savollar ${i+1}-${i+batch.length}: ${error.message}`);if(!inserted||inserted.length!==batch.length)throw new Error('Bazadan savol IDlari to‘liq qaytmadi.');const keys=inserted.map((q,j)=>({question_id:q.id,correct_option:batch[j].correct_option,created_by:currentUser.id}));const {error:keyError}=await db.from('school_test_answer_keys').insert(keys);if(keyError)throw new Error(`Javob kalitlari ${i+1}-${i+batch.length}: ${keyError.message}`);done+=batch.length}setStatus('csvStatus',`Tayyor! ${done} ta savol bazaga yuklandi. Barcha sinflar va fanlarda testlar bo‘limidan foydalanish mumkin.`,'success')}catch(e){setStatus('csvStatus','Yuklash to‘xtadi: '+e.message,'error')}finally{btn.disabled=false}}
-function prepareChat(){if(!currentUser){$('chatMessages').replaceChildren();const d=document.createElement('div');d.className='empty';d.textContent='Chat uchun avval tizimga kiring.';$('chatMessages').append(d);return}const grade=currentProfile?.grade||currentUser.user_metadata?.grade;if(isStaff()){$('chatGrade').disabled=false;if(!$('chatGrade').value)$('chatGrade').value='6'}else{$('chatGrade').value=String(grade||'');$('chatGrade').disabled=true}loadChat()}
-async function loadChat(){if(!requireLogin())return;const grade=Number($('chatGrade').value);if(!grade){setStatus('chatStatus','Profilingizda sinf topilmadi. Qayta ro‘yxatdan o‘tish yoki administratorga murojaat qilish kerak.','error');return}const box=$('chatMessages');box.replaceChildren();const loading=document.createElement('div');loading.className='empty';loading.textContent='Xabarlar yuklanmoqda...';box.append(loading);try{const {data,error}=await db.from('class_chat_messages').select('id,grade,user_id,display_name,message,created_at').eq('grade',grade).order('created_at',{ascending:true}).limit(150);if(error)throw error;box.replaceChildren();if(!data?.length){const d=document.createElement('div');d.className='empty';d.textContent='Hozircha xabar yo‘q. Birinchi bo‘lib yozing!';box.append(d);return}data.forEach(m=>{const b=document.createElement('div');b.className='bubble'+(m.user_id===currentUser.id?' mine':'');const name=document.createElement('strong');name.textContent=m.user_id===currentUser.id?'Siz':m.display_name;const msg=document.createElement('div');msg.textContent=m.message;const time=document.createElement('small');time.textContent=new Date(m.created_at).toLocaleString('uz-UZ');b.append(name,msg,time);box.append(b)});box.scrollTop=box.scrollHeight;setStatus('chatStatus',`${grade}-sinf: ${data.length} ta oxirgi xabar`)}catch(e){box.replaceChildren();const d=document.createElement('div');d.className='empty';d.textContent='Chatni yuklashda xatolik: '+e.message;box.append(d);setStatus('chatStatus','Supabase jadvali va SQL sozlamalarini tekshiring.','error')}}
-async function sendChat(){if(!requireLogin())return;const message=$('chatMessage').value.trim(),grade=Number($('chatGrade').value);if(!message){setStatus('chatStatus','Xabar yozing.','error');return}if(message.length>1000){setStatus('chatStatus','Xabar 1000 belgidan oshmasin.','error');return}const btn=$('sendChatBtn');btn.disabled=true;try{const display_name=(currentProfile?.full_name||currentUser.user_metadata?.full_name||'O‘quvchi').slice(0,80);const {error}=await db.from('class_chat_messages').insert({grade,user_id:currentUser.id,display_name,message});if(error)throw error;$('chatMessage').value='';setStatus('chatStatus','Xabar yuborildi.','success');await loadChat()}catch(e){setStatus('chatStatus','Xabar yuborilmadi: '+e.message,'error')}finally{btn.disabled=false}}
-$('chatMessage').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChat()}});
-async function sendFeedback(){if(!requireLogin())return;const category=$('feedbackCategory').value,message=$('feedbackMessage').value.trim();if(message.length<5){setStatus('feedbackStatus','Xabar kamida 5 ta belgidan iborat bo‘lsin.','error');return}const btn=$('sendFeedbackBtn');btn.disabled=true;try{const {error}=await db.from('student_feedback').insert({user_id:currentUser.id,category,message});if(error)throw error;$('feedbackMessage').value='';setStatus('feedbackStatus','Xabaringiz yuborildi. Rahmat!','success');await loadMyFeedback();if(isStaff())await loadStaffFeedback()}catch(e){setStatus('feedbackStatus','Yuborishda xatolik: '+e.message,'error')}finally{btn.disabled=false}}
-async function loadMyFeedback(){if(!currentUser){$('myFeedback').textContent='Xabarlaringizni ko‘rish uchun tizimga kiring.';return}try{const {data,error}=await db.from('student_feedback').select('id,category,message,status,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(30);if(error)throw error;renderFeedbackList($('myFeedback'),data||[],false)}catch(e){$('myFeedback').textContent='Yuklash xatosi: '+e.message}}
-async function loadStaffFeedback(){if(!isStaff())return;try{const {data,error}=await db.from('student_feedback').select('id,user_id,category,message,status,created_at').order('created_at',{ascending:false}).limit(100);if(error)throw error;renderFeedbackList($('allFeedback'),data||[],true)}catch(e){$('allFeedback').textContent='Xatolik: '+e.message}}
-function renderFeedbackList(target,items,staff){target.replaceChildren();if(!items.length){const p=document.createElement('p');p.className='muted';p.textContent='Hozircha xabar yo‘q.';target.append(p);return}items.forEach(item=>{const c=document.createElement('article');c.className='feedback-item';const title=document.createElement('strong');title.textContent=item.category+' · '+item.status;const date=document.createElement('small');date.className='muted';date.style.display='block';date.textContent=new Date(item.created_at).toLocaleString('uz-UZ')+(staff?' · foydalanuvchi: '+item.user_id:'');const p=document.createElement('p');p.textContent=item.message;c.append(title,date,p);if(staff){const sel=document.createElement('select');['Yangi','Ko‘rib chiqilmoqda','Hal qilindi'].forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;if(s===item.status)o.selected=true;sel.append(o)});sel.onchange=async()=>{const {error}=await db.from('student_feedback').update({status:sel.value}).eq('id',item.id);if(error){alert('Holatni o‘zgartirib bo‘lmadi: '+error.message);return}loadStaffFeedback()};c.append(sel)}target.append(c)})}
-async function renderNews(){const list=$('newsList');if(!list)return;list.replaceChildren();try{const {data,error}=await db.from('news').select('id,title,body,image_url,video_url,created_at').eq('is_published',true).order('created_at',{ascending:false}).limit(50);if(error)throw error;if(!data?.length){const d=document.createElement('div');d.className='empty';d.textContent='Hozircha yangiliklar yo‘q.';list.append(d);return}data.forEach(item=>{const c=document.createElement('article');c.className='news-item';const h=document.createElement('h3');h.textContent=item.title;c.append(h);if(item.image_url){const img=document.createElement('img');img.src=item.image_url;img.alt=item.title;img.loading='lazy';c.append(img)}const p=document.createElement('p');p.textContent=item.body||'';c.append(p);if(item.video_url){if(item.video_url.includes('/storage/v1/object/public/school-news-media/')){const v=document.createElement('video');v.src=item.video_url;v.controls=true;v.preload='metadata';c.append(v)}else{const a=document.createElement('a');a.href=item.video_url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='▶ Videoni ochish';c.append(a)}}const date=document.createElement('small');date.className='muted';date.textContent=new Date(item.created_at).toLocaleString('uz-UZ');c.append(date);list.append(c)})}catch(e){const p=document.createElement('p');p.className='error';p.textContent='Yangiliklarni yuklash xatosi: '+e.message;list.append(p)}}
-async function publishNews(){if(!currentUser||currentProfile?.role!=='admin'){setStatus('newsUploadStatus','Faqat administrator yangilik joylay oladi.','error');return}const title=$('newsTitle').value.trim(),body=$('newsBody').value.trim(),videoLink=$('newsVideo').value.trim(),imageFile=$('newsImageFile').files[0],videoFile=$('newsVideoFile').files[0];if(!title||(!body&&!videoLink&&!imageFile&&!videoFile)){setStatus('newsUploadStatus','Sarlavha va kamida matn, rasm yoki video kiriting.','error');return}if(videoLink){try{const u=new URL(videoLink);if(!['https:','http:'].includes(u.protocol))throw Error()}catch{setStatus('newsUploadStatus','Video havolasi noto‘g‘ri.','error');return}}const btn=$('publishNewsBtn');btn.disabled=true;try{async function upload(file){if(!file)return null;const path=`${currentUser.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;const {error}=await db.storage.from('school-news-media').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;return db.storage.from('school-news-media').getPublicUrl(path).data.publicUrl}const image_url=await upload(imageFile),uploadedVideo=await upload(videoFile);const {error}=await db.from('news').insert({title,body,image_url,video_url:uploadedVideo||videoLink||null,created_by:currentUser.id,is_published:true});if(error)throw error;['newsTitle','newsBody','newsVideo','newsImageFile','newsVideoFile'].forEach(id=>$(id).value='');setStatus('newsUploadStatus','Yangilik joylandi.','success');await renderNews()}catch(e){setStatus('newsUploadStatus','Xatolik: '+e.message,'error')}finally{btn.disabled=false}}
-async function init(){renderSubjects();await refreshSession();await renderNews();db.auth.onAuthStateChange(()=>{setTimeout(async()=>{await refreshSession()},0)})}
-init().catch(e=>console.error('Init error:',e));
-</script></body></html>
+
+async function init(){
+  setup();
+  await refreshUser();
+  await loadNews();
+  db.auth.onAuthStateChange(()=>setTimeout(()=>refreshUser().catch(console.error),0));
+}
+init().catch(e=>console.error('Saytni ishga tushirish xatosi:',e));
+</script>
+</body>
+</html>
