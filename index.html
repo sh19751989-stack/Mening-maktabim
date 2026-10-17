@@ -300,30 +300,58 @@ function getNews() {
   }
 }
 
-function renderNews() {
-  const list = document.getElementById("newsList");
-  list.replaceChildren();
-  const news = getNews();
 
-  if (!news.length) {
+async function renderNews() {
+  const list = document.getElementById("newsList");
+  if (!list) return;
+
+  list.replaceChildren();
+
+  const loading = document.createElement("p");
+  loading.textContent = "Yangiliklar yuklanmoqda...";
+  list.appendChild(loading);
+
+  const { data: news, error } = await db
+    .from("news")
+    .select("id, title, body, video_url, created_at")
+    .eq("is_published", true)
+    .order("created_at", { ascending: false });
+
+  list.replaceChildren();
+
+  if (error) {
+    const p = document.createElement("p");
+    p.textContent = "Yangiliklarni yuklashda xatolik: " + error.message;
+    list.appendChild(p);
+    return;
+  }
+
+  if (!news || news.length === 0) {
     const p = document.createElement("p");
     p.className = "muted";
     p.textContent = "Hozircha yangiliklar yo‘q.";
     list.appendChild(p);
+    return;
   }
 
-  news.slice().reverse().forEach(item => {
+  news.forEach(item => {
     const card = document.createElement("article");
     card.className = "card news-item";
+
     const h = document.createElement("h3");
     h.textContent = item.title;
-    const p = document.createElement("p");
-    p.textContent = item.body;
-    card.append(h, p);
 
-    if (item.video) {
+    const p = document.createElement("p");
+    p.textContent = item.body || "";
+
+    const date = document.createElement("small");
+    date.textContent = new Date(item.created_at).toLocaleString("uz-UZ");
+
+    card.append(h, p, date);
+
+    if (item.video_url) {
       const link = document.createElement("a");
-      link.href = item.video;
+      link.href = item.video_url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.textContent = "▶ Videoni ochish";
@@ -334,7 +362,8 @@ function renderNews() {
   });
 }
 
-function publishNews() {
+
+async function publishNews() {
   const title = document.getElementById("newsTitle").value.trim();
   const body = document.getElementById("newsBody").value.trim();
   const video = document.getElementById("newsVideo").value.trim();
@@ -354,21 +383,43 @@ function publishNews() {
     }
   }
 
-  const news = getNews();
-  news.push({title, body, video, date: new Date().toISOString()});
+  const { data: { user } } = await db.auth.getUser();
 
-  try {
-    localStorage.setItem("mm_news", JSON.stringify(news));
-  } catch {
-    alert("Yangilikni saqlab bo‘lmadi. Brauzer xotirasini tekshiring.");
+  if (!user) {
+    alert("Avval hisobingizga kiring.");
+    return;
+  }
+
+  const { data: profile, error: profileError } = await db
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError || profile?.role !== "admin") {
+    alert("Sizda admin huquqi yo‘q.");
+    return;
+  }
+
+  const { error } = await db.from("news").insert({
+    title,
+    body,
+    video_url: video || null,
+    created_by: user.id,
+    is_published: true
+  });
+
+  if (error) {
+    alert("Xatolik: " + error.message);
     return;
   }
 
   document.getElementById("newsTitle").value = "";
   document.getElementById("newsBody").value = "";
   document.getElementById("newsVideo").value = "";
-  renderNews();
-  alert("Yangilik ushbu brauzerda saqlandi.");
+
+  await renderNews();
+  alert("Yangilik Supabase bazasiga saqlandi!");
 }
 
 renderSubjects();
