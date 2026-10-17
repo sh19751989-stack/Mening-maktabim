@@ -666,6 +666,16 @@ updateNewsEditor();
 renderNews();
 updateAccountButton();
 updateNewsEditor();
+  document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await renderSubjects();
+    await renderNews();
+    await updateAccountButton();
+    await updateNewsEditor();
+  } catch (error) {
+    console.error("Sayt xatosi:", error);
+  }
+});
 </script>
 </body>
 </html>
