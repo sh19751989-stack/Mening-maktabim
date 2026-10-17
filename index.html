@@ -74,25 +74,29 @@
   </section>
 
   <section id="news" class="container hidden">
-    <h2>📰 Maktab yangiliklari</h2>
-    <p class="muted">E'lonlar, axborotlar, matnlar va videolar.</p>
-    <div id="newsList"></div>
-    <div id="newsEditor" class="card hidden">
-      <h3>➕ Yangi yangilik qo‘shish</h3>
-      <div class="notice">Yangilik joylash uchun administrator tizimiga kirish kerak. Ushbu sodda demo versiyada yangiliklar faqat shu brauzerda saqlanadi.</div>
-      <label for="newsTitle">Sarlavha</label>
-      <input id="newsTitle" placeholder="Yangilik sarlavhasi">
-      <label for="newsType">Axborot turi</label>
-      <select id="newsType">
-        <option value="text">Matnli axborot</option>
-        <option value="video">Video havolasi</option>
-      </select>
-      <label for="newsBody">Matn yoki axborot</label>
-      <textarea id="newsBody" placeholder="Yangilik matnini kiriting..."></textarea>
-      <label for="newsVideo">Video havolasi (ixtiyoriy)</label>
-      <input id="newsVideo" type="url" placeholder="https://www.youtube.com/watch?v=...">
-      <button onclick="publishNews()">Yangilikni joylash</button>
-    </div>
+   
+<div id="newsEditor" class="card hidden">
+  <h3>➕ Yangi yangilik qo‘shish</h3>
+  <p class="muted">Bu forma faqat administrator uchun.</p>
+
+  <label for="newsTitle">Sarlavha</label>
+  <input id="newsTitle" placeholder="Yangilik sarlavhasi">
+
+  <label for="newsType">Axborot turi</label>
+  <select id="newsType">
+    <option value="text">Matnli axborot</option>
+    <option value="video">Video havolasi</option>
+  </select>
+
+  <label for="newsBody">Matn yoki axborot</label>
+  <textarea id="newsBody" placeholder="Yangilik matnini kiriting..."></textarea>
+
+  <label for="newsVideo">Video havolasi (ixtiyoriy)</label>
+  <input id="newsVideo" type="url" placeholder="https://www.youtube.com/watch?v=...">
+
+  <button onclick="publishNews()">📢 Yangilikni joylash</button>
+</div>
+
   </section>
 
 <section id="account" class="container hidden">
@@ -581,6 +585,32 @@ async function logoutUser() {
 
 updateAccountButton();
 db.auth.onAuthStateChange(() => updateAccountButton());
+  
+async function updateNewsEditor() {
+  const editor = document.getElementById("newsEditor");
+  if (!editor) return;
+
+  editor.classList.add("hidden");
+
+  const { data: { user } } = await db.auth.getUser();
+  if (!user) return;
+
+  const { data: profile, error } = await db
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!error && profile?.role === "admin") {
+    editor.classList.remove("hidden");
+  }
+}
+
+db.auth.onAuthStateChange(() => {
+  updateNewsEditor();
+});
+
+updateNewsEditor();
 </script>
 </body>
 </html>
