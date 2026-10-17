@@ -56,7 +56,49 @@ async function loginUser(){const email=$('authEmail').value.trim(),password=$('a
 function openProfile(){showSection('account');if(currentUser)showProfile()}
 async function showProfile(){const card=$('accountCard');card.replaceChildren();const h=document.createElement('h3');h.textContent='👤 Mening profilim';card.append(h);const details=[['Ism',currentProfile?.full_name||currentUser?.user_metadata?.full_name],['Email',currentUser?.email],['Maktab',currentProfile?.school_name||currentUser?.user_metadata?.school_name],['Maktab raqami',currentProfile?.school_number||currentUser?.user_metadata?.school_number],['Sinf',currentProfile?.grade||currentUser?.user_metadata?.grade],['Rol',currentProfile?.role||'student']];details.forEach(([k,v])=>{const p=document.createElement('p');p.textContent=k+': '+(v??'Kiritilmagan');card.append(p)});if(!isStaff()){const p=document.createElement('p');p.className='muted';p.textContent='O‘qituvchi/admin imkoniyatlari tegishli rol berilgandan keyin ochiladi.';card.append(p)}const b=document.createElement('button');b.className='danger';b.textContent='Hisobdan chiqish';b.onclick=logoutUser;card.append(b)}
 async function logoutUser(){const {error}=await db.auth.signOut();if(error){alert('Chiqishda xatolik: '+error.message);return}currentUser=null;currentProfile=null;location.reload()}
-async function startTest(){if(!requireLogin())return;const grade=Number($('grade').value),subject=$('subject').value,limit=Number($('questionLimit').value);if(!grade||!subject){setStatus('testStatus','Sinf va fanni tanlang.','error');return}setStatus('testStatus','Savollar yuklanmoqda...');$('testArea').classList.add('hidden');try{const {data,error}=await db.from('school_test_questions').select('id,grade,subject,question,option_a,option_b,option_c,option_d').eq('grade',grade).eq('subject',subject).limit(1000);if(error)throw error;if(!data?.length){setStatus('testStatus','Bu sinf va fan uchun bazada savollar yo‘q. O‘qituvchi/admin savol qo‘shishi yoki CSV yuklashi mumkin.','error');return}currentQuestions=data.sort(()=>Math.random()-.5).slice(0,limit);testAnswers=[];testIndex=0;testRunId++;$('testArea').classList.remove('hidden');setStatus('testStatus',`Jami ${data.length} ta savol topildi. Test boshlandi.`,'success');showQuestion()}catch(e){setStatus('testStatus','Savollarni yuklashda xatolik: '+e.message,'error')}}
+async function startTest(){if(!requireLogin())return;const grade=Number($('grade').value),subject=$('subject').value,limit=Number($('questionLimit').value);if(!grade||!subject){setStatus('testStatus','Sinf va fanni tanlang.','error');return}setStatus('testStatus','Savollar yuklanmoqda...');$('testArea').classList.add('hidden');try{const {data,error}=await db.from('school_test_questions').select('id,grade,subject,question,option_a,option_b,option_c,option_d').eq('grade',grade).eq('subject',subject).limit(1000);if(errorif (error) throw error;
+
+if (!data?.length) {
+  setStatus(
+    'testStatus',
+    'Bu sinf va fan uchun bazada savollar yo‘q.',
+    'error'
+  );
+  return;
+}
+
+currentQuestions = [...data];
+
+for (let i = currentQuestions.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [currentQuestions[i], currentQuestions[j]] =
+    [currentQuestions[j], currentQuestions[i]];
+}
+
+currentQuestions = currentQuestions.slice(0, limit);
+
+testAnswers = [];
+testIndex = 0;
+testRunId++;
+
+$('testArea').classList.remove('hidden');
+
+setStatus(
+  'testStatus',
+  `Jami ${data.length} ta savol topildi. Test boshlandi.`,
+  'success'
+);
+
+showQuestion();
+
+} catch (e) {
+  setStatus(
+    'testStatus',
+    'Savollarni yuklashda xatolik: ' + e.message,
+    'error'
+  );
+}
+}
 function showQuestion(){const area=$('testArea');area.replaceChildren();if(testIndex>=currentQuestions.length){finishTest();return}const q=currentQuestions[testIndex];const h=document.createElement('h3');h.textContent=`Savol ${testIndex+1} / ${currentQuestions.length}`;const progress=document.createElement('div');progress.className='progress';const bar=document.createElement('span');bar.style.width=(testIndex/currentQuestions.length*100)+'%';progress.append(bar);const p=document.createElement('p');p.style.fontWeight='700';p.textContent=q.question;area.append(h,progress,p);const opts=[['A',q.option_a],['B',q.option_b],['C',q.option_c],['D',q.option_d]];opts.forEach(([letter,txt])=>{const b=document.createElement('button');b.className='question-option';b.textContent=letter+'. '+txt;b.onclick=()=>{if(testAnswers[testIndex])return;testAnswers[testIndex]={question_id:q.id,answer:letter};b.classList.add('selected');[...area.querySelectorAll('.question-option')].forEach(x=>x.disabled=true);const next=document.createElement('button');next.style.marginTop='12px';next.textContent=testIndex+1<currentQuestions.length?'Keyingi savol →':'Natijani ko‘rish';next.onclick=()=>{testIndex++;showQuestion()};area.append(next)};area.append(b)});const skip=document.createElement('button');skip.className='secondary smallbtn';skip.style.marginTop='8px';skip.textContent='Savolni tashlab o‘tish';skip.onclick=()=>{if(!testAnswers[testIndex])testAnswers[testIndex]={question_id:q.id,answer:''};testIndex++;showQuestion()};area.append(skip)}
 async function finishTest(){const area=$('testArea');area.replaceChildren();const h=document.createElement('h3');h.textContent='Test yakunlandi!';area.append(h);const chosen=testAnswers.filter(Boolean);if(!chosen.length){const p=document.createElement('p');p.textContent='Javob tanlanmadi.';area.append(p);return}const p=document.createElement('p');p.textContent='Natija tekshirilmoqda...';area.append(p);try{const {data,error}=await db.rpc('grade_school_test',{p_answers:chosen});if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result)throw new Error('Natija olinmadi.');p.textContent=`Natija: ${result.correct_count} / ${result.total_count} ta to‘g‘ri (${Math.round(result.correct_count/Math.max(1,result.total_count)*100)}%).`;p.className='success';if(Array.isArray(result.details)){const review=document.createElement('div');review.className='answer-review';const title=document.createElement('h3');title.textContent='Javoblar tahlili';review.append(title);result.details.forEach((d,i)=>{const card=document.createElement('article');card.className='card';const q=document.createElement('p');q.style.fontWeight='700';q.textContent=`${i+1}. ${d.question||'Savol'}`;const your=document.createElement('p');your.textContent='Sizning javobingiz: '+(d.selected_answer||'Javob berilmadi')+(d.selected_text?' — '+d.selected_text:'');const correct=document.createElement('p');correct.textContent='To‘g‘ri javob: '+d.correct_option+(d.correct_text?' — '+d.correct_text:'');const status=document.createElement('p');status.className=d.is_correct?'success':'error';status.textContent=d.is_correct?'✓ To‘g‘ri':'✗ Noto‘g‘ri';card.append(q,your,correct,status);review.append(card)});area.append(review)}const again=document.createElement('button');again.textContent='Yana test ishlash';again.onclick=startTest;area.append(again)}catch(e){p.textContent='Natijani tekshirishda xatolik: '+e.message;p.className='error';const again=document.createElement('button');again.textContent='Qayta urinish';again.onclick=startTest;area.append(again)}}
 async function addQuestion(){if(!requireLogin())return;if(!isStaff()){setStatus('addQuestionStatus','Faqat o‘qituvchi yoki administrator test qo‘sha oladi.','error');return}const grade=Number($('newGrade').value),subject=$('newSubject').value,question=$('newQuestion').value.trim(),a=$('newA').value.trim(),b=$('newB').value.trim(),c=$('newC').value.trim(),d=$('newD').value.trim(),correct=$('newCorrect').value;if(!grade||!subject||!question||!a||!b||!c||!d||!correct){setStatus('addQuestionStatus','Barcha maydonlarni to‘ldiring.','error');return}const btn=$('addQuestionBtn');btn.disabled=true;try{const {data:q,error}=await db.from('school_test_questions').insert({grade,subject,question,option_a:a,option_b:b,option_c:c,option_d:d,created_by:currentUser.id}).select('id').single();if(error)throw error;const {error:keyError}=await db.from('school_test_answer_keys').insert({question_id:q.id,correct_option:correct,created_by:currentUser.id});if(keyError)throw keyError;setStatus('addQuestionStatus','Savol saqlandi. Tizimga kirgan foydalanuvchilar uni testlarda ko‘ra oladi.','success');['newQuestion','newA','newB','newC','newD'].forEach(id=>$(id).value='');$('newCorrect').value=''}catch(e){setStatus('addQuestionStatus','Xatolik: '+e.message,'error')}finally{btn.disabled=false}}
