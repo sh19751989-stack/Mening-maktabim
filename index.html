@@ -1,279 +1,374 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#10152f">
-<title>Mening Maktabim — Bilim sari!</title>
+<title>Mening Maktabim</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0b1023;--panel:#141b35;--text:#f5f7ff;--muted:#a4aecb;--blue:#7085ff;--purple:#a66bff;--line:#293252}
-body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-button,select{font:inherit}
-button{cursor:pointer;border:0}
-header{max-width:1180px;margin:auto;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px}
-.logo-icon{width:43px;height:43px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#7085ff,#b16aff);font-size:23px;box-shadow:0 8px 30px #7085ff44}
-nav{display:flex;gap:8px;flex-wrap:wrap}
-nav button{background:transparent;color:var(--muted);padding:10px 14px;border-radius:12px}
-nav button:hover,nav button.active{background:#ffffff12;color:white}
-main{max-width:1180px;margin:auto;padding:18px 24px 70px}
-.hero{position:relative;overflow:hidden;border:1px solid #ffffff16;border-radius:30px;padding:54px 48px;background:radial-gradient(ellipse at 85% 15%,#7757e966,transparent 38%),radial-gradient(ellipse at 10% 100%,#2674e755,transparent 42%),linear-gradient(120deg,#182346,#211b48 70%,#292052);min-height:300px}
-.hero:after{content:"✦";position:absolute;right:9%;top:22px;font-size:100px;color:#ffffff15;transform:rotate(15deg)}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #ffffff25;background:#ffffff0b;border-radius:30px;color:#d5d9ff;font-size:13px;margin-bottom:22px}
-.hero h1{font-size:clamp(34px,5vw,59px);line-height:1.08;letter-spacing:-1.8px;max-width:650px}
-.gradient-text{background:linear-gradient(90deg,#a9b7ff,#e1b9ff);background-clip:text;-webkit-background-clip:text;color:transparent}
-.hero p{color:#c0c8e6;line-height:1.7;max-width:520px;margin-top:18px;font-size:16px}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-.primary,.secondary{padding:13px 19px;border-radius:14px;font-weight:700;transition:.2s}
-.primary{color:white;background:linear-gradient(120deg,#687fff,#9c62ef);box-shadow:0 8px 24px #7865ff33}
-.primary:hover{transform:translateY(-2px);filter:brightness(1.12)}
-.secondary{background:#ffffff12;color:white;border:1px solid #ffffff22}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 40px}
-.stat{padding:20px;border:1px solid var(--line);background:linear-gradient(140deg,#151d38,#11172d);border-radius:20px}
-.stat strong{font-size:25px;display:block;margin-bottom:6px}
-.stat span{font-size:13px;color:var(--muted)}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:34px 0 20px}
-.section-head h2{font-size:26px;letter-spacing:-.6px}
-.section-head p{color:var(--muted);font-size:14px;margin-top:7px}
-.pill{font-size:12px;color:#c9ceff;background:#7587ff1b;border:1px solid #7587ff35;padding:8px 11px;border-radius:30px;white-space:nowrap}
-.subject-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-.subject{position:relative;text-align:left;color:white;padding:20px 16px;min-height:145px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#171f3b,#11172d);transition:.22s;overflow:hidden}
-.subject:hover{transform:translateY(-5px);border-color:#7587ff99;background:linear-gradient(145deg,#222d53,#171d39)}
-.subject .emoji{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;font-size:24px;margin-bottom:16px;background:#ffffff0e}
-.subject strong{display:block;font-size:14px}
-.subject small{display:block;color:var(--muted);margin-top:7px;font-size:12px}
-.subject .arrow{position:absolute;right:14px;top:14px;color:#8e9bff;font-size:18px}
-.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.news-card{padding:21px;border:1px solid var(--line);border-radius:20px;background:var(--panel)}
-.news-art{height:105px;border-radius:15px;margin-bottom:17px;display:grid;place-items:center;font-size:42px;background:radial-gradient(circle at 30% 30%,#8e77ff77,transparent 50%),linear-gradient(120deg,#202d58,#30204c)}
-.news-card h3{font-size:16px;margin-bottom:9px}
-.news-card p{font-size:13px;line-height:1.6;color:var(--muted)}
-.page{display:none;animation:appear .3s ease}
-.page.active{display:block}
-@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.quiz-box{max-width:760px;margin:22px auto;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--panel)}
-.quiz-top{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}
-.progress{height:7px;background:#ffffff12;border-radius:10px;overflow:hidden;margin:17px 0 27px}
-.progress div{height:100%;width:0;background:linear-gradient(90deg,#7085ff,#b36bff);transition:.3s}
-.quiz-box h2{font-size:23px;line-height:1.5;margin-bottom:23px}
-.answers{display:grid;gap:11px}
-.answer{width:100%;text-align:left;color:#e8ebff;background:#ffffff06;border:1px solid var(--line);padding:15px;border-radius:13px}
-.answer:hover{border-color:#8492ff;background:#7587ff15}
-.answer.selected{border-color:#8998ff;background:#7587ff25}
-.answer.correct{border-color:#38c995;background:#38c99517}
-.answer.wrong{border-color:#ff6b8b;background:#ff6b8b16}
-.quiz-controls{display:flex;justify-content:space-between;gap:12px;margin-top:22px;align-items:center}
-.muted{color:var(--muted);font-size:13px;line-height:1.7}
-.field{display:grid;gap:8px;margin:18px 0}
-.field label{font-size:14px;color:#c9d0e9}
-select{width:100%;background:#10162c;color:white;border:1px solid var(--line);padding:13px;border-radius:12px;outline:none}
-.empty{text-align:center;padding:50px 20px;border:1px dashed var(--line);border-radius:22px;color:var(--muted)}
-footer{text-align:center;padding:24px;color:#737f9f;font-size:12px;border-top:1px solid #ffffff0c}
-@media(max-width:900px){.subject-grid{grid-template-columns:repeat(3,1fr)}.hero{padding:38px 30px}.news-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){header{align-items:flex-start;flex-direction:column;padding:18px}nav{width:100%}nav button{padding:9px 11px;font-size:13px}main{padding:8px 15px 45px}.hero{padding:30px 22px;border-radius:23px}.hero h1{letter-spacing:-1px}.stats{gap:8px}.stat{padding:14px}.stat strong{font-size:21px}.stat span{font-size:11px}.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.subject{padding:15px;min-height:135px}.news-grid{grid-template-columns:1fr}.section-head h2{font-size:22px}.quiz-box{padding:20px 15px}.quiz-box h2{font-size:19px}}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;background:#0b1020;color:#f5f6ff}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{max-width:1150px;margin:auto;padding:22px}.top{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:25px}.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:800}.logo{background:linear-gradient(135deg,#778bff,#b46aff);padding:12px;border-radius:15px}.nav{display:flex;gap:8px;flex-wrap:wrap}.btn,.nav button{border:1px solid #ffffff17;padding:11px 15px;border-radius:12px;color:white;background:#ffffff0b}.btn.primary{background:linear-gradient(120deg,#667fff,#9d62ef);border:0;font-weight:700}.btn:hover,.nav button:hover{filter:brightness(1.2)}.hero{border:1px solid #ffffff16;border-radius:27px;padding:45px;background:radial-gradient(ellipse at 90% 5%,#8a61ff66,transparent 38%),radial-gradient(ellipse at 0% 100%,#2976d855,transparent 40%),#171e3c}.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.1;margin:16px 0}.hero p,.muted{color:#aab4d2;line-height:1.7}.grad{background:linear-gradient(90deg,#9fb3ff,#e4b8ff);background-clip:text;color:transparent}.section{margin-top:30px}.section h2{font-size:25px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card,.panel{background:#141b32;border:1px solid #293250;border-radius:18px;padding:20px}.subject{min-height:125px;text-align:left;color:white;transition:.2s}.subject:hover{transform:translateY(-3px);border-color:#8d8bff}.subject span{display:block;font-size:27px;margin-bottom:14px}.subject small{display:block;color:#9da9ca;margin-top:8px}.page{display:none}.page.active{display:block}.panel{max-width:750px;margin:22px auto}.field{display:grid;gap:8px;margin:14px 0}.field label{font-size:13px;color:#b6c1de}.field input,.field select,.field textarea{width:100%;padding:13px;background:#0e1529;border:1px solid #34405f;color:white;border-radius:11px;outline:none}.field textarea{min-height:90px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}.msg{margin-top:12px;color:#9edfc7;white-space:pre-wrap}.news{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.news img,.news video{width:100%;border-radius:12px;margin-bottom:10px}.news iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}.hidden{display:none!important}.profilepic{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#303958}.divider{border:0;border-top:1px solid #2b3552;margin:22px 0}.tag{display:inline-block;border-radius:20px;padding:6px 10px;background:#6d7fff25;color:#cbd3ff;font-size:12px}.small{font-size:12px;color:#9ca8c9}footer{text-align:center;color:#7885a7;padding:35px 10px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news{grid-template-columns:1fr 1fr}.hero{padding:28px}.wrap{padding:15px}}@media(max-width:480px){.news{grid-template-columns:1fr}.top{align-items:flex-start}.hero{padding:24px}.panel{padding:16px}.nav button{padding:9px;font-size:12px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo"><div class="logo-icon">✦</div><span>Mening Maktabim</span></div>
-  <nav>
-    <button class="active" data-page="home">Bosh sahifa</button>
-    <button data-page="tests">Testlar</button>
-    <button data-page="news">Yangiliklar</button>
-  </nav>
+<div class="wrap">
+<header class="top">
+ <div class="brand"><span class="logo">✦</span><span>Mening Maktabim</span></div>
+ <nav class="nav">
+  <button onclick="page('home')">Bosh sahifa</button>
+  <button onclick="page('tests')">Testlar</button>
+  <button onclick="page('news')">Yangiliklar</button>
+  <button onclick="page('account')">Profil / Kirish</button>
+ </nav>
 </header>
 
-<main>
 <section id="home" class="page active">
-  <div class="hero">
-    <div class="eyebrow">✧ O‘rganishning yangi usuli</div>
-    <h1>Bilim sari <span class="gradient-text">katta qadam.</span></h1>
-    <p>Maktab fanlarini o‘rgan, bilimingni sinab ko‘r va har kuni o‘zingning yangi imkoniyatlaringni kashf et.</p>
-    <div class="hero-actions">
-      <button class="primary" onclick="showPage('tests')">Testni boshlash ↗</button>
-      <button class="secondary" onclick="document.getElementById('subjects').scrollIntoView({behavior:'smooth'})">Fanlarni ko‘r</button>
-    </div>
+ <div class="hero">
+  <span class="tag">✧ Bilim sari yangi qadam</span>
+  <h1>Kelajagingni<br><span class="grad">bilim bilan yarat!</span></h1>
+  <p>Maktab fanlarini o‘rgan, bilimingni sinab ko‘r va har kuni yangi marralarni zabt et.</p>
+  <div class="row" style="max-width:370px;margin-top:22px">
+   <button class="btn primary" onclick="page('tests')">Test boshlash ↗</button>
+   <button class="btn" onclick="page('account')">Hisobim</button>
   </div>
+ </div>
+ <div class="section">
+  <h2>📚 Fanlar</h2><p class="muted">Fan tanlang va test ishlashni boshlang.</p>
+  <div class="grid" id="subjects"></div>
+ </div>
+ <div class="section"><h2>✨ So‘nggi yangiliklar</h2><div class="news" id="homeNews"></div></div>
+</section>
 
-  <div class="stats">
-    <div class="stat"><strong>6–11</strong><span>Maktab sinflari</span></div>
-    <div class="stat"><strong>10 ta</strong><span>Asosiy fanlar</span></div>
-    <div class="stat"><strong>24/7</strong><span>O‘rganish imkoniyati</span></div>
+<section id="account" class="page">
+ <div class="panel" id="authPanel">
+  <h2>Hisobingizga xush kelibsiz</h2>
+  <p class="muted">Kirish yoki yangi hisob yaratish.</p>
+  <div class="field"><label>To‘liq ism</label><input id="fullName" placeholder="Ism va familiya"></div>
+  <div class="field"><label>Email</label><input id="email" type="email" placeholder="email@example.com"></div>
+  <div class="field"><label>Parol</label><input id="password" type="password" minlength="6" placeholder="Kamida 6 ta belgi"></div>
+  <div class="field"><label>Hisob turi</label>
+   <select id="requestedRole"><option value="student">O‘quvchi</option><option value="teacher">O‘qituvchi (tasdiqlanishi kerak)</option></select>
   </div>
-
-  <div id="subjects">
-    <div class="section-head">
-      <div><h2>Fanlarni tanlang</h2><p>O‘zingizga kerakli fandan test ishlang.</p></div>
-      <span class="pill">10 ta fan</span>
-    </div>
-    <div class="subject-grid" id="subjectGrid"></div>
+  <div class="field" id="gradeField"><label>Sinf</label><select id="grade"><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select></div>
+  <div class="row">
+   <button class="btn primary" onclick="signup()">Ro‘yxatdan o‘tish</button>
+   <button class="btn" onclick="login()">Kirish</button>
   </div>
+  <p class="msg" id="authMsg"></p>
+ </div>
 
-  <div class="section-head"><div><h2>So‘nggi yangiliklar</h2><p>Saytimizdagi muhim xabarlar.</p></div></div>
-  <div class="news-grid" id="homeNews"></div>
+ <div class="panel hidden" id="profilePanel">
+  <div class="row" style="align-items:center">
+   <img id="avatar" class="profilepic" alt="Profil rasmi">
+   <div><h2 id="profileName">Profil</h2><span id="profileRole" class="tag"></span><p id="profileExtra" class="muted"></p></div>
+  </div>
+  <hr class="divider">
+  <div class="field"><label>Ismni o‘zgartirish</label><input id="editName"></div>
+  <div class="field"><label>Profil rasmi</label><input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
+  <button class="btn primary" onclick="saveProfile()">Profilni saqlash</button>
+  <button class="btn" onclick="logout()">Chiqish</button>
+  <p id="profileMsg" class="msg"></p>
+  <hr class="divider">
+  <div id="teacherRequest" class="muted"></div>
+ </div>
 </section>
 
 <section id="tests" class="page">
-  <div class="section-head"><div><h2>Bilimingizni sinang</h2><p>Sinf va fanni tanlab testni boshlang.</p></div></div>
-  <div class="quiz-box" id="setup">
-    <div class="field"><label for="grade">Sinfni tanlang</label>
-      <select id="grade"><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select>
-    </div>
-    <div class="field"><label for="subject">Fanni tanlang</label><select id="subject"></select></div>
-    <p class="muted">Hozircha namuna savollar bilan ishlaydi. Keyingi bosqichda haqiqiy savollar bazasini ulash mumkin.</p>
-    <button class="primary" style="width:100%;margin-top:20px" onclick="startQuiz()">Testni boshlash →</button>
+ <div class="section"><h2>📝 Test ishlash</h2><p class="muted">Sinf va fanni tanlang. Test savollari bazadan olinadi.</p></div>
+ <div class="panel" id="testSetup">
+  <div class="row">
+   <div class="field"><label>Sinf</label><select id="testGrade"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div>
+   <div class="field"><label>Fan</label><select id="testSubject"></select></div>
   </div>
-  <div class="quiz-box" id="quiz" style="display:none"></div>
+  <button class="btn primary" onclick="startTest()">Testni boshlash</button><p id="testMsg" class="msg"></p>
+ </div>
+ <div class="panel hidden" id="testPanel"></div>
 </section>
 
 <section id="news" class="page">
-  <div class="section-head"><div><h2>Yangiliklar</h2><p>Maktab va ta’lim olamidan xabarlar.</p></div></div>
-  <div class="news-grid" id="allNews"></div>
+ <div class="section"><h2>📰 Yangiliklar</h2><p class="muted">Maktabdagi yangiliklar, rasm va videolar.</p></div>
+ <div id="allNews" class="news"></div>
+ <div class="panel hidden" id="publishPanel">
+  <h2>Yangilik qo‘shish</h2>
+  <div class="field"><label>Sarlavha</label><input id="newsTitle" placeholder="Yangilik sarlavhasi"></div>
+  <div class="field"><label>Matn</label><textarea id="newsBody" placeholder="Yangilik haqida..."></textarea></div>
+  <div class="field"><label>Rasm yoki video fayl (50 MB gacha)</label><input type="file" id="mediaFile" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"></div>
+  <div class="field"><label>YouTube URL (ixtiyoriy)</label><input id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=..."></div>
+  <button class="btn primary" onclick="publishNews()">Yangilikni joylash</button><p id="newsMsg" class="msg"></p>
+ </div>
 </section>
-</main>
-<footer>© 2026 Mening Maktabim · Bilim sari birga!</footer>
 
+<section id="staff" class="page">
+ <div class="section"><h2>🛠 Boshqaruv paneli</h2><p class="muted">O‘qituvchi va admin uchun.</p></div>
+ <div class="panel">
+  <h3>Savollarni fayldan yuklash</h3>
+  <p class="muted">JSON yoki CSV. CSV ustunlari: grade, subject, question, option_a, option_b, option_c, option_d, correct_option.</p>
+  <div class="field"><label>Fayl tanlash</label><input type="file" id="questionsFile" accept=".json,.csv,application/json,text/csv"></div>
+  <button class="btn primary" onclick="importQuestions()">Savollarni yuklash</button><p id="importMsg" class="msg"></p>
+  <hr class="divider">
+  <h3>Bitta savol qo‘shish</h3>
+  <div class="row">
+   <div class="field"><label>Sinf</label><select id="qGrade"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div>
+   <div class="field"><label>Fan</label><select id="qSubject"></select></div>
+  </div>
+  <div class="field"><label>Savol</label><textarea id="qText"></textarea></div>
+  <div class="row"><div class="field"><label>A</label><input id="optA"></div><div class="field"><label>B</label><input id="optB"></div></div>
+  <div class="row"><div class="field"><label>C</label><input id="optC"></div><div class="field"><label>D</label><input id="optD"></div></div>
+  <div class="field"><label>To‘g‘ri javob</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+  <button class="btn primary" onclick="addQuestion()">Savolni saqlash</button><p id="addQMsg" class="msg"></p>
+ </div>
+ <div class="panel hidden" id="adminPanel">
+  <h3>O‘qituvchi so‘rovlarini tasdiqlash</h3>
+  <p class="muted">Admin bo‘lib kirganda kutilayotgan so‘rovlar ko‘rinadi.</p>
+  <div id="teacherRequests"></div>
+ </div>
+</section>
+<footer>Mening Maktabim · Bilim sari birga!</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL="https://pkbhavmbudmyrmfhifmr.supabase.co";
+const SUPABASE_KEY="sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const BUCKET="school-news-media";
 const subjects=[
- ['Ona tili','📚'],['Matematika','➗'],['Ingliz tili','🌍'],['Tarix','🏛️'],
- ['Fizika','⚡'],['Kimyo','🧪'],['Biologiya','🌱'],['Geografiya','🌎'],
- ['Informatika','💻'],['Huquq','⚖️']
+ ["Ona tili","📚"],["Matematika","➗"],["Ingliz tili","🌍"],["Tarix","🏛️"],
+ ["Fizika","⚡"],["Kimyo","🧪"],["Biologiya","🌱"],["Geografiya","🌎"],
+ ["Informatika","💻"],["Huquq","⚖️"]
 ];
+let user=null,profile=null,questions=[],questionIndex=0,chosen={},newsItems=[];
 
-const news=[
- {icon:'📘',title:'Bilim olish — kelajak poydevori',body:'Har kuni ozgina yangi bilim o‘rganish katta natijalarga olib keladi.'},
- {icon:'🎯',title:'Maqsad qo‘ying',body:'O‘zingizga kichik maqsadlar belgilang va ularni bosqichma-bosqich bajaring.'},
- {icon:'💡',title:'Xatolardan o‘rganing',body:'Testdagi xatolar — qaysi mavzuni yana takrorlash kerakligini ko‘rsatadi.'}
-];
-
-const sampleQuestions={
- 'Matematika':[
-  {q:'12 × 8 nechaga teng?',a:['86','96','88','108'],correct:1},
-  {q:'144 sonining kvadrat ildizi nechaga teng?',a:['10','11','12','14'],correct:2},
-  {q:'3/4 kasrning o‘nli ko‘rinishi qaysi?',a:['0,25','0,5','0,75','1,25'],correct:2}
- ],
- 'Ona tili':[
-  {q:'Qaysi so‘z ot hisoblanadi?',a:['Chiroyli','Kitob','Yugurdi','Tez'],correct:1},
-  {q:'Gapning bosh bo‘laklari qaysilar?',a:['Aniqlovchi va to‘ldiruvchi','Ega va kesim','Hol va aniqlovchi','Faqat ega'],correct:1}
- ],
- 'Ingliz tili':[
-  {q:'“Book” so‘zining tarjimasi qaysi?',a:['Daftar','Qalam','Kitob','Maktab'],correct:2},
-  {q:'“She ___ a student.” Bo‘sh joyni to‘ldiring.',a:['am','are','is','be'],correct:2}
- ],
- 'Tarix':[
-  {q:'Amir Temur qaysi yilda tug‘ilgan?',a:['1336-yil','1405-yil','1220-yil','1365-yil'],correct:0}
- ],
- 'Informatika':[
-  {q:'Kompyuterning asosiy hisoblash qurilmasi qaysi?',a:['Monitor','Protsessor','Klaviatura','Sichqoncha'],correct:1}
- ],
- 'Biologiya':[
-  {q:'O‘simliklar fotosintez jarayonida nimadan foydalanadi?',a:['Quyosh nuri','Plastmassa','Temir','Qumning o‘zi'],correct:0}
- ],
- 'Fizika':[
-  {q:'Kuchning SI tizimidagi birligi qaysi?',a:['Joul','Vatt','Nyuton','Paskal'],correct:2}
- ],
- 'Kimyo':[
-  {q:'Suvning kimyoviy formulasi qaysi?',a:['CO₂','H₂O','O₂','NaCl'],correct:1}
- ],
- 'Geografiya':[
-  {q:'Yerning tabiiy yo‘ldoshi qaysi?',a:['Mars','Quyosh','Oy','Venera'],correct:2}
- ],
- 'Huquq':[
-  {q:'O‘zbekiston Respublikasining asosiy qonuni nima?',a:['Konstitutsiya','Farmon','Ariza','Shartnoma'],correct:0}
- ]
-};
-
-let quizQuestions=[],current=0,answers=[],finished=false;
-const subjectGrid=document.getElementById('subjectGrid');
-subjectGrid.innerHTML=subjects.map(([name,icon])=>`
- <button class="subject" onclick="chooseSubject('${name}')">
- <span class="arrow">↗</span><span class="emoji">${icon}</span>
- <strong>${name}</strong><small>Testni boshlash →</small></button>`).join('');
-
-document.getElementById('subject').innerHTML=subjects.map(([s])=>`<option>${s}</option>`).join('');
-
-function renderNews(id){
- document.getElementById(id).innerHTML=news.map(n=>`
- <article class="news-card"><div class="news-art">${n.icon}</div>
- <h3>${n.title}</h3><p>${n.body}</p></article>`).join('');
+function el(id){return document.getElementById(id)}
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function say(id,msg){el(id).textContent=msg}
+function page(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ el(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});
+ if(id==="news")loadNews();
+ if(id==="staff"&&!user){page("account");say("authMsg","Avval hisobingizga kiring.");return}
 }
-renderNews('homeNews');renderNews('allNews');
-
-function showPage(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
- document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
- window.scrollTo({top:0,behavior:'smooth'});
+function roleLabel(r){return ({student:"O‘quvchi",teacher:"O‘qituvchi",admin:"Admin"})[r]||r}
+function fillSubjects(){
+ el("subjects").innerHTML=subjects.map(([s,icon])=>`<button class="card subject" onclick="el('testSubject').value='${esc(s)}';page('tests')"><span>${icon}</span><b>${esc(s)}</b><small>Test ishlash →</small></button>`).join("");
+ for(const id of ["testSubject","qSubject"])el(id).innerHTML=subjects.map(([s])=>`<option>${esc(s)}</option>`).join("");
 }
-document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+fillSubjects();
+el("requestedRole").addEventListener("change",()=>el("gradeField").classList.toggle("hidden",el("requestedRole").value!=="student"));
 
-function chooseSubject(name){
- document.getElementById('subject').value=name;
- showPage('tests');
+async function signup(){
+ const full_name=el("fullName").value.trim(),email=el("email").value.trim(),password=el("password").value;
+ if(!full_name||!email||password.length<6){say("authMsg","Ism, email va kamida 6 belgili parolni kiriting.");return}
+ const requested_role=el("requestedRole").value;
+ const grade=requested_role==="student"?Number(el("grade").value):null;
+ say("authMsg","Hisob yaratilmoqda...");
+ const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name,requested_role,grade}}});
+ if(error){say("authMsg","Xatolik: "+error.message);return}
+ if(data.session){await refreshUser();say("authMsg","Hisob yaratildi!")}
+ else say("authMsg","Tasdiqlash xati yuborildi. Emailingizni tekshiring, so‘ng tizimga kiring.");
 }
-function startQuiz(){
- const name=document.getElementById('subject').value;
- quizQuestions=(sampleQuestions[name]||[]).map(q=>({...q,a:[...q.a]}));
- if(!quizQuestions.length){alert('Bu fan uchun hozircha namuna savol yo‘q.');return;}
- for(let i=quizQuestions.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [quizQuestions[i],quizQuestions[j]]=[quizQuestions[j],quizQuestions[i]];
+async function login(){
+ const email=el("email").value.trim(),password=el("password").value;
+ const {error}=await db.auth.signInWithPassword({email,password});
+ if(error){say("authMsg","Kirish xatosi: "+error.message);return}
+ await refreshUser();say("authMsg","Muvaffaqiyatli kirdingiz.");
+}
+async function logout(){await db.auth.signOut();user=null;profile=null;renderAccount();page("home")}
+async function refreshUser(){
+ const {data:{user:u}}=await db.auth.getUser();user=u;
+ if(user){
+  const {data,error}=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+  profile=data||null;
+  if(error)console.error(error);
  }
- current=0;answers=[];finished=false;
- document.getElementById('setup').style.display='none';
- document.getElementById('quiz').style.display='block';
- renderQuestion();
+ renderAccount();
+}
+function renderAccount(){
+ el("authPanel").classList.toggle("hidden",!!user);
+ el("profilePanel").classList.toggle("hidden",!user);
+ el("publishPanel").classList.toggle("hidden",!(profile&&["teacher","admin"].includes(profile.role)));
+ el("adminPanel").classList.toggle("hidden",!(profile&&profile.role==="admin"));
+ if(!user)return;
+ el("profileName").textContent=profile?.full_name||user.email;
+ el("profileRole").textContent=roleLabel(profile?.role||"student");
+ el("profileExtra").textContent=(profile?.grade?profile.grade+"-sinf · ":"")+user.email;
+ el("editName").value=profile?.full_name||"";
+ el("avatar").src=profile?.avatar_url||"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" rx="50" fill="#303958"/><text x="50" y="62" font-size="42" text-anchor="middle" fill="white">👤</text></svg>');
+ el("teacherRequest").textContent=profile?.requested_role==="teacher"&&profile.role==="student"?"O‘qituvchi bo‘lish so‘rovingiz admin tomonidan tasdiqlanishi kerak.":"";
+ if(profile&&["teacher","admin"].includes(profile.role))el("teacherRequest").innerHTML='<button class="btn" onclick="page(\'staff\')">Boshqaruv paneli →</button>';
+ if(profile?.role==="admin")loadTeacherRequests();
+}
+async function saveProfile(){
+ if(!user)return;
+ const full_name=el("editName").value.trim();
+ if(!full_name){say("profileMsg","Ismingizni kiriting.");return}
+ let avatar_url=profile?.avatar_url||null;
+ const file=el("avatarFile").files[0];
+ if(file){
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){say("profileMsg","JPG, PNG yoki WebP rasm tanlang.");return}
+  const path=`avatars/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+  const {error:upErr}=await db.storage.from(BUCKET).upload(path,file,{upsert:true});
+  if(upErr){say("profileMsg","Rasm yuklanmadi: "+upErr.message);return}
+  avatar_url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+ }
+ const {error}=await db.from("profiles").update({full_name,avatar_url}).eq("id",user.id);
+ if(error){say("profileMsg","Saqlash xatosi: "+error.message);return}
+ await refreshUser();say("profileMsg","Profil saqlandi.");
+}
+function ytEmbed(url){
+ try{
+  const u=new URL(url);
+  if(u.hostname==="youtu.be")return "https://www.youtube-nocookie.com/embed/"+u.pathname.slice(1);
+  if(["youtube.com","www.youtube.com","m.youtube.com"].includes(u.hostname)){
+   if(u.pathname==="/watch"&&u.searchParams.get("v"))return "https://www.youtube-nocookie.com/embed/"+u.searchParams.get("v");
+   if(u.pathname.startsWith("/embed/"))return "https://www.youtube-nocookie.com"+u.pathname;
+   if(u.pathname.startsWith("/shorts/"))return "https://www.youtube-nocookie.com/embed/"+u.pathname.split("/")[2];
+  }
+ }catch{}
+ return null;
+}
+async function publishNews(){
+ if(!user||!profile||!["teacher","admin"].includes(profile.role)){say("newsMsg","Yangilik qo‘shish uchun tasdiqlangan o‘qituvchi yoki admin bo‘lish kerak.");return}
+ const title=el("newsTitle").value.trim(),body=el("newsBody").value.trim(),yt=el("youtubeUrl").value.trim(),file=el("mediaFile").files[0];
+ if(!title){say("newsMsg","Sarlavha kiriting.");return}
+ const video_url=yt?ytEmbed(yt):null;
+ if(yt&&!video_url){say("newsMsg","YouTube URL manzili noto‘g‘ri.");return}
+ let image_url=null;
+ if(file){
+  if(file.size>50*1024*1024){say("newsMsg","Fayl 50 MB dan kichik bo‘lishi kerak.");return}
+  if(!["image/jpeg","image/png","image/webp","video/mp4","video/webm"].includes(file.type)){say("newsMsg","JPG, PNG, WebP, MP4 yoki WebM fayl tanlang.");return}
+  const path=`news/${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+  say("newsMsg","Fayl yuklanmoqda...");
+  const {error:upErr}=await db.storage.from(BUCKET).upload(path,file);
+  if(upErr){say("newsMsg","Fayl yuklanmadi: "+upErr.message);return}
+  image_url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+ }
+ const {error}=await db.from("news").insert({title,body,image_url,video_url,created_by:user.id});
+ if(error){say("newsMsg","Saqlash xatosi: "+error.message);return}
+ el("newsTitle").value="";el("newsBody").value="";el("youtubeUrl").value="";el("mediaFile").value="";
+ say("newsMsg","Yangilik joylandi.");await loadNews();
+}
+function mediaMarkup(n){
+ let html="";
+ if(n.image_url&&/\.(mp4|webm)(\?|$)/i.test(n.image_url))html+=`<video controls preload="metadata" src="${esc(n.image_url)}"></video>`;
+ else if(n.image_url)html+=`<img loading="lazy" src="${esc(n.image_url)}" alt="Yangilik rasmi">`;
+ if(n.video_url)html+=`<iframe loading="lazy" src="${esc(n.video_url)}" title="YouTube video" allowfullscreen></iframe>`;
+ return html;
+}
+function renderNews(items){
+ const markup=items.length?items.map(n=>`<article class="card">${mediaMarkup(n)}<h3>${esc(n.title)}</h3><p class="muted">${esc(n.body||"")}</p><p class="small">${n.created_at?new Date(n.created_at).toLocaleDateString("uz-UZ"):""}</p></article>`).join(""):'<div class="card">Hozircha yangilik yo‘q.</div>';
+ el("homeNews").innerHTML=markup;el("allNews").innerHTML=markup;
+}
+async function loadNews(){
+ const {data,error}=await db.from("news").select("*").order("created_at",{ascending:false}).limit(30);
+ if(error){renderNews([]);console.error(error);return}
+ newsItems=data||[];renderNews(newsItems);
+}
+function parseCSV(text){
+ const lines=text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());
+ if(!lines.length)return [];
+ function splitLine(line){
+  const out=[];let val="",quoted=false;
+  for(let i=0;i<line.length;i++){
+   const c=line[i];
+   if(c==='"'&&quoted&&line[i+1]==='"'){val+='"';i++}
+   else if(c==='"')quoted=!quoted;
+   else if(c===","&&!quoted){out.push(val.trim());val=""}
+   else val+=c;
+  }out.push(val.trim());return out;
+ }
+ const headers=splitLine(lines[0]).map(h=>h.toLowerCase().trim());
+ return lines.slice(1).map(line=>{
+  const vals=splitLine(line),obj={};
+  headers.forEach((h,i)=>obj[h]=vals[i]||"");
+  return obj;
+ });
+}
+function normalizeQuestion(row){
+ return {
+  grade:Number(row.grade),
+  subject:String(row.subject||"").trim(),
+  question:String(row.question||"").trim(),
+  option_a:String(row.option_a||row.A||"").trim(),
+  option_b:String(row.option_b||row.B||"").trim(),
+  option_c:String(row.option_c||row.C||"").trim(),
+  option_d:String(row.option_d||row.D||"").trim(),
+  correct_option:String(row.correct_option||row.answer||"").trim().toUpperCase()
+ };
+}
+async function importQuestions(){
+ if(!profile||!["teacher","admin"].includes(profile.role)){say("importMsg","Faqat tasdiqlangan o‘qituvchi yoki admin savol yuklay oladi.");return}
+ const file=el("questionsFile").files[0];if(!file){say("importMsg","Avval CSV yoki JSON fayl tanlang.");return}
+ try{
+  const text=await file.text();
+  const rows=file.name.toLowerCase().endsWith(".json")?JSON.parse(text):parseCSV(text);
+  if(!Array.isArray(rows)||!rows.length)throw Error("Faylda savollar topilmadi.");
+  const prepared=rows.map(normalizeQuestion);
+  const bad=prepared.find(q=>!(q.grade>=6&&q.grade<=11)||!q.subject||!q.question||!q.option_a||!q.option_b||!q.option_c||!q.option_d||!["A","B","C","D"].includes(q.correct_option));
+  if(bad)throw Error("Sinf (6–11), fan, savol, A/B/C/D variantlari va correct_option to‘g‘ri to‘ldirilganini tekshiring.");
+  say("importMsg",prepared.length+" ta savol yuklanmoqda...");
+  for(let i=0;i<prepared.length;i+=100){
+   const batch=prepared.slice(i,i+100).map(q=>({...q,created_by:user.id}));
+   const {error}=await db.from("school_test_questions").insert(batch);
+   if(error)throw Error(error.message+" (savollar "+(i+1)+" dan boshlanadi)");
+  }
+  say("importMsg",prepared.length+" ta savol muvaffaqiyatli yuklandi.");
+ }catch(e){say("importMsg","Xatolik: "+e.message)}
+}
+async function addQuestion(){
+ if(!profile||!["teacher","admin"].includes(profile.role)){say("addQMsg","Ruxsat yo‘q.");return}
+ const q=normalizeQuestion({grade:el("qGrade").value,subject:el("qSubject").value,question:el("qText").value,option_a:el("optA").value,option_b:el("optB").value,option_c:el("optC").value,option_d:el("optD").value,correct_option:el("qCorrect").value});
+ if(!q.question||![q.option_a,q.option_b,q.option_c,q.option_d].every(Boolean)){say("addQMsg","Savol va barcha 4 ta variantni to‘ldiring.");return}
+ const {error}=await db.from("school_test_questions").insert({...q,created_by:user.id});
+ say("addQMsg",error?"Xatolik: "+error.message:"Savol saqlandi.");
+}
+async function startTest(){
+ if(!user){say("testMsg","Test ishlash uchun avval ro‘yxatdan o‘ting yoki kiring.");page("account");return}
+ const grade=Number(el("testGrade").value),subject=el("testSubject").value;
+ say("testMsg","Savollar olinmoqda...");
+ const {data,error}=await db.from("school_test_questions").select("id,grade,subject,question,option_a,option_b,option_c,option_d,correct_option").eq("grade",grade).eq("subject",subject).limit(500);
+ if(error){say("testMsg","Savollarni olishda xatolik: "+error.message);return}
+ if(!data?.length){say("testMsg","Bu sinf va fan uchun hali savollar yuklanmagan.");return}
+ questions=data;
+ for(let i=questions.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[questions[i],questions[j]]=[questions[j],questions[i]]}
+ questions=questions.slice(0,Math.min(20,questions.length));questionIndex=0;chosen={};
+ el("testSetup").classList.add("hidden");el("testPanel").classList.remove("hidden");renderQuestion();
 }
 function renderQuestion(){
- const box=document.getElementById('quiz');
- if(finished){renderResult();return;}
- const q=quizQuestions[current];
- box.innerHTML=`
- <div class="quiz-top"><span>${document.getElementById('subject').value}</span><span>${current+1} / ${quizQuestions.length}</span></div>
- <div class="progress"><div style="width:${current/quizQuestions.length*100}%"></div></div>
- <h2>${q.q}</h2>
- <div class="answers">${q.a.map((a,i)=>`<button class="answer ${answers[current]===i?'selected':''}" onclick="pickAnswer(${i})">${String.fromCharCode(65+i)}. ${a}</button>`).join('')}</div>
- <div class="quiz-controls"><button class="secondary" onclick="exitQuiz()">Chiqish</button><button class="primary" onclick="nextQuestion()">${current===quizQuestions.length-1?'Natijani ko‘r':'Keyingi →'}</button></div>`;
+ const q=questions[questionIndex],keys=["A","B","C","D"];
+ el("testPanel").innerHTML=`<div class="small">Savol ${questionIndex+1} / ${questions.length}</div><div style="height:6px;background:#2b3552;border-radius:9px;margin:12px 0 20px"><div style="height:100%;width:${(questionIndex+1)/questions.length*100}%;background:#8790ff;border-radius:9px"></div></div><h3>${esc(q.question)}</h3><div class="field">${keys.map((k,i)=>`<button class="btn ${chosen[q.id]===k?'primary':''}" style="text-align:left;margin:4px 0" onclick="chooseAnswer('${k}')">${k}. ${esc(q['option_'+k.toLowerCase()])}</button>`).join("")}</div><div class="row"><button class="btn" onclick="prevQuestion()" ${questionIndex===0?'disabled':''}>← Oldingi</button><button class="btn primary" onclick="nextQuestion()">${questionIndex===questions.length-1?'Natijani ko‘r':'Keyingi →'}</button></div><p class="small">Javoblar shu test davomida saqlanadi.</p>`;
 }
-function pickAnswer(i){
- answers[current]=i;
- renderQuestion();
+function chooseAnswer(k){chosen[questions[questionIndex].id]=k;renderQuestion()}
+function prevQuestion(){if(questionIndex>0){questionIndex--;renderQuestion()}}
+async function nextQuestion(){
+ if(!chosen[questions[questionIndex].id]){say("testMsg","Davom etishdan oldin javob tanlang.");return}
+ if(questionIndex<questions.length-1){questionIndex++;renderQuestion();return}
+ const correct=questions.filter(q=>chosen[q.id]===q.correct_option).length;
+ const percent=Math.round(correct/questions.length*100);
+ el("testPanel").innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:50px">${percent>=70?'🏆':'📘'}</div><h2>Test yakunlandi!</h2><div style="font-size:48px;font-weight:800">${percent}%</div><p class="muted">${correct} / ${questions.length} ta to‘g‘ri javob</p><button class="btn primary" onclick="reviewTest()">Javoblarni ko‘rish</button> <button class="btn" onclick="resetTest()">Yana test</button></div><div id="review"></div>`;
 }
-function nextQuestion(){
- if(answers[current]===undefined){alert('Davom etishdan oldin javobni tanlang.');return;}
- if(current<quizQuestions.length-1){current++;renderQuestion();}
- else{finished=true;renderResult();}
+function reviewTest(){
+ el("review").innerHTML=questions.map((q,i)=>`<div class="card" style="margin-top:10px"><b>${i+1}. ${esc(q.question)}</b><p class="muted">Sizning javobingiz: ${esc(chosen[q.id]||"Tanlanmagan")}</p><p style="color:#91e8c4">To‘g‘ri javob: ${esc(q.correct_option)}. ${esc(q["option_"+String(q.correct_option).toLowerCase()])}</p></div>`).join("");
 }
-function renderResult(){
- const correct=quizQuestions.reduce((sum,q,i)=>sum+(answers[i]===q.correct?1:0),0);
- const percent=Math.round(correct/quizQuestions.length*100);
- document.getElementById('quiz').innerHTML=`
- <div style="text-align:center;padding:15px 0">
- <div style="font-size:52px;margin-bottom:14px">${percent>=70?'🏆':'📘'}</div>
- <h2>Test yakunlandi!</h2>
- <p class="muted">Natijangiz</p>
- <div style="font-size:48px;font-weight:800;margin:12px 0">${percent}%</div>
- <p style="margin-bottom:24px">${correct} ta to‘g‘ri javob / ${quizQuestions.length} ta savol</p>
- <button class="primary" onclick="reviewAnswers()">Javoblarni ko‘rish</button>
- <button class="secondary" onclick="resetQuiz()" style="margin-left:7px">Yana test</button>
- </div><div id="review" style="margin-top:22px"></div>`;
+function resetTest(){el("testSetup").classList.remove("hidden");el("testPanel").classList.add("hidden");say("testMsg","")}
+async function loadTeacherRequests(){
+ if(!profile||profile.role!=="admin")return;
+ const {data,error}=await db.from("profiles").select("id,full_name,requested_role,created_at").eq("requested_role","teacher").eq("role","student");
+ if(error){el("teacherRequests").textContent="So‘rovlarni olish xatosi: "+error.message;return}
+ el("teacherRequests").innerHTML=data.length?data.map(p=>`<div class="card" style="margin-top:10px"><b>${esc(p.full_name)}</b><p class="small">${esc(p.id)}</p><button class="btn primary" onclick="approveTeacher('${p.id}')">O‘qituvchini tasdiqlash</button></div>`).join(""):"Kutilayotgan so‘rovlar yo‘q.";
 }
-function reviewAnswers(){
- document.getElementById('review').innerHTML=quizQuestions.map((q,i)=>`
- <div style="padding:15px 0;border-top:1px solid var(--line)">
- <strong>${i+1}. ${q.q}</strong>
- <p class="muted" style="margin-top:8px">Sizning javobingiz: ${answers[i]===undefined?'Tanlanmagan':q.a[answers[i]]}</p>
- <p style="color:#58d9aa;font-size:14px;margin-top:5px">To‘g‘ri javob: ${q.a[q.correct]}</p>
- </div>`).join('');
+async function approveTeacher(id){
+ say("teacherRequests","Tasdiqlanmoqda...");
+ const {data,error}=await db.rpc("approve_school_teacher",{target_user_id:id});
+ if(error){say("teacherRequests","Tasdiqlash funksiyasi bazada sozlanmagan: "+error.message);return}
+ await loadTeacherRequests();
 }
-function resetQuiz(){
- document.getElementById('setup').style.display='block';
- document.getElementById('quiz').style.display='none';
+async function init(){
+ await refreshUser();await loadNews();
+ db.auth.onAuthStateChange(()=>setTimeout(refreshUser,0));
 }
-function exitQuiz(){
- if(confirm('Testdan chiqmoqchimisiz? Javoblaringiz saqlanmaydi.'))resetQuiz();
-}
+init();
 </script>
 </body>
 </html>
