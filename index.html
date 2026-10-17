@@ -406,14 +406,69 @@ async function loginUser() {
   const password = document.getElementById("authPassword").value;
   const msg = document.getElementById("authMessage");
 
-  const { error } = await db.auth.signInWithPassword({ email, password });
-  msg.textContent = error ? "Kirish xatosi: " + error.message : "Muvaffaqiyatli kirdingiz!";
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    msg.textContent = "Kirish xatosi: " + error.message;
+    return;
+  }
+
+  const { data: profile } = await db
+    .from("profiles")
+    .select("full_name, role, school_name, school_number, grade")
+    .eq("id", data.user.id)
+    .maybeSingle();
+
+  showSection("account");
+
+  const card = document.querySelector("#account .card");
+  card.replaceChildren();
+
+  const title = document.createElement("h3");
+  title.textContent = "👤 Mening profilim";
+  card.appendChild(title);
+
+  const fields = [
+    ["Email", data.user.email],
+    ["Ism", profile?.full_name || data.user.user_metadata.full_name],
+    ["Maktab", profile?.school_name],
+    ["Maktab raqami", profile?.school_number],
+    ["Sinf", profile?.grade],
+    ["Rol", profile?.role]
+  ];
+
+  fields.forEach(([label, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      const p = document.createElement("p");
+      p.textContent = `${label}: ${value}`;
+      card.appendChild(p);
+    }
+  });
+
+  const button = document.createElement("button");
+  button.textContent = "Hisobdan chiqish";
+  button.onclick = logoutUser;
+  card.appendChild(button);
+
+  msg.textContent = "Muvaffaqiyatli kirdingiz!";
 }
 
 async function logoutUser() {
   const { error } = await db.auth.signOut();
+
+  if (error) {
+    document.getElementById("authMessage").textContent =
+      "Xatolik: " + error.message;
+    return;
+  }
+
+  showSection("account");
   document.getElementById("authMessage").textContent =
-    error ? error.message : "Hisobdan chiqdingiz.";
+    "Hisobdan chiqdingiz. Qayta kirishingiz mumkin.";
+  location.reload();
 }
 </script>
 </body>
