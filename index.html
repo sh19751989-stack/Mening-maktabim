@@ -689,6 +689,29 @@ db.auth.onAuthStateChange(() => {
 });
 
 initApp().catch(error => console.error("Saytni ishga tushirish xatosi:", error));
+  async function previewCSV() {
+  const file = document.getElementById("csvFile").files[0];
+  const status = document.getElementById("csvStatus");
+  const preview = document.getElementById("csvPreview");
+
+  preview.textContent = "";
+
+  if (!file) {
+    status.textContent = "Avval CSV faylni tanlang.";
+    return;
+  }
+
+  const text = (await file.text()).replace(/^\uFEFF/, "");
+  const lines = text.split(/\r?\n/).filter(line => line.trim());
+
+  if (lines.length < 2) {
+    status.textContent = "CSV fayl bo‘sh.";
+    return;
+  }
+
+  status.textContent =
+    "Faylda " + (lines.length - 1) + " ta qator bor. Bu hozircha faqat tekshiruv; bazaga yuklanmadi.";
+}
 </script>
 </body>
 </html>
