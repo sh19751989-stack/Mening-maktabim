@@ -41,7 +41,7 @@
     <button class="secondary" onclick="showSection('home')">Bosh sahifa</button>
     <button class="secondary" onclick="showSection('tests')">Testlar</button>
     <button class="secondary" onclick="showSection('news')">Yangiliklar</button>
-    <button onclick="showSection('account')">Kirish</button>
+ <button id="accountNavBtn" onclick="openProfile()">Kirish</button>
   </nav>
 </header>
 
@@ -455,20 +455,73 @@ async function loginUser() {
 
   msg.textContent = "Muvaffaqiyatli kirdingiz!";
 }
+async function openProfile() {
+  const { data: { user } } = await db.auth.getUser();
+
+  if (!user) {
+    showSection("account");
+    return;
+  }
+
+  showSection("account");
+
+  const card = document.querySelector("#account .card");
+  card.replaceChildren();
+
+  const title = document.createElement("h3");
+  title.textContent = "👤 Mening profilim";
+  card.appendChild(title);
+
+  const { data: p, error } = await db
+    .from("profiles")
+    .select("full_name, school_name, school_number, grade, role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    const err = document.createElement("p");
+    err.textContent = "Profilni yuklashda xatolik: " + error.message;
+    card.appendChild(err);
+  }
+
+  [
+    ["Ism", p?.full_name || user.user_metadata.full_name],
+    ["Email", user.email],
+    ["Maktab", p?.school_name || user.user_metadata.school_name],
+    ["Maktab raqami", p?.school_number || user.user_metadata.school_number],
+    ["Sinf", p?.grade || user.user_metadata.grade],
+    ["Rol", p?.role || "student"]
+  ].forEach(([label, value]) => {
+    const row = document.createElement("p");
+    row.textContent = `${label}: ${value ?? "Kiritilmagan"}`;
+    card.appendChild(row);
+  });
+
+  const btn = document.createElement("button");
+  btn.textContent = "Chiqish";
+  btn.onclick = logoutUser;
+  card.appendChild(btn);
+}
+
+async function updateAccountButton() {
+  const { data: { user } } = await db.auth.getUser();
+  const btn = document.getElementById("accountNavBtn");
+  if (btn) btn.textContent = user ? "Profil" : "Kirish";
+}
 
 async function logoutUser() {
   const { error } = await db.auth.signOut();
 
   if (error) {
-    document.getElementById("authMessage").textContent =
-      "Xatolik: " + error.message;
+    alert("Chiqishda xatolik: " + error.message);
     return;
   }
 
-  showSection("account");
-  document.getElementById("authMessage").textContent =
-    "Hisobdan chiqdingiz. Qayta kirishingiz mumkin.";
   location.reload();
+}
+
+updateAccountButton();
+db.auth.onAuthStateChange(() => updateAccountButton());
 }
 </script>
 </body>
