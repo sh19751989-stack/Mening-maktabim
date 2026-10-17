@@ -659,14 +659,9 @@ async function updateNewsEditor() {
 
 db.auth.onAuthStateChange(() => {
   updateNewsEditor();
+  updateAccountButton();
 });
 
-updateNewsEditor();
-  renderSubjects();
-renderNews();
-updateAccountButton();
-updateNewsEditor();
- <script>
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await renderSubjects();
