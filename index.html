@@ -56,7 +56,111 @@ async function loginUser(){const email=$('authEmail').value.trim(),password=$('a
 function openProfile(){showSection('account');if(currentUser)showProfile()}
 async function showProfile(){const card=$('accountCard');card.replaceChildren();const h=document.createElement('h3');h.textContent='👤 Mening profilim';card.append(h);const details=[['Ism',currentProfile?.full_name||currentUser?.user_metadata?.full_name],['Email',currentUser?.email],['Maktab',currentProfile?.school_name||currentUser?.user_metadata?.school_name],['Maktab raqami',currentProfile?.school_number||currentUser?.user_metadata?.school_number],['Sinf',currentProfile?.grade||currentUser?.user_metadata?.grade],['Rol',currentProfile?.role||'student']];details.forEach(([k,v])=>{const p=document.createElement('p');p.textContent=k+': '+(v??'Kiritilmagan');card.append(p)});if(!isStaff()){const p=document.createElement('p');p.className='muted';p.textContent='O‘qituvchi/admin imkoniyatlari tegishli rol berilgandan keyin ochiladi.';card.append(p)}const b=document.createElement('button');b.className='danger';b.textContent='Hisobdan chiqish';b.onclick=logoutUser;card.append(b)}
 async function logoutUser(){const {error}=await db.auth.signOut();if(error){alert('Chiqishda xatolik: '+error.message);return}currentUser=null;currentProfile=null;location.reload()}
-async function startTest(){if(!requireLogin())return;const grade=Number($('grade').value),subject=$('subject').value,limit=Number($('questionLimit').value);if(!grade||!subject){setStatus('testStatus','Sinf va fanni tanlang.','error');return}setStatus('testStatus','Savollar yuklanmoqda...');$('testArea').classList.add('hidden');try{const {data,error}=await db.from('school_test_questions').select('id,grade,subject,question,option_a,option_b,option_c,option_d').eq('grade',grade).eq('subject',subject).limit(1000);if(errorif (error) throw error;
+
+async function startTest() {
+  if (!requireLogin()) return;
+
+  const grade = Number($('grade').value);
+  const subject = $('subject').value;
+  const limit = Number($('questionLimit').value);
+
+  if (!grade || !subject) {
+    setStatus('testStatus', 'Sinf va fanni tanlang.', 'error');
+    return;
+  }
+
+  const btn = document.querySelector(
+    '#tests .panel button[onclick="startTest()"]'
+  );
+
+  if (btn) btn.disabled = true;
+
+  setStatus('testStatus', 'Savollar yuklanmoqda...');
+  $('testArea').classList.add('hidden');
+
+  try {
+    let data = [];
+    const pageSize = 1000;
+
+    // Bazadagi barcha mos savollarni sahifalab olish
+    for (let from = 0; ; from += pageSize) {
+      const { data: page, error } = await db
+        .from('school_test_questions')
+        .select('id,grade,subject,question,option_a,option_b,option_c,option_d')
+        .eq('grade', grade)
+        .eq('subject', subject)
+        .range(from, from + pageSize - 1);
+
+      if (error) throw error;
+      if (!page || page.length === 0) break;
+
+      data.push(...page);
+
+      if (page.length < pageSize) break;
+    }
+
+    if (!data.length) {
+      setStatus(
+        'testStatus',
+        'Bu sinf va fan uchun bazada savollar yo‘q.',
+        'error'
+      );
+      return;
+    }
+
+    // Bir xil savol matnlarini takrorlamaslik
+    const seen = new Set();
+
+    data = data.filter(q => {
+      const key = String(q.question || '')
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, ' ');
+
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Savollarni tasodifiy aralashtirish
+    currentQuestions = [...data];
+
+    for (let i = currentQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [currentQuestions[i], currentQuestions[j]] =
+        [currentQuestions[j], currentQuestions[i]];
+    }
+
+    currentQuestions = currentQuestions.slice(0, limit);
+
+    testAnswers = [];
+    testIndex = 0;
+    testRunId++;
+
+    $('testArea').classList.remove('hidden');
+
+    setStatus(
+      'testStatus',
+      `${data.length} ta takrorlanmagan savol topildi. Test boshlandi.`,
+      'success'
+    );
+
+    showQuestion();
+
+  } catch (e) {
+    console.error('Test xatosi:', e);
+
+    setStatus(
+      'testStatus',
+      'Savollarni yuklashda xatolik: ' + e.message,
+      'error'
+    );
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 
 if (!data?.length) {
   setStatus(
