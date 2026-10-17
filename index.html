@@ -79,7 +79,14 @@ footer{text-align:center;padding:30px;color:#718096}
 <section id="news" class="container hidden">
   <h2>📰 Maktab yangiliklari</h2>
   <p class="muted">Maktabdan e'lonlar, rasmlar va videolar.</p>
-
+<div id="csvImportBox" class="card hidden">
+  <h3>📥 CSV orqali test yuklash</h3>
+  <p>CSV faylni tanlang.</p>
+  <input id="csvFile" type="file" accept=".csv,text/csv">
+  <button onclick="previewCSV()">CSV faylni tekshirish</button>
+  <p id="csvStatus" role="status"></p>
+  <div id="csvPreview"></div>
+</div>
   <div id="newsEditor" class="card hidden">
     <h3>➕ Yangi yangilik joylash</h3>
     <label for="newsTitle">Sarlavha</label>
