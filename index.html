@@ -8,15 +8,66 @@
 :root{--bg:#0b1020;--panel:#131b31;--panel2:#192441;--line:#293653;--text:#f3f6ff;--muted:#aab5d0;--purple:#8b5cf6;--blue:#4f8cff;--green:#36d399;--red:#fb7185}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#1c2450 0,transparent 40%),radial-gradient(ellipse at 95% 20%,#22204d 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:700;color:white;background:linear-gradient(115deg,var(--purple),var(--blue));transition:.18s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button.secondary{background:#26324f;border:1px solid #3a4868}button.danger{background:#7f2940}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.wrap{max-width:1220px;margin:auto;padding:22px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:21px}.logo{width:44px;height:44px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#8b5cf6,#39b9ff);font-size:22px;box-shadow:0 8px 30px #5b53dc55}.muted{color:var(--muted)}.small{font-size:12px}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav button{background:#18213a;border:1px solid var(--line);color:#dce5ff}.nav button.active{background:linear-gradient(115deg,var(--purple),var(--blue));border-color:transparent}.hero{padding:32px;border:1px solid #ffffff14;border-radius:26px;background:linear-gradient(120deg,#28255aee,#172e4aee);position:relative;overflow:hidden;margin-bottom:20px}.hero:after{content:'✦';position:absolute;right:5%;top:-35px;font-size:170px;color:#ffffff0b}.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:8px 0 14px;max-width:750px}.hero p{max-width:680px;color:#c4cee9}.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#c4b5fd;font-weight:800}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:linear-gradient(145deg,#151e35,#10182b);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0;box-shadow:0 12px 35px #00000013}.card h2,.card h3{margin:0 0 10px}.subject{display:flex;gap:14px;align-items:center;min-height:115px}.subject-icon{height:48px;width:48px;flex-shrink:0;border-radius:15px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,#8b5cf633,#4f8cff2c);border:1px solid #8b5cf644}.subject p{margin:3px 0;color:var(--muted);font-size:13px}.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:28px 0 14px}.section-title h2{margin:0;font-size:23px}.field{display:flex;flex-direction:column;gap:6px;margin:12px 0}.field label{font-size:13px;color:#c5cee5;font-weight:700}.field input,.field textarea,.field select,input,textarea,select{width:100%;background:#0b1327;border:1px solid #33415f;color:white;border-radius:11px;padding:12px;outline:none}.field input:focus,.field textarea:focus,.field select:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px #8b5cf622}.field textarea{min-height:105px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.hidden{display:none!important}.notice{padding:12px 14px;border-radius:12px;margin:12px 0;background:#182744;border:1px solid #35466c;color:#dbeafe;overflow-wrap:anywhere}.notice.error{background:#3b1727;border-color:#773348;color:#fecdd3}.notice.good{background:#10362e;border-color:#1b725c;color:#bbf7d0}.pill{display:inline-flex;border-radius:999px;padding:4px 10px;background:#2b2550;color:#ddd6fe;font-size:12px;font-weight:800}.auth{max-width:510px;margin:6vh auto}.auth .card{padding:26px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.stat{padding:16px;border-radius:16px;background:#111a30;border:1px solid var(--line)}.stat strong{display:block;font-size:27px}.question{font-size:21px;font-weight:800;margin:15px 0}.options{display:grid;gap:10px}.option{width:100%;text-align:left;background:#111a30;border:1px solid #35415e;color:#e9eeff;padding:14px;border-radius:13px}.option.selected{border-color:#a78bfa;background:#32255a}.option.correct{border-color:#34d399;background:#10382e}.option.wrong{border-color:#fb7185;background:#3a1827}.bar{height:7px;background:#293653;border-radius:99px;overflow:hidden;margin:14px 0}.bar span{height:100%;display:block;background:linear-gradient(90deg,var(--purple),#43c5ff)}.news-image{width:100%;max-height:230px;object-fit:cover;border-radius:14px;margin:8px 0}.video{width:100%;aspect-ratio:16/9;border:0;border-radius:14px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:450px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.foot{text-align:center;color:#7f8aa7;padding:28px 10px;font-size:12px}.filebox{padding:16px;border:1px dashed #596b91;border-radius:15px;background:#101a31}.filebox input{margin:10px 0}.toast{position:sticky;top:10px;z-index:5}.inline{display:flex;gap:10px;align-items:center}.inline>*{flex:1}@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:15px}.hero{padding:24px}}@media(max-width:560px){.grid,.two{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.top{align-items:flex-start}.nav{width:100%}.nav button{flex:1}.hero h1{font-size:32px}.card{padding:16px}}
 </style></head>
 <body><div class="wrap">
-<header class="top"><div class="brand"><div class="logo">✦</div><div>Mening Maktabim<div class="muted small" style="font-weight:500">Bilim sari — kelajak sari</div></div></div><div id="userBar" class="inline hidden" style="max-width:300px"><span id="userLabel" class="muted small"></span><button class="secondary" id="logoutBtn">Chiqish</button></div></header>
-<div id="toast" class="toast"></div>
+<header class="top">
+  <div class="brand">
+    <div class="logo">✦</div>
+    <div>
+      Mening Maktabim
+      <div class="muted small" style="font-weight:500">
+        Bilim sari — kelajak sari
+      </div>
+    </div>
+  </div>
+
+  <div id="userBar" class="inline hidden" style="max-width:350px">
+    <img id="topAvatar" src="" alt="Profil rasmi"
+         style="width:40px;height:40px;border-radius:50%;
+                object-fit:cover;display:none">
+    <span id="userLabel" class="muted small"></span>
+    <button class="secondary" id="logoutBtn">Chiqish</button>
+  </div>
+</header>
+  <div id="toast" class="toast"></div>
 <section id="authView" class="auth"><div class="card"><div class="eyebrow">Ta’lim platformasi</div><h1 id="authTitle">Xush kelibsiz!</h1><p class="muted">Bilimingizni sinang, natijalaringizni kuzating.</p><div class="field"><label>Ism va familiya</label><input id="authName" placeholder="Ism va familiyangiz" autocomplete="name"></div><div class="field signup-only"><label>Maktab nomi</label><input id="authSchool" placeholder="Masalan, 12-maktab" autocomplete="organization"></div><div class="field signup-only"><label>Maktab raqami</label><input id="authSchoolNumber" type="number" min="1" step="1" placeholder="Masalan, 12"></div><div class="field signup-only"><label>Sinf</label><select id="authGrade"><option value="">Sinfni tanlang</option><option value="1">1-sinf</option><option value="2">2-sinf</option><option value="3">3-sinf</option><option value="4">4-sinf</option><option value="5">5-sinf</option><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select></div><div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="name@example.com" autocomplete="email"></div><div class="field"><label>Parol</label><input id="authPassword" type="password" placeholder="Kamida 6 belgi" autocomplete="current-password"></div><div class="actions"><button id="authSubmit">Ro‘yxatdan o‘tish</button><button class="secondary" id="authSwitch">Hisobim bor</button></div><p class="muted small">Admin huquqi ro‘yxatdan o‘tishda tanlanmaydi. Uni faqat Supabase SQL orqali egasi belgilaydi.</p></div></section>
 <main id="appView" class="hidden"><nav class="nav" id="nav"><button data-page="home" class="active">Bosh sahifa</button><button data-page="tests">Testlar</button><button data-page="news">Yangiliklar</button><button data-page="profile">Profil</button><button data-page="admin" id="adminNav" class="hidden">Admin panel</button></nav>
 <section id="page-home"><div class="hero"><div class="eyebrow">O‘rganishning yangi bosqichi</div><h1>Bilimingni sinab ko‘r. <br>Imkoniyatingni och.</h1><p>Fanlarni tanlang, testlarni bajaring va natijalaringizni kuzatib boring. Har bir savol — yangi imkoniyat.</p><div class="actions"><button data-goto="tests">Test boshlash ↗</button><button class="secondary" data-goto="news">Yangiliklarni ko‘rish</button></div></div><div class="stats"><div class="stat"><span class="muted small">Mening natijalarim</span><strong id="statResults">0</strong><span class="muted small">test urinishlari</span></div><div class="stat"><span class="muted small">Savollar bazasi</span><strong id="statQuestions">—</strong><span class="muted small">savol</span></div><div class="stat"><span class="muted small">Hisob turi</span><strong id="statRole" style="font-size:20px">O‘quvchi</strong><span class="muted small">Mening Maktabim</span></div></div><div class="section-title"><h2>Fanlar olami</h2><span class="muted small">Fan tanlab test ishlang</span></div><div id="homeSubjects" class="grid"></div></section>
 <section id="page-tests" class="hidden"><div class="section-title"><h2>Test markazi</h2><span class="pill">Bilimingizni sinang</span></div><div class="card"><div class="grid two"><div class="field"><label>Fan</label><select id="testSubject"></select></div><div class="field"><label>Daraja</label><select id="testLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div><div class="field"><label>Sinf (ixtiyoriy)</label><select id="testGrade"><option value="">Barcha sinflar / daraja bo‘yicha</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Savollar soni</label><select id="testCount"><option>10</option><option>20</option><option>5</option><option>30</option><option>50</option></select></div></div><button id="startTest">Testni boshlash</button></div><div id="testArea" class="card hidden" style="margin-top:15px"></div><div class="section-title"><h2>Oldingi natijalar</h2></div><div id="resultsList" class="card"><p class="muted">Natijalar yuklanmoqda…</p></div></section>
 <section id="page-news" class="hidden"><div class="section-title"><h2>Yangiliklar</h2><span class="muted small">Maktab va platforma xabarlari</span></div><div id="newsList" class="grid two"></div></section>
-<section id="page-profile" class="hidden"><div class="section-title"><h2>Mening profilim</h2></div><div class="card" style="max-width:680px"><div class="field"><label>Ism</label><input id="profileName" maxlength="80"></div><div class="field"><label>Avatar rasmi URL (ixtiyoriy)</label><input id="profileAvatar" type="url" placeholder="https://..."></div><div class="field"><label>YouTube kanal URL (ixtiyoriy)</label><input id="profileYoutube" type="url" placeholder="https://youtube.com/@... "></div><button id="saveProfile">Profilni saqlash</button><div id="profileMessage"></div></div></section>
-<section id="page-admin" class="hidden"><div class="section-title"><h2>Admin boshqaruvi</h2><span class="pill">Faqat administrator</span></div><div class="card"><h3>CSV orqali savollar yuklash</h3><p class="muted">CSV ustunlari: subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option. UTF-8 CSV ishlating. Yuklash mavjud savollarni o‘chirmaydi.</p><div class="filebox"><button class="secondary" id="csvTemplate">Namuna CSV yuklab olish</button><input type="file" id="csvFile" accept=".csv,text/csv"><div class="actions"><button id="uploadCsv">CSV ni tekshirish va yuklash</button></div><div id="csvStatus" class="muted small"></div></div></div><div class="grid two" style="margin-top:15px"><div class="card"><h3>Yangi savol qo‘shish</h3><div class="field"><label>Fan</label><select id="qSubject"></select></div><div class="grid two"><div class="field"><label>Sinf</label><select id="qGrade"><option value="">Ko‘rsatilmagan</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Daraja</label><select id="qLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div></div><div class="field"><label>Savol</label><textarea id="qText"></textarea></div><div class="grid two"><div class="field"><label>A varianti</label><input id="qA"></div><div class="field"><label>B varianti</label><input id="qB"></div><div class="field"><label>C varianti</label><input id="qC"></div><div class="field"><label>D varianti</label><input id="qD"></div></div><div class="field"><label>To‘g‘ri javob</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div><button id="addQuestion">Savolni saqlash</button></div><div class="card"><h3>Yangilik qo‘shish</h3><div class="field"><label>Sarlavha</label><input id="nTitle" maxlength="180"></div><div class="field"><label>Matn</label><textarea id="nBody"></textarea></div><div class="field"><label>Rasm URL</label><input id="nImage" type="url" placeholder="https://..."></div><div class="field"><label>YouTube video URL</label><input id="nYoutube" type="url" placeholder="https://youtube.com/watch?v=..."></div><button id="addNews">Yangilikni joylash</button></div></div><div class="section-title"><h2>Savollar bazasi</h2><button class="secondary" id="refreshAdmin">Yangilash</button></div><div class="card"><div id="adminStats" class="muted">Yuklanmoqda…</div></div></section>
+<section id="page-profile" class="hidden">
+  <div class="section-title">
+    <h2>Mening profilim</h2>
+  </div>
+
+  <div class="card" style="max-width:680px">
+    <div class="field">
+      <label>Ism</label>
+      <input id="profileName" maxlength="80">
+    </div>
+
+    <div class="field">
+      <label>Avatar rasmi URL (ixtiyoriy)</label>
+      <input id="profileAvatar" type="url" placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label>Yoki kompyuterdan avatar rasmi tanlang</label>
+      <input id="profileAvatarFile" type="file"
+             accept="image/jpeg,image/png,image/webp,image/gif">
+      <small>JPG, PNG, WEBP yoki GIF. Maksimal 10 MB.</small>
+    </div>
+
+    <div class="field">
+      <label>YouTube kanal URL (ixtiyoriy)</label>
+      <input id="profileYoutube" type="url"
+             placeholder="https://youtube.com/@...">
+    </div>
+
+    <button id="saveProfile">Profilni saqlash</button>
+    <div id="profileMessage"></div>
+  </div>
+</section>
+  
+  <section id="page-admin" class="hidden"><div class="section-title"><h2>Admin boshqaruvi</h2><span class="pill">Faqat administrator</span></div><div class="card"><h3>CSV orqali savollar yuklash</h3><p class="muted">CSV ustunlari: subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option. UTF-8 CSV ishlating. Yuklash mavjud savollarni o‘chirmaydi.</p><div class="filebox"><button class="secondary" id="csvTemplate">Namuna CSV yuklab olish</button><input type="file" id="csvFile" accept=".csv,text/csv"><div class="actions"><button id="uploadCsv">CSV ni tekshirish va yuklash</button></div><div id="csvStatus" class="muted small"></div></div></div><div class="grid two" style="margin-top:15px"><div class="card"><h3>Yangi savol qo‘shish</h3><div class="field"><label>Fan</label><select id="qSubject"></select></div><div class="grid two"><div class="field"><label>Sinf</label><select id="qGrade"><option value="">Ko‘rsatilmagan</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Daraja</label><select id="qLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div></div><div class="field"><label>Savol</label><textarea id="qText"></textarea></div><div class="grid two"><div class="field"><label>A varianti</label><input id="qA"></div><div class="field"><label>B varianti</label><input id="qB"></div><div class="field"><label>C varianti</label><input id="qC"></div><div class="field"><label>D varianti</label><input id="qD"></div></div><div class="field"><label>To‘g‘ri javob</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div><button id="addQuestion">Savolni saqlash</button></div><div class="card"><h3>Yangilik qo‘shish</h3><div class="field"><label>Sarlavha</label><input id="nTitle" maxlength="180"></div><div class="field"><label>Matn</label><textarea id="nBody"></textarea></div><div class="field"><label>Rasm URL</label><input id="nImage" type="url" placeholder="https://..."></div><div class="field"><label>YouTube video URL</label><input id="nYoutube" type="url" placeholder="https://youtube.com/watch?v=..."></div><button id="addNews">Yangilikni joylash</button></div></div><div class="section-title"><h2>Savollar bazasi</h2><button class="secondary" id="refreshAdmin">Yangilash</button></div><div class="card"><div id="adminStats" class="muted">Yuklanmoqda…</div></div></section>
 </main><footer class="foot">© <span id="year"></span> Mening Maktabim · Bilim sari — kelajak sari</footer></div>
 <script>
 'use strict';
@@ -66,8 +117,76 @@ $('authSubmit').onclick=async()=>{
 };
 $('logoutBtn').onclick=async()=>{await db.auth.signOut();currentUser=null;profile=null;showAuth()};
 function showAuth(){$('authView').classList.remove('hidden');$('appView').classList.add('hidden');$('userBar').classList.add('hidden');toast('')}
-async function initApp(){let {data:{user},error}=await db.auth.getUser();if(error||!user){showAuth();return}currentUser=user;let {data:p,error:pe}=await db.from('mm_profiles').select('id,display_name,role,avatar_url,youtube_url').eq('id',user.id).maybeSingle();if(pe){showAuth();toast('Profilni olishda xatolik: '+pe.message,'error');return}if(!p){let ins=await db.from('mm_profiles').insert({id:user.id,display_name:user.user_metadata?.display_name||'Oquvchi',role:'student'}).select().single();if(ins.error){showAuth();toast('Profil yaratilmadi: '+ins.error.message,'error');return}p=ins.data}profile=p;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('userBar').classList.remove('hidden');$('userLabel').textContent=p.display_name||user.email;$('adminNav').classList.toggle('hidden',p.role!=='admin');$('statRole').textContent=p.role==='admin'?'Administrator':'O‘quvchi';$('profileName').value=p.display_name||'';$('profileAvatar').value=p.avatar_url||'';$('profileYoutube').value=p.youtube_url||'';buildSubjects();await Promise.all([loadNews(),loadResults(),loadCounts()]);goPage('home')}
-function buildSubjects(){let html=SUBJECTS.map(([s,icon])=>`<div class="card subject"><div class="subject-icon">${icon}</div><div><h3>${esc(s)}</h3><p>Testlar va bilimni mustahkamlash</p><button class="secondary" data-subject="${esc(s)}">Test tanlash ↗</button></div></div>`).join('');$('homeSubjects').innerHTML=html;$('homeSubjects').querySelectorAll('[data-subject]').forEach(b=>b.onclick=()=>{$('testSubject').value=b.dataset.subject;applySubjectMode($('testSubject'),$('testLevel'),$('testGrade'));goPage('tests')});let opts=SUBJECTS.map(([s])=>`<option>${esc(s)}</option>`).join('');$('testSubject').innerHTML=opts;$('qSubject').innerHTML=opts}
+async function initApp() {
+  let { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user) {
+    showAuth();
+    return;
+  }
+
+  currentUser = user;
+
+  let { data: p, error: pe } = await db
+    .from('mm_profiles')
+    .select('id,display_name,role,avatar_url,youtube_url')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (pe) {
+    showAuth();
+    toast('Profilni olishda xatolik: ' + pe.message, 'error');
+    return;
+  }
+
+  if (!p) {
+    let ins = await db.from('mm_profiles').insert({
+      id: user.id,
+      display_name: user.user_metadata?.display_name || 'Oquvchi',
+      role: 'student'
+    }).select().single();
+
+    if (ins.error) {
+      showAuth();
+      toast('Profil yaratilmadi: ' + ins.error.message, 'error');
+      return;
+    }
+
+    p = ins.data;
+  }
+
+  profile = p;
+
+  $('authView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('userBar').classList.remove('hidden');
+
+  $('userLabel').textContent = p.display_name || user.email;
+
+  const topAvatar = $('topAvatar');
+  if (topAvatar) {
+    topAvatar.src = p.avatar_url || '';
+    topAvatar.style.display = p.avatar_url ? 'block' : 'none';
+  }
+
+  $('adminNav').classList.toggle('hidden', p.role !== 'admin');
+  $('statRole').textContent = p.role === 'admin' ? 'Administrator' : 'O‘quvchi';
+
+  $('profileName').value = p.display_name || '';
+  $('profileAvatar').value = p.avatar_url || '';
+  $('profileYoutube').value = p.youtube_url || '';
+
+  buildSubjects();
+
+  await Promise.all([
+    loadNews(),
+    loadResults(),
+    loadCounts()
+  ]);
+
+  goPage('home');
+}
+  function buildSubjects(){let html=SUBJECTS.map(([s,icon])=>`<div class="card subject"><div class="subject-icon">${icon}</div><div><h3>${esc(s)}</h3><p>Testlar va bilimni mustahkamlash</p><button class="secondary" data-subject="${esc(s)}">Test tanlash ↗</button></div></div>`).join('');$('homeSubjects').innerHTML=html;$('homeSubjects').querySelectorAll('[data-subject]').forEach(b=>b.onclick=()=>{$('testSubject').value=b.dataset.subject;applySubjectMode($('testSubject'),$('testLevel'),$('testGrade'));goPage('tests')});let opts=SUBJECTS.map(([s])=>`<option>${esc(s)}</option>`).join('');$('testSubject').innerHTML=opts;$('qSubject').innerHTML=opts}
 const SCHOOL_SUBJECTS=new Set(['Ona tili','Matematika','Ingliz tili','Tarix','Biologiya','Geografiya','Fizika','Kimyo','Informatika','Huquq']);
 function applySubjectMode(subjectSelect, levelSelect, gradeSelect){
   const isSchool=SCHOOL_SUBJECTS.has(subjectSelect.value);
@@ -128,8 +247,78 @@ async function checkAnswer(){
   $('nextQuestion').classList.remove('hidden');
 }
 async function nextQuestion(){if(testIndex<testQuestions.length-1){testIndex++;renderQuestion();return}let {error}=await db.rpc('mm_save_result',{p_subject:testSubject,p_level:testLevel,p_total:testQuestions.length,p_correct:testCorrect});$('testArea').innerHTML=`<div class="subject-icon">🏆</div><h2>Test yakunlandi!</h2><p class="muted">${esc(testSubject)} · ${esc(testLevel)}</p><div class="stats"><div class="stat"><span class="muted small">To‘g‘ri javob</span><strong>${testCorrect}/${testQuestions.length}</strong></div><div class="stat"><span class="muted small">Natija</span><strong>${Math.round(testCorrect/testQuestions.length*100)}%</strong></div></div>${error?`<div class="notice error">Natijani saqlashda xatolik: ${esc(error.message)}</div>`:'<div class="notice good">Natijangiz saqlandi.</div>'}<button id="againTest">Yana test ishlash</button>`;$('againTest').onclick=()=>$('startTest').click();await loadResults()}
-$('saveProfile').onclick=async()=>{let name=$('profileName').value.trim();if(!name){toast('Ism bo‘sh qolmasin.','error');return}let avatar=$('profileAvatar').value.trim(),youtube=$('profileYoutube').value.trim();if(avatar&&!safeUrl(avatar)||youtube&&!safeUrl(youtube)){toast('URL http:// yoki https:// bilan boshlanishi kerak.','error');return}let {data,error}=await db.from('mm_profiles').update({display_name:name,avatar_url:avatar||null,youtube_url:youtube||null}).eq('id',currentUser.id).select().single();if(error){$('profileMessage').innerHTML=`<div class="notice error">${esc(error.message)}</div>`;return}profile={...profile,...data};$('userLabel').textContent=name;$('profileMessage').innerHTML='<div class="notice good">Profil saqlandi.</div>'};
-$('addQuestion').onclick=async()=>{
+$('saveProfile').onclick = async () => {
+  let name = $('profileName').value.trim();
+  let file = $('profileAvatarFile').files[0];
+  let avatar = $('profileAvatar').value.trim();
+  let youtube = $('profileYoutube').value.trim();
+
+  if (!name) return toast('Ism bo‘sh qolmasin.', 'error');
+
+  if ((avatar && !safeUrl(avatar)) ||
+      (youtube && !safeUrl(youtube))) {
+    return toast('URL noto‘g‘ri.', 'error');
+  }
+
+  const btn = $('saveProfile');
+  btn.disabled = true;
+
+  try {
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        throw new Error('Rasm faylini tanlang.');
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('Rasm 10 MB dan kichik bo‘lishi kerak.');
+      }
+
+      const path = `${currentUser.id}/avatar/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+
+      const { error: uploadError } = await db.storage
+        .from('mm-media')
+        .upload(path, file, { contentType: file.type });
+
+      if (uploadError) throw uploadError;
+
+      avatar = db.storage.from('mm-media')
+        .getPublicUrl(path).data.publicUrl;
+    }
+
+    const { data, error } = await db.from('mm_profiles')
+      .update({
+        display_name: name,
+        avatar_url: avatar || null,
+        youtube_url: youtube || null
+      })
+      .eq('id', currentUser.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    profile = { ...profile, ...data };
+    $('userLabel').textContent = name;
+    $('profileAvatar').value = avatar || '';
+
+    $('profileMessage').innerHTML =
+      '<div class="notice good">Profil saqlandi.</div>';
+
+    const topAvatar = $('topAvatar');
+    if (topAvatar) {
+      topAvatar.src = avatar || '';
+      topAvatar.style.display = avatar ? 'block' : 'none';
+    }
+
+    $('profileAvatarFile').value = '';
+  } catch (e) {
+    $('profileMessage').innerHTML =
+      `<div class="notice error">${esc(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+};
+  $('addQuestion').onclick=async()=>{
   if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');
   const subject=$('qSubject').value;
   const grade=$('qGrade').value?Number($('qGrade').value):null;
