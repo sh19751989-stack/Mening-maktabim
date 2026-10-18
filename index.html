@@ -67,7 +67,160 @@
   </div>
 </section>
   
-  <section id="page-admin" class="hidden"><div class="section-title"><h2>Admin boshqaruvi</h2><span class="pill">Faqat administrator</span></div><div class="card"><h3>CSV orqali savollar yuklash</h3><p class="muted">CSV ustunlari: subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option. UTF-8 CSV ishlating. Yuklash mavjud savollarni o‘chirmaydi.</p><div class="filebox"><button class="secondary" id="csvTemplate">Namuna CSV yuklab olish</button><input type="file" id="csvFile" accept=".csv,text/csv"><div class="actions"><button id="uploadCsv">CSV ni tekshirish va yuklash</button></div><div id="csvStatus" class="muted small"></div></div></div><div class="grid two" style="margin-top:15px"><div class="card"><h3>Yangi savol qo‘shish</h3><div class="field"><label>Fan</label><select id="qSubject"></select></div><div class="grid two"><div class="field"><label>Sinf</label><select id="qGrade"><option value="">Ko‘rsatilmagan</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Daraja</label><select id="qLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div></div><div class="field"><label>Savol</label><textarea id="qText"></textarea></div><div class="grid two"><div class="field"><label>A varianti</label><input id="qA"></div><div class="field"><label>B varianti</label><input id="qB"></div><div class="field"><label>C varianti</label><input id="qC"></div><div class="field"><label>D varianti</label><input id="qD"></div></div><div class="field"><label>To‘g‘ri javob</label><select id="qCorrect"><option>A</option><option>B</option><option>C</option><option>D</option></select></div><button id="addQuestion">Savolni saqlash</button></div><div class="card"><h3>Yangilik qo‘shish</h3><div class="field"><label>Sarlavha</label><input id="nTitle" maxlength="180"></div><div class="field"><label>Matn</label><textarea id="nBody"></textarea></div><div class="field"><label>Rasm URL</label><input id="nImage" type="url" placeholder="https://..."></div><div class="field"><label>YouTube video URL</label><input id="nYoutube" type="url" placeholder="https://youtube.com/watch?v=..."></div><button id="addNews">Yangilikni joylash</button></div></div><div class="section-title"><h2>Savollar bazasi</h2><button class="secondary" id="refreshAdmin">Yangilash</button></div><div class="card"><div id="adminStats" class="muted">Yuklanmoqda…</div></div></section>
+
+<section id="page-admin" class="hidden">
+  <div class="section-title">
+    <h2>Admin boshqaruvi</h2>
+    <span class="pill">Faqat administrator</span>
+  </div>
+
+  <div class="card">
+    <h3>CSV orqali savollar yuklash</h3>
+    <p class="muted">
+      CSV ustunlari: subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option.
+      UTF-8 CSV ishlating. Yuklash mavjud savollarni o‘chirmaydi.
+    </p>
+    <div class="filebox">
+      <button class="secondary" id="csvTemplate">Namuna CSV yuklab olish</button>
+      <input type="file" id="csvFile" accept=".csv,text/csv">
+      <div class="actions">
+        <button id="uploadCsv">CSV ni tekshirish va yuklash</button>
+      </div>
+      <div id="csvStatus" class="muted small"></div>
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:15px">
+    <div class="card">
+      <h3>Yangi savol qo‘shish</h3>
+
+      <div class="field">
+        <label>Fan</label>
+        <select id="qSubject"></select>
+      </div>
+
+      <div class="grid two">
+        <div class="field">
+          <label>Sinf</label>
+          <select id="qGrade">
+            <option value="">Ko‘rsatilmagan</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Daraja</label>
+          <select id="qLevel">
+            <option>A1</option>
+            <option>A2</option>
+            <option>B1</option>
+            <option>B2</option>
+            <option>C1</option>
+            <option>C2</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Savol</label>
+        <textarea id="qText"></textarea>
+      </div>
+
+      <div class="grid two">
+        <div class="field">
+          <label>A varianti</label>
+          <input id="qA">
+        </div>
+        <div class="field">
+          <label>B varianti</label>
+          <input id="qB">
+        </div>
+        <div class="field">
+          <label>C varianti</label>
+          <input id="qC">
+        </div>
+        <div class="field">
+          <label>D varianti</label>
+          <input id="qD">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>To‘g‘ri javob</label>
+        <select id="qCorrect">
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+          <option>D</option>
+        </select>
+      </div>
+
+      <button id="addQuestion">Savolni saqlash</button>
+    </div>
+
+    <div class="card">
+      <h3>Yangilik qo‘shish</h3>
+
+      <div class="field">
+        <label>Sarlavha</label>
+        <input id="nTitle" maxlength="180">
+      </div>
+
+      <div class="field">
+        <label>Matn</label>
+        <textarea id="nBody"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Rasm URL (ixtiyoriy)</label>
+        <input id="nImage" type="url" placeholder="https://...">
+      </div>
+
+      <div class="field">
+        <label>Yoki kompyuterdan rasm tanlang</label>
+        <input
+          type="file"
+          id="nImageFile"
+          accept="image/jpeg,image/png,image/webp,image/gif">
+        <small>JPG, PNG, WEBP yoki GIF. Maksimal 10 MB.</small>
+      </div>
+
+      <div class="field">
+        <label>YouTube video URL (ixtiyoriy)</label>
+        <input
+          id="nYoutube"
+          type="url"
+          placeholder="https://youtube.com/watch?v=...">
+      </div>
+
+      <div class="field">
+        <label>Yoki kompyuterdan video tanlang</label>
+        <input
+          type="file"
+          id="nVideoFile"
+          accept="video/mp4,video/webm,video/quicktime">
+        <small>MP4, WEBM yoki MOV formatlari.</small>
+      </div>
+
+      <div id="newsUploadStatus" class="muted small"></div>
+
+      <button id="addNews">Yangilikni joylash</button>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h2>Savollar bazasi</h2>
+    <button class="secondary" id="refreshAdmin">Yangilash</button>
+  </div>
+
+  <div class="card">
+    <div id="adminStats" class="muted">Yuklanmoqda…</div>
+  </div>
+</section>
 </main><footer class="foot">© <span id="year"></span> Mening Maktabim · Bilim sari — kelajak sari</footer></div>
 <script>
 'use strict';
@@ -338,7 +491,109 @@ $('saveProfile').onclick = async () => {
     toast('Savol muvaffaqiyatli saqlandi.','good');await loadCounts();await loadAdminStats();
   }catch(e){toast('Savol saqlanmadi: '+(e.message||e),'error');}
 };
-$('addNews').onclick=async()=>{if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');let title=$('nTitle').value.trim(),body=$('nBody').value.trim(),image=$('nImage').value.trim(),youtube=$('nYoutube').value.trim();if(!title||!body)return toast('Yangilik sarlavhasi va matnini kiriting.','error');if(image&&!safeUrl(image)||youtube&&!safeUrl(youtube))return toast('URL noto‘g‘ri. https:// havolasidan foydalaning.','error');let {error}=await db.from('mm_news').insert({title,body,image_url:image||null,youtube_url:youtube||null,author_id:currentUser.id});if(error)return toast('Yangilik joylanmadi: '+error.message,'error');['nTitle','nBody','nImage','nYoutube'].forEach(id=>$(id).value='');toast('Yangilik joylandi.','good');await loadNews()};
+
+$('addNews').onclick = async () => {
+  if (profile?.role !== 'admin') {
+    return toast('Admin ruxsati kerak.', 'error');
+  }
+
+  const title = $('nTitle').value.trim();
+  const body = $('nBody').value.trim();
+  let image = $('nImage').value.trim();
+  const youtube = $('nYoutube').value.trim();
+
+  const imageFile = $('nImageFile')?.files?.[0];
+  const videoFile = $('nVideoFile')?.files?.[0];
+  const status = $('newsUploadStatus');
+  const btn = $('addNews');
+
+  if (!title || !body) {
+    return toast('Yangilik sarlavhasi va matnini kiriting.', 'error');
+  }
+
+  if ((image && !safeUrl(image)) ||
+      (youtube && !safeUrl(youtube))) {
+    return toast('URL noto‘g‘ri. https:// havolasidan foydalaning.', 'error');
+  }
+
+  if (imageFile && !imageFile.type.startsWith('image/')) {
+    return toast('Iltimos, rasm faylini tanlang.', 'error');
+  }
+
+  if (imageFile && imageFile.size > 10 * 1024 * 1024) {
+    return toast('Rasm hajmi 10 MB dan oshmasin.', 'error');
+  }
+
+  if (videoFile &&
+      !['video/mp4', 'video/webm', 'video/quicktime'].includes(videoFile.type)) {
+    return toast('Video MP4, WEBM yoki MOV formatida bo‘lishi kerak.', 'error');
+  }
+
+  if (videoFile && videoFile.size > 50 * 1024 * 1024) {
+    return toast('Video hajmi 50 MB dan oshmasin.', 'error');
+  }
+
+  if (imageFile && image) {
+    return toast('Rasm uchun URL yoki fayldan bittasini tanlang.', 'error');
+  }
+
+  if (videoFile && youtube) {
+    return toast('Video uchun YouTube URL yoki fayldan bittasini tanlang.', 'error');
+  }
+
+  btn.disabled = true;
+  if (status) status.textContent = 'Yuklanmoqda...';
+
+  try {
+    async function uploadMedia(file, folder) {
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = `${currentUser.id}/news/${folder}-${Date.now()}-${safeName}`;
+
+      const { error: uploadError } = await db.storage
+        .from('mm-media')
+        .upload(path, file, { contentType: file.type });
+
+      if (uploadError) throw uploadError;
+
+      return db.storage.from('mm-media').getPublicUrl(path).data.publicUrl;
+    }
+
+    if (imageFile) {
+      image = await uploadMedia(imageFile, 'image');
+    }
+
+    let videoUrl = youtube || '';
+
+    if (videoFile) {
+      videoUrl = await uploadMedia(videoFile, 'video');
+    }
+
+    const { error } = await db.from('mm_news').insert({
+      title,
+      body,
+      image_url: image || null,
+      youtube_url: videoUrl || null,
+      author_id: currentUser.id
+    });
+
+    if (error) throw error;
+
+    ['nTitle', 'nBody', 'nImage', 'nYoutube',
+     'nImageFile', 'nVideoFile'].forEach(id => {
+      if ($(id)) $(id).value = '';
+    });
+
+    if (status) status.textContent = '';
+    toast('Yangilik joylandi.', 'good');
+    await loadNews();
+
+  } catch (e) {
+    if (status) status.textContent = 'Xatolik: ' + e.message;
+    toast('Yangilik joylanmadi: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+};
 function parseCSV(text){let rows=[],row=[],field='',quoted=false;for(let i=0;i<text.length;i++){let c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}else{if(c==='"')quoted=true;else if(c===','){row.push(field);field=''}else if(c==='\n'){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()!==''))rows.push(row);row=[];field=''}else field+=c}}if(quoted)throw Error('CSV faylda yopilmagan qo‘shtirnoq bor.');if(field.length||row.length){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()!==''))rows.push(row)}if(!rows.length)return [];let headers=rows.shift().map(h=>h.trim().replace(/^\uFEFF/, '').toLowerCase());return rows.map((r,idx)=>{let o={};headers.forEach((h,i)=>o[h]=(r[i]??'').trim());o.__line=idx+2;return o})}
 $('csvTemplate').onclick=()=>{let csv='subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option\nMatematika,6,A1,"2 + 2 nechaga teng?",3,4,5,6,B\n';let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='mening_maktabim_namuna.csv';a.click();URL.revokeObjectURL(a.href)};
 $('uploadCsv').onclick=async()=>{
