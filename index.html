@@ -10,8 +10,66 @@
 <body><div class="wrap">
 <header class="top"><div class="brand"><div class="logo">✦</div><div>Mening Maktabim<div class="muted small" style="font-weight:500">Bilim sari — kelajak sari</div></div></div><div id="userBar" class="inline hidden" style="max-width:300px"><span id="userLabel" class="muted small"></span><button class="secondary" id="logoutBtn">Chiqish</button></div></header>
 <div id="toast" class="toast"></div>
-<section id="authView" class="auth"><div class="card"><div class="eyebrow">Ta’lim platformasi</div><h1 id="authTitle">Xush kelibsiz!</h1><p class="muted">Bilimingizni sinang, natijalaringizni kuzating.</p><div class="field"><label>Ism</label><input id="authName" placeholder="Ismingiz" autocomplete="name"></div><div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="name@example.com" autocomplete="email"></div><div class="field"><label>Parol</label><input id="authPassword" type="password" placeholder="Kamida 6 belgi" autocomplete="current-password"></div><div class="actions"><button id="authSubmit">Ro‘yxatdan o‘tish</button><button class="secondary" id="authSwitch">Hisobim bor</button></div><p class="muted small">Admin huquqi ro‘yxatdan o‘tishda tanlanmaydi. Uni faqat Supabase SQL orqali egasi belgilaydi.</p></div></section>
-<main id="appView" class="hidden"><nav class="nav" id="nav"><button data-page="home" class="active">Bosh sahifa</button><button data-page="tests">Testlar</button><button data-page="news">Yangiliklar</button><button data-page="profile">Profil</button><button data-page="admin" id="adminNav" class="hidden">Admin panel</button></nav>
+<section id="authView" class="auth">
+  <div class="card">
+    <div class="eyebrow">Ta’lim platformasi</div>
+    <h1 id="authTitle">Xush kelibsiz!</h1>
+    <p class="muted">Bilimingizni sinang, natijalaringizni kuzating.</p>
+
+    <div class="field">
+      <label>Ism va familiya</label>
+      <input id="authName" placeholder="Ism va familiyangiz" autocomplete="name">
+    </div>
+
+    <div class="field">
+      <label>Maktab nomi</label>
+      <input id="authSchool" placeholder="Masalan, 12-maktab">
+    </div>
+
+    <div class="field">
+      <label>Maktab raqami</label>
+      <input id="authSchoolNumber" type="number" min="1" placeholder="Masalan, 12">
+    </div>
+
+    <div class="field">
+      <label>Sinf</label>
+      <select id="authGrade">
+        <option value="">Sinfni tanlang</option>
+        <option value="1">1-sinf</option>
+        <option value="2">2-sinf</option>
+        <option value="3">3-sinf</option>
+        <option value="4">4-sinf</option>
+        <option value="5">5-sinf</option>
+        <option value="6">6-sinf</option>
+        <option value="7">7-sinf</option>
+        <option value="8">8-sinf</option>
+        <option value="9">9-sinf</option>
+        <option value="10">10-sinf</option>
+        <option value="11">11-sinf</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input id="authEmail" type="email" placeholder="name@example.com" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>Parol</label>
+      <input id="authPassword" type="password" placeholder="Kamida 6 belgi" autocomplete="current-password">
+    </div>
+
+    <div class="actions">
+      <button id="authSubmit">Ro‘yxatdan o‘tish</button>
+      <button class="secondary" id="authSwitch">Hisobim bor</button>
+    </div>
+
+    <p class="muted small">
+      Admin huquqi ro‘yxatdan o‘tishda tanlanmaydi. Uni faqat Supabase SQL orqali egasi belgilaydi.
+    </p>
+  </div>
+</section>
+  <main id="appView" class="hidden"><nav class="nav" id="nav"><button data-page="home" class="active">Bosh sahifa</button><button data-page="tests">Testlar</button><button data-page="news">Yangiliklar</button><button data-page="profile">Profil</button><button data-page="admin" id="adminNav" class="hidden">Admin panel</button></nav>
 <section id="page-home"><div class="hero"><div class="eyebrow">O‘rganishning yangi bosqichi</div><h1>Bilimingni sinab ko‘r. <br>Imkoniyatingni och.</h1><p>Fanlarni tanlang, testlarni bajaring va natijalaringizni kuzatib boring. Har bir savol — yangi imkoniyat.</p><div class="actions"><button data-goto="tests">Test boshlash ↗</button><button class="secondary" data-goto="news">Yangiliklarni ko‘rish</button></div></div><div class="stats"><div class="stat"><span class="muted small">Mening natijalarim</span><strong id="statResults">0</strong><span class="muted small">test urinishlari</span></div><div class="stat"><span class="muted small">Savollar bazasi</span><strong id="statQuestions">—</strong><span class="muted small">savol</span></div><div class="stat"><span class="muted small">Hisob turi</span><strong id="statRole" style="font-size:20px">O‘quvchi</strong><span class="muted small">Mening Maktabim</span></div></div><div class="section-title"><h2>Fanlar olami</h2><span class="muted small">Fan tanlab test ishlang</span></div><div id="homeSubjects" class="grid"></div></section>
 <section id="page-tests" class="hidden"><div class="section-title"><h2>Test markazi</h2><span class="pill">Bilimingizni sinang</span></div><div class="card"><div class="grid two"><div class="field"><label>Fan</label><select id="testSubject"></select></div><div class="field"><label>Daraja</label><select id="testLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div><div class="field"><label>Sinf (ixtiyoriy)</label><select id="testGrade"><option value="">Barcha sinflar / daraja bo‘yicha</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Savollar soni</label><select id="testCount"><option>10</option><option>20</option><option>5</option><option>30</option><option>50</option></select></div></div><button id="startTest">Testni boshlash</button></div><div id="testArea" class="card hidden" style="margin-top:15px"></div><div class="section-title"><h2>Oldingi natijalar</h2></div><div id="resultsList" class="card"><p class="muted">Natijalar yuklanmoqda…</p></div></section>
 <section id="page-news" class="hidden"><div class="section-title"><h2>Yangiliklar</h2><span class="muted small">Maktab va platforma xabarlari</span></div><div id="newsList" class="grid two"></div></section>
