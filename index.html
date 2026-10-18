@@ -193,21 +193,34 @@ $('uploadCsv').onclick=async()=>{
   try{
     let fresh=[];
 
-    for(let i=0;i<clean.length;i+=100){
-      let batch=clean.slice(i,i+100);
-      let {data:found,error:findError}=await db
-        .from('mm_questions')
-        .select('question')
-        .in('question',batch.map(x=>x.question));
+  
+for (let i = 0; i < clean.length; i += 10) {
+  const batch = clean.slice(i, i + 10);
 
-      if(findError)throw Error(`Takrorlarni tekshirishda xato: ${findError.message}`);
+  const { data: found, error: findError } = await db
+    .from('mm_questions')
+    .select('question')
+    .eq('subject', batch[0].subject)
+    .in('question', batch.map(x => x.question));
 
-      let already=new Set((found||[]).map(x=>x.question));
-      let newBatch=batch.filter(x=>!already.has(x.question));
+  if (findError) {
+    throw Error(
+      `Takrorlarni tekshirishda xato: ${findError.message}`
+    );
+  }
 
-      fresh.push(...newBatch);
-      skipped+=batch.length-newBatch.length;
-    }
+  const already = new Set(
+    (found || []).map(x => x.question)
+  );
+
+  const newBatch = batch.filter(
+    x => !already.has(x.question)
+  );
+
+  fresh.push(...newBatch);
+  skipped += batch.length - newBatch.length;
+}
+
 
     if(!fresh.length){
       $('csvStatus').textContent=`Yangi savol topilmadi. ${skipped} ta savol bazada oldindan bor.`;
