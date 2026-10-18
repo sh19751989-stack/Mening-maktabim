@@ -168,7 +168,13 @@ $('uploadCsv').onclick=async()=>{
         C:r.option_c,
         D:r.option_d
       },
-      correct_option:correct
+           correct_option:correct,
+      correct_answer:({
+        A:r.option_a,
+        B:r.option_b,
+        C:r.option_c,
+        D:r.option_d
+      })[correct]
     });
   });
 
