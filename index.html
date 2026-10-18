@@ -10,66 +10,8 @@
 <body><div class="wrap">
 <header class="top"><div class="brand"><div class="logo">✦</div><div>Mening Maktabim<div class="muted small" style="font-weight:500">Bilim sari — kelajak sari</div></div></div><div id="userBar" class="inline hidden" style="max-width:300px"><span id="userLabel" class="muted small"></span><button class="secondary" id="logoutBtn">Chiqish</button></div></header>
 <div id="toast" class="toast"></div>
-<section id="authView" class="auth">
-  <div class="card">
-    <div class="eyebrow">Ta’lim platformasi</div>
-    <h1 id="authTitle">Xush kelibsiz!</h1>
-    <p class="muted">Bilimingizni sinang, natijalaringizni kuzating.</p>
-
-    <div class="field">
-      <label>Ism va familiya</label>
-      <input id="authName" placeholder="Ism va familiyangiz" autocomplete="name">
-    </div>
-
-    <div class="field">
-      <label>Maktab nomi</label>
-      <input id="authSchool" placeholder="Masalan, 12-maktab">
-    </div>
-
-    <div class="field">
-      <label>Maktab raqami</label>
-      <input id="authSchoolNumber" type="number" min="1" placeholder="Masalan, 12">
-    </div>
-
-    <div class="field">
-      <label>Sinf</label>
-      <select id="authGrade">
-        <option value="">Sinfni tanlang</option>
-        <option value="1">1-sinf</option>
-        <option value="2">2-sinf</option>
-        <option value="3">3-sinf</option>
-        <option value="4">4-sinf</option>
-        <option value="5">5-sinf</option>
-        <option value="6">6-sinf</option>
-        <option value="7">7-sinf</option>
-        <option value="8">8-sinf</option>
-        <option value="9">9-sinf</option>
-        <option value="10">10-sinf</option>
-        <option value="11">11-sinf</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Email</label>
-      <input id="authEmail" type="email" placeholder="name@example.com" autocomplete="email">
-    </div>
-
-    <div class="field">
-      <label>Parol</label>
-      <input id="authPassword" type="password" placeholder="Kamida 6 belgi" autocomplete="current-password">
-    </div>
-
-    <div class="actions">
-      <button id="authSubmit">Ro‘yxatdan o‘tish</button>
-      <button class="secondary" id="authSwitch">Hisobim bor</button>
-    </div>
-
-    <p class="muted small">
-      Admin huquqi ro‘yxatdan o‘tishda tanlanmaydi. Uni faqat Supabase SQL orqali egasi belgilaydi.
-    </p>
-  </div>
-</section>
-  <main id="appView" class="hidden"><nav class="nav" id="nav"><button data-page="home" class="active">Bosh sahifa</button><button data-page="tests">Testlar</button><button data-page="news">Yangiliklar</button><button data-page="profile">Profil</button><button data-page="admin" id="adminNav" class="hidden">Admin panel</button></nav>
+<section id="authView" class="auth"><div class="card"><div class="eyebrow">Ta’lim platformasi</div><h1 id="authTitle">Xush kelibsiz!</h1><p class="muted">Bilimingizni sinang, natijalaringizni kuzating.</p><div class="field"><label>Ism va familiya</label><input id="authName" placeholder="Ism va familiyangiz" autocomplete="name"></div><div class="field signup-only"><label>Maktab nomi</label><input id="authSchool" placeholder="Masalan, 12-maktab" autocomplete="organization"></div><div class="field signup-only"><label>Maktab raqami</label><input id="authSchoolNumber" type="number" min="1" step="1" placeholder="Masalan, 12"></div><div class="field signup-only"><label>Sinf</label><select id="authGrade"><option value="">Sinfni tanlang</option><option value="1">1-sinf</option><option value="2">2-sinf</option><option value="3">3-sinf</option><option value="4">4-sinf</option><option value="5">5-sinf</option><option value="6">6-sinf</option><option value="7">7-sinf</option><option value="8">8-sinf</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select></div><div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="name@example.com" autocomplete="email"></div><div class="field"><label>Parol</label><input id="authPassword" type="password" placeholder="Kamida 6 belgi" autocomplete="current-password"></div><div class="actions"><button id="authSubmit">Ro‘yxatdan o‘tish</button><button class="secondary" id="authSwitch">Hisobim bor</button></div><p class="muted small">Admin huquqi ro‘yxatdan o‘tishda tanlanmaydi. Uni faqat Supabase SQL orqali egasi belgilaydi.</p></div></section>
+<main id="appView" class="hidden"><nav class="nav" id="nav"><button data-page="home" class="active">Bosh sahifa</button><button data-page="tests">Testlar</button><button data-page="news">Yangiliklar</button><button data-page="profile">Profil</button><button data-page="admin" id="adminNav" class="hidden">Admin panel</button></nav>
 <section id="page-home"><div class="hero"><div class="eyebrow">O‘rganishning yangi bosqichi</div><h1>Bilimingni sinab ko‘r. <br>Imkoniyatingni och.</h1><p>Fanlarni tanlang, testlarni bajaring va natijalaringizni kuzatib boring. Har bir savol — yangi imkoniyat.</p><div class="actions"><button data-goto="tests">Test boshlash ↗</button><button class="secondary" data-goto="news">Yangiliklarni ko‘rish</button></div></div><div class="stats"><div class="stat"><span class="muted small">Mening natijalarim</span><strong id="statResults">0</strong><span class="muted small">test urinishlari</span></div><div class="stat"><span class="muted small">Savollar bazasi</span><strong id="statQuestions">—</strong><span class="muted small">savol</span></div><div class="stat"><span class="muted small">Hisob turi</span><strong id="statRole" style="font-size:20px">O‘quvchi</strong><span class="muted small">Mening Maktabim</span></div></div><div class="section-title"><h2>Fanlar olami</h2><span class="muted small">Fan tanlab test ishlang</span></div><div id="homeSubjects" class="grid"></div></section>
 <section id="page-tests" class="hidden"><div class="section-title"><h2>Test markazi</h2><span class="pill">Bilimingizni sinang</span></div><div class="card"><div class="grid two"><div class="field"><label>Fan</label><select id="testSubject"></select></div><div class="field"><label>Daraja</label><select id="testLevel"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></div><div class="field"><label>Sinf (ixtiyoriy)</label><select id="testGrade"><option value="">Barcha sinflar / daraja bo‘yicha</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select></div><div class="field"><label>Savollar soni</label><select id="testCount"><option>10</option><option>20</option><option>5</option><option>30</option><option>50</option></select></div></div><button id="startTest">Testni boshlash</button></div><div id="testArea" class="card hidden" style="margin-top:15px"></div><div class="section-title"><h2>Oldingi natijalar</h2></div><div id="resultsList" class="card"><p class="muted">Natijalar yuklanmoqda…</p></div></section>
 <section id="page-news" class="hidden"><div class="section-title"><h2>Yangiliklar</h2><span class="muted small">Maktab va platforma xabarlari</span></div><div id="newsList" class="grid two"></div></section>
@@ -81,79 +23,64 @@
 // Supabase loyiha ma'lumotlari — publishable key frontendda ishlatish uchun mo'ljallangan.
 const SUPABASE_URL='https://pkbhavmbudmyrmfhifmr.supabase.co';
 const SUPABASE_KEY='sb_publishable_GwViL67Yo5I7dVMIO_eCHw_WEZWDhRe';
-const SUBJECTS=[['Ona tili','📚'],['Matematika','➗'],['Ingliz tili','🇬🇧'],['Arab tili','🕌'],['Rus tili','🌐'],['Tarix','🏛️'],['Biologiya','🌿'],['Geografiya','🌍'],['Fizika','⚛️'],['Kimyo','🧪'],['Informatika','💻'],['Huquq','⚖️'],['O‘zbek tili','✍️'],['Turk tili','🌙'],['Koreys tili','🎎'],['Nemis tili','🇩🇪'],['Fransuz tili','🇫🇷']];
+const SUBJECTS=[['Ona tili','📚'],['Matematika','➗'],['Ingliz tili','🇬🇧'],['Ingliz tili (CEFR)','🇬🇧'],['Arab tili','🕌'],['Rus tili','🌐'],['Tarix','🏛️'],['Biologiya','🌿'],['Geografiya','🌍'],['Fizika','⚛️'],['Kimyo','🧪'],['Informatika','💻'],['Huquq','⚖️'],['O‘zbek tili','✍️'],['Turk tili','🌙'],['Koreys tili','🎎'],['Nemis tili','🇩🇪'],['Fransuz tili','🇫🇷']];
 const $=id=>document.getElementById(id); const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,profile=null,authMode='signup',testQuestions=[],testIndex=0,testCorrect=0,testSubject='',testLevel='A1',testGrade=null,chosen=null,answerBusy=false;
 function toast(msg,type=''){ $('toast').innerHTML=msg?`<div class="notice ${type}">${esc(msg)}</div>`:''; if(msg)window.scrollTo({top:0,behavior:'smooth'}); }
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function safeUrl(s){try{let u=new URL(s);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function youtubeEmbed(url){let s=safeUrl(url);if(!s)return '';try{let u=new URL(s),id='';if(u.hostname.includes('youtu.be'))id=u.pathname.slice(1);else if(u.hostname.includes('youtube.com')){id=u.searchParams.get('v')||u.pathname.split('/').filter(Boolean).pop();if(['embed','shorts','live'].includes(u.pathname.split('/').filter(Boolean)[0]))id=u.pathname.split('/').filter(Boolean)[1]}return /^[\w-]{11}$/.test(id||'')?'https://www.youtube-nocookie.com/embed/'+id:''}catch{return ''}}
-function setAuthMode(mode){authMode=mode;$('authTitle').textContent=mode==='signup'?'Hisob yarating':'Qaytganingizdan xursandmiz!';$('authName').parentElement.classList.toggle('hidden',mode!=='signup');$('authSubmit').textContent=mode==='signup'?'Ro‘yxatdan o‘tish':'Kirish';$('authSwitch').textContent=mode==='signup'?'Hisobim bor':'Yangi hisob yaratish';$('authPassword').autocomplete=mode==='signup'?'new-password':'current-password';}
+function setAuthMode(mode){
+  authMode=mode;
+  $('authTitle').textContent=mode==='signup'?'Hisob yarating':'Qaytganingizdan xursandmiz!';
+  ['authName','authSchool','authSchoolNumber','authGrade'].forEach(id=>{
+    const el=$(id); if(el) el.parentElement.classList.toggle('hidden',mode!=='signup');
+  });
+  $('authSubmit').textContent=mode==='signup'?'Ro‘yxatdan o‘tish':'Kirish';
+  $('authSwitch').textContent=mode==='signup'?'Hisobim bor':'Yangi hisob yaratish';
+  $('authPassword').autocomplete=mode==='signup'?'new-password':'current-password';
+}
 $('authSwitch').onclick=()=>setAuthMode(authMode==='signup'?'login':'signup');
 $('authSubmit').onclick=async()=>{
   toast('');
-
-  const email=$('authEmail').value.trim();
-  const password=$('authPassword').value;
+  const email=$('authEmail').value.trim(), password=$('authPassword').value;
   const name=$('authName').value.trim();
-
-  if(!email||!password||password.length<6){
-    toast('Emailni kiriting va parol kamida 6 belgidan iborat bo‘lsin.','error');
-    return;
-  }
-
+  if(!email||!password||password.length<6){toast('Emailni kiriting va parol kamida 6 belgidan iborat bo‘lsin.','error');return;}
   try{
     let res;
-
     if(authMode==='signup'){
       const school=$('authSchool').value.trim();
       const schoolNumber=$('authSchoolNumber').value.trim();
       const grade=$('authGrade').value;
-
-      if(!name||!school||!schoolNumber||!grade){
-        toast('Ism, maktab nomi, maktab raqami va sinfni to‘ldiring.','error');
-        return;
-      }
-
-      if(!/^[1-9]\d*$/.test(schoolNumber)){
-        toast('Maktab raqami musbat butun son bo‘lishi kerak.','error');
-        return;
-      }
-
-      res=await db.auth.signUp({
-        email,
-        password,
-        options:{
-          data:{
-            display_name:name,
-            full_name:name,
-            school_name:school,
-            school_number:schoolNumber,
-            grade:grade
-          }
-        }
-      });
-
+      if(!name||!school||!schoolNumber||!grade){toast('Ism-familiya, maktab nomi, maktab raqami va sinfni to‘ldiring.','error');return;}
+      if(!/^[1-9]\d*$/.test(schoolNumber)){toast('Maktab raqami musbat butun son bo‘lishi kerak.','error');return;}
+      res=await db.auth.signUp({email,password,options:{data:{display_name:name,full_name:name,school_name:school,school_number:schoolNumber,grade:grade}}});
       if(res.error) throw res.error;
-
-      if(!res.data.session){
-        toast('Hisob yaratildi. Emailingizni tasdiqlash talab qilinsa, pochtangizni tekshiring.','good');
-        return;
-      }
+      if(!res.data.session){toast('Hisob yaratish so‘rovi bajarildi. Email tasdiqlash talab qilinsa, pochtangizni tekshiring.','good');return;}
     }else{
       res=await db.auth.signInWithPassword({email,password});
       if(res.error) throw res.error;
     }
-
     await initApp();
-  }catch(e){
-    toast(e.message||'Kirishda xatolik yuz berdi.','error');
-  }
+  }catch(e){toast(e.message||'Kirishda xatolik yuz berdi.','error');}
 };
-  $('logoutBtn').onclick=async()=>{await db.auth.signOut();currentUser=null;profile=null;showAuth()};
+$('logoutBtn').onclick=async()=>{await db.auth.signOut();currentUser=null;profile=null;showAuth()};
 function showAuth(){$('authView').classList.remove('hidden');$('appView').classList.add('hidden');$('userBar').classList.add('hidden');toast('')}
 async function initApp(){let {data:{user},error}=await db.auth.getUser();if(error||!user){showAuth();return}currentUser=user;let {data:p,error:pe}=await db.from('mm_profiles').select('id,display_name,role,avatar_url,youtube_url').eq('id',user.id).maybeSingle();if(pe){showAuth();toast('Profilni olishda xatolik: '+pe.message,'error');return}if(!p){let ins=await db.from('mm_profiles').insert({id:user.id,display_name:user.user_metadata?.display_name||'Oquvchi',role:'student'}).select().single();if(ins.error){showAuth();toast('Profil yaratilmadi: '+ins.error.message,'error');return}p=ins.data}profile=p;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('userBar').classList.remove('hidden');$('userLabel').textContent=p.display_name||user.email;$('adminNav').classList.toggle('hidden',p.role!=='admin');$('statRole').textContent=p.role==='admin'?'Administrator':'O‘quvchi';$('profileName').value=p.display_name||'';$('profileAvatar').value=p.avatar_url||'';$('profileYoutube').value=p.youtube_url||'';buildSubjects();await Promise.all([loadNews(),loadResults(),loadCounts()]);goPage('home')}
-function buildSubjects(){let html=SUBJECTS.map(([s,icon])=>`<div class="card subject"><div class="subject-icon">${icon}</div><div><h3>${esc(s)}</h3><p>Testlar va bilimni mustahkamlash</p><button class="secondary" data-subject="${esc(s)}">Test tanlash ↗</button></div></div>`).join('');$('homeSubjects').innerHTML=html;$('homeSubjects').querySelectorAll('[data-subject]').forEach(b=>b.onclick=()=>{$('testSubject').value=b.dataset.subject;goPage('tests')});let opts=SUBJECTS.map(([s])=>`<option>${esc(s)}</option>`).join('');$('testSubject').innerHTML=opts;$('qSubject').innerHTML=opts}
+function buildSubjects(){let html=SUBJECTS.map(([s,icon])=>`<div class="card subject"><div class="subject-icon">${icon}</div><div><h3>${esc(s)}</h3><p>Testlar va bilimni mustahkamlash</p><button class="secondary" data-subject="${esc(s)}">Test tanlash ↗</button></div></div>`).join('');$('homeSubjects').innerHTML=html;$('homeSubjects').querySelectorAll('[data-subject]').forEach(b=>b.onclick=()=>{$('testSubject').value=b.dataset.subject;applySubjectMode($('testSubject'),$('testLevel'),$('testGrade'));goPage('tests')});let opts=SUBJECTS.map(([s])=>`<option>${esc(s)}</option>`).join('');$('testSubject').innerHTML=opts;$('qSubject').innerHTML=opts}
+const SCHOOL_SUBJECTS=new Set(['Ona tili','Matematika','Ingliz tili','Tarix','Biologiya','Geografiya','Fizika','Kimyo','Informatika','Huquq']);
+function applySubjectMode(subjectSelect, levelSelect, gradeSelect){
+  const isSchool=SCHOOL_SUBJECTS.has(subjectSelect.value);
+  levelSelect.disabled=isSchool;
+  if(isSchool) levelSelect.value='A1';
+  if(gradeSelect){
+    gradeSelect.disabled=!isSchool;
+    if(!isSchool) gradeSelect.value='';
+  }
+}
+$('testSubject').addEventListener('change',()=>applySubjectMode($('testSubject'),$('testLevel'),$('testGrade')));
+$('qSubject').addEventListener('change',()=>applySubjectMode($('qSubject'),$('qLevel'),$('qGrade')));
+
 function goPage(page){if(page==='admin'&&profile?.role!=='admin'){toast('Bu bo‘lim faqat administrator uchun.','error');return}document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));['home','tests','news','profile','admin'].forEach(p=>$('page-'+p).classList.toggle('hidden',p!==page));toast('');if(page==='tests')loadResults();if(page==='admin')loadAdminStats()}
 document.querySelectorAll('#nav button[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>goPage(b.dataset.goto));
 async function loadCounts(){let r=await db.from('mm_questions').select('id',{count:'exact',head:true});$('statQuestions').textContent=r.error?'—':(r.count??0)}
@@ -164,11 +91,30 @@ function renderQuestion(){chosen=null;answerBusy=false;let q=testQuestions[testI
 async function checkAnswer(){if(!chosen||answerBusy)return;answerBusy=true;$('checkAnswer').disabled=true;let q=testQuestions[testIndex];let {data,error}=await db.rpc('mm_check_answer',{p_question_id:q.id,p_choice:chosen});if(error){answerBusy=false;$('checkAnswer').disabled=false;$('answerFeedback').innerHTML=`<div class="notice error">Javob tekshirilmadi: ${esc(error.message)}</div>`;return}let row=Array.isArray(data)?data[0]:data;if(row?.is_correct)testCorrect++;$('testArea').querySelectorAll('[data-choice]').forEach(b=>{b.disabled=true;if(b.dataset.choice===row.correct_option)b.classList.add('correct');else if(b.dataset.choice===chosen)b.classList.add('wrong')});$('answerFeedback').innerHTML=`<div class="notice ${row?.is_correct?'good':'error'}">${row?.is_correct?'To‘g‘ri javob! 🎉':'Bu safar noto‘g‘ri.'} To‘g‘ri javob: <b>${esc(row?.correct_option||'—')}</b></div>`;$('checkAnswer').classList.add('hidden');$('nextQuestion').classList.remove('hidden')}
 async function nextQuestion(){if(testIndex<testQuestions.length-1){testIndex++;renderQuestion();return}let {error}=await db.rpc('mm_save_result',{p_subject:testSubject,p_level:testLevel,p_total:testQuestions.length,p_correct:testCorrect});$('testArea').innerHTML=`<div class="subject-icon">🏆</div><h2>Test yakunlandi!</h2><p class="muted">${esc(testSubject)} · ${esc(testLevel)}</p><div class="stats"><div class="stat"><span class="muted small">To‘g‘ri javob</span><strong>${testCorrect}/${testQuestions.length}</strong></div><div class="stat"><span class="muted small">Natija</span><strong>${Math.round(testCorrect/testQuestions.length*100)}%</strong></div></div>${error?`<div class="notice error">Natijani saqlashda xatolik: ${esc(error.message)}</div>`:'<div class="notice good">Natijangiz saqlandi.</div>'}<button id="againTest">Yana test ishlash</button>`;$('againTest').onclick=()=>$('startTest').click();await loadResults()}
 $('saveProfile').onclick=async()=>{let name=$('profileName').value.trim();if(!name){toast('Ism bo‘sh qolmasin.','error');return}let avatar=$('profileAvatar').value.trim(),youtube=$('profileYoutube').value.trim();if(avatar&&!safeUrl(avatar)||youtube&&!safeUrl(youtube)){toast('URL http:// yoki https:// bilan boshlanishi kerak.','error');return}let {data,error}=await db.from('mm_profiles').update({display_name:name,avatar_url:avatar||null,youtube_url:youtube||null}).eq('id',currentUser.id).select().single();if(error){$('profileMessage').innerHTML=`<div class="notice error">${esc(error.message)}</div>`;return}profile={...profile,...data};$('userLabel').textContent=name;$('profileMessage').innerHTML='<div class="notice good">Profil saqlandi.</div>'};
-$('addQuestion').onclick=async()=>{if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');let q={subject:$('qSubject').value,grade:$('qGrade').value?Number($('qGrade').value):null,level:$('qLevel').value,question:$('qText').value.trim(),option_a:$('qA').value.trim(),option_b:$('qB').value.trim(),option_c:$('qC').value.trim(),option_d:$('qD').value.trim(),correct_option:$('qCorrect').value};if(!q.question||!q.option_a||!q.option_b||!q.option_c||!q.option_d)return toast('Savol va to‘rtta variantni to‘ldiring.','error');let {error}=await db.from('mm_questions').insert(q);if(error)return toast('Savol saqlanmadi: '+error.message,'error');['qText','qA','qB','qC','qD'].forEach(id=>$(id).value='');toast('Savol muvaffaqiyatli saqlandi.','good');await loadCounts();await loadAdminStats()};
+$('addQuestion').onclick=async()=>{
+  if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');
+  const subject=$('qSubject').value;
+  const grade=$('qGrade').value?Number($('qGrade').value):null;
+  const level=$('qLevel').value;
+  const question=$('qText').value.trim();
+  const a=$('qA').value.trim(),b=$('qB').value.trim(),c=$('qC').value.trim(),d=$('qD').value.trim();
+  const correct=$('qCorrect').value;
+  if(!question||!a||!b||!c||!d)return toast('Savol va to‘rtta variantni to‘ldiring.','error');
+  try{
+    const {data:lastRows,error:lastError}=await db.from('mm_questions').select('number').order('number',{ascending:false}).limit(1);
+    if(lastError)throw lastError;
+    const number=Number(lastRows?.[0]?.number||0)+1;
+    const q={subject,grade,level,number,question,option_a:a,option_b:b,option_c:c,option_d:d,options:{A:a,B:b,C:c,D:d},correct_option:correct,correct_answer:correct};
+    const {error}=await db.from('mm_questions').insert(q);
+    if(error)throw error;
+    ['qText','qA','qB','qC','qD'].forEach(id=>$(id).value='');
+    toast('Savol muvaffaqiyatli saqlandi.','good');await loadCounts();await loadAdminStats();
+  }catch(e){toast('Savol saqlanmadi: '+(e.message||e),'error');}
+};
 $('addNews').onclick=async()=>{if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');let title=$('nTitle').value.trim(),body=$('nBody').value.trim(),image=$('nImage').value.trim(),youtube=$('nYoutube').value.trim();if(!title||!body)return toast('Yangilik sarlavhasi va matnini kiriting.','error');if(image&&!safeUrl(image)||youtube&&!safeUrl(youtube))return toast('URL noto‘g‘ri. https:// havolasidan foydalaning.','error');let {error}=await db.from('mm_news').insert({title,body,image_url:image||null,youtube_url:youtube||null,author_id:currentUser.id});if(error)return toast('Yangilik joylanmadi: '+error.message,'error');['nTitle','nBody','nImage','nYoutube'].forEach(id=>$(id).value='');toast('Yangilik joylandi.','good');await loadNews()};
 function parseCSV(text){let rows=[],row=[],field='',quoted=false;for(let i=0;i<text.length;i++){let c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}else{if(c==='"')quoted=true;else if(c===','){row.push(field);field=''}else if(c==='\n'){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()!==''))rows.push(row);row=[];field=''}else field+=c}}if(quoted)throw Error('CSV faylda yopilmagan qo‘shtirnoq bor.');if(field.length||row.length){row.push(field.replace(/\r$/,''));if(row.some(v=>v.trim()!==''))rows.push(row)}if(!rows.length)return [];let headers=rows.shift().map(h=>h.trim().replace(/^\uFEFF/, '').toLowerCase());return rows.map((r,idx)=>{let o={};headers.forEach((h,i)=>o[h]=(r[i]??'').trim());o.__line=idx+2;return o})}
 $('csvTemplate').onclick=()=>{let csv='subject,grade,level,question,option_a,option_b,option_c,option_d,correct_option\nMatematika,6,A1,"2 + 2 nechaga teng?",3,4,5,6,B\n';let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='mening_maktabim_namuna.csv';a.click();URL.revokeObjectURL(a.href)};
-$('uploadCsv').onclick=async()=>{if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');let file=$('csvFile').files[0];if(!file)return $('csvStatus').textContent='Avval CSV fayl tanlang.';if(file.size>10*1024*1024)return $('csvStatus').textContent='Fayl 10 MB dan kichik bo‘lishi kerak.';let rows;try{rows=parseCSV(await file.text())}catch(e){return $('csvStatus').textContent=e.message}let required=['subject','grade','level','question','option_a','option_b','option_c','option_d','correct_option'];if(!rows.length)return $('csvStatus').textContent='CSV ichida savollar topilmadi.';let errors=[],clean=[];rows.forEach(r=>{let missing=required.filter(k=>!(k in r));if(missing.length){errors.push(`CSV sarlavhalari noto‘g‘ri: ${missing.join(', ')}`);return}let grade=r.grade===''?null:Number(r.grade),level=r.level.toUpperCase(),correct=r.correct_option.toUpperCase();if(!r.subject||!r.question||![r.option_a,r.option_b,r.option_c,r.option_d].every(Boolean)||!['A1','A2','B1','B2','C1','C2'].includes(level)||!['A','B','C','D'].includes(correct)||(grade!==null&&(!Number.isInteger(grade)||grade<1||grade>11))){errors.push(`${r.__line}-qator: bo‘sh maydon, sinf, daraja yoki to‘g‘ri javob noto‘g‘ri.`);return}clean.push({subject:r.subject,grade,level,question:r.question,option_a:r.option_a,option_b:r.option_b,option_c:r.option_c,option_d:r.option_d,correct_option:correct})});if(errors.length){$('csvStatus').innerHTML=`Tekshiruvdan o‘tmadi (${errors.length} xato). Hech narsa yuklanmadi.<br>${errors.slice(0,8).map(esc).join('<br>')}`;return}if(!confirm(`${clean.length} ta savol bazaga qo‘shilsinmi? Mavjud savollar o‘chirilmaydi.`))return;$('uploadCsv').disabled=true;$('csvStatus').textContent='Yuklanmoqda…';let inserted=0;try{for(let i=0;i<clean.length;i+=100){let {error}=await db.from('mm_questions').insert(clean.slice(i,i+100));if(error)throw Error(`Yuklash ${inserted} ta savoldan keyin to‘xtadi: ${error.message}`);inserted+=Math.min(100,clean.length-i)}$('csvStatus').textContent=`Muvaffaqiyatli: ${inserted} ta savol qo‘shildi.`;toast(`${inserted} ta savol CSV dan yuklandi.`,'good');$('csvFile').value='';await loadCounts();await loadAdminStats()}catch(e){$('csvStatus').textContent=e.message;toast(e.message,'error')}finally{$('uploadCsv').disabled=false}};
+$('uploadCsv').onclick=async()=>{if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');let file=$('csvFile').files[0];if(!file)return $('csvStatus').textContent='Avval CSV fayl tanlang.';if(file.size>10*1024*1024)return $('csvStatus').textContent='Fayl 10 MB dan kichik bo‘lishi kerak.';let rows;try{rows=parseCSV(await file.text())}catch(e){return $('csvStatus').textContent=e.message}let required=['subject','grade','level','question','option_a','option_b','option_c','option_d','correct_option'];if(!rows.length)return $('csvStatus').textContent='CSV ichida savollar topilmadi.';let errors=[],clean=[];rows.forEach(r=>{let missing=required.filter(k=>!(k in r));if(missing.length){errors.push(`CSV sarlavhalari noto‘g‘ri: ${missing.join(', ')}`);return}let grade=r.grade===''?null:Number(r.grade),level=r.level.toUpperCase(),correct=r.correct_option.toUpperCase();if(!r.subject||!r.question||![r.option_a,r.option_b,r.option_c,r.option_d].every(Boolean)||!['A1','A2','B1','B2','C1','C2'].includes(level)||!['A','B','C','D'].includes(correct)||(grade!==null&&(!Number.isInteger(grade)||grade<1||grade>11))){errors.push(`${r.__line}-qator: bo‘sh maydon, sinf, daraja yoki to‘g‘ri javob noto‘g‘ri.`);return}clean.push({subject:r.subject,grade,level,number:Number(r.number||r.__line),question:r.question,option_a:r.option_a,option_b:r.option_b,option_c:r.option_c,option_d:r.option_d,options:{A:r.option_a,B:r.option_b,C:r.option_c,D:r.option_d},correct_option:correct,correct_answer:correct})});if(errors.length){$('csvStatus').innerHTML=`Tekshiruvdan o‘tmadi (${errors.length} xato). Hech narsa yuklanmadi.<br>${errors.slice(0,8).map(esc).join('<br>')}`;return}let csvSeen=new Set();clean=clean.filter(x=>{let k=x.question.trim();if(csvSeen.has(k))return false;csvSeen.add(k);return true});$('uploadCsv').disabled=true;$('csvStatus').textContent='Mavjud savollar tekshirilmoqda…';let inserted=0,skipped=0;try{let fresh=[];for(let i=0;i<clean.length;i+=100){let batch=clean.slice(i,i+100);let {data:found,error:findError}=await db.from('mm_questions').select('question').in('question',batch.map(x=>x.question));if(findError)throw Error(`Takrorlarni tekshirishda xato: ${findError.message}`);let already=new Set((found||[]).map(x=>x.question));fresh.push(...batch.filter(x=>!already.has(x.question)));skipped+=batch.length-batch.filter(x=>!already.has(x.question)).length}if(!fresh.length){$('csvStatus').textContent=`Yangi savol topilmadi. ${skipped} ta savol bazada oldindan bor.`;toast('Takroriy savollar qayta yuklanmadi.');return}if(!confirm(`${fresh.length} ta yangi savol yuklansinmi? ${skipped} ta takroriy savol tashlab ketiladi.`)){ $('csvStatus').textContent='Yuklash bekor qilindi.';return }$('csvStatus').textContent='Yuklanmoqda…';for(let i=0;i<fresh.length;i+=100){let {error}=await db.from('mm_questions').insert(fresh.slice(i,i+100));if(error)throw Error(`Yuklash ${inserted} ta savoldan keyin to‘xtadi: ${error.message}`);inserted+=Math.min(100,fresh.length-i)}$('csvStatus').textContent=`Muvaffaqiyatli: ${inserted} ta yangi savol qo‘shildi. ${skipped} ta takroriy savol tashlab ketildi.`;toast(`${inserted} ta yangi savol CSV dan yuklandi.`,'good');$('csvFile').value='';await loadCounts();await loadAdminStats()}catch(e){$('csvStatus').textContent=e.message;toast(e.message,'error')}finally{$('uploadCsv').disabled=false}};
 async function loadAdminStats(){if(profile?.role!=='admin')return;let [q,n,u]=await Promise.all([db.from('mm_questions').select('id',{count:'exact',head:true}),db.from('mm_news').select('id',{count:'exact',head:true}),db.from('mm_profiles').select('id',{count:'exact',head:true})]);$('adminStats').innerHTML=[['Savollar',q.count,q.error],['Yangiliklar',n.count,n.error],['Foydalanuvchilar',u.count,u.error]].map(([label,count,error])=>`<div class="inline" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>${label}</span><strong>${error?'Xatolik':count??0}</strong></div>`).join('')+(q.error||n.error||u.error?'<p class="muted small">Ayrim hisoblarni olishda ruxsat yoki ulanish xatosi bor.</p>':'')}
 $('refreshAdmin').onclick=loadAdminStats;
 db.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){currentUser=null;profile=null;showAuth()}});
