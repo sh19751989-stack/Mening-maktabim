@@ -752,4 +752,88 @@ $('refreshAdmin').onclick=loadAdminStats;
 db.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){currentUser=null;profile=null;showAuth()}});
 $('year').textContent=new Date().getFullYear();setAuthMode('signup');
 (async()=>{let {data:{session}}=await db.auth.getSession();if(session)await initApp();else showAuth()})();
-</script></body></html>
+</script><!-- Murojaat uchun bo‘limi -->
+<section class="contact-section">
+  <div class="contact-card">
+    <div class="contact-icon">✉️</div>
+    <h2>Murojaat uchun</h2>
+    <p>
+      Sayt bo‘yicha savolingiz, taklifingiz yoki muammoingiz bormi?
+      Biz bilan Telegram orqali bog‘laning.
+    </p>
+
+    <a
+      href="https://t.me/salohiddinov571"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="telegram-button"
+    >
+      <span>✈️</span> Telegram orqali murojaat
+    </a>
+
+    <div class="contact-username">@salohiddinov571</div>
+  </div>
+</section>
+
+<style>
+.contact-section {
+  padding: 35px 16px;
+  font-family: Arial, sans-serif;
+}
+
+.contact-card {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 30px 24px;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #101b3c, #174e91);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 22px;
+  box-shadow: 0 12px 35px rgba(16, 27, 60, .2);
+}
+
+.contact-icon {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.contact-card h2 {
+  margin: 0 0 12px;
+  font-size: 25px;
+}
+
+.contact-card p {
+  color: #dce8ff;
+  line-height: 1.7;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+.telegram-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: #229ed9;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: .2s ease;
+}
+
+.telegram-button:hover {
+  background: #168ac0;
+  transform: translateY(-2px);
+}
+
+.contact-username {
+  margin-top: 18px;
+  color: #c6dcff;
+  font-size: 14px;
+}
+</style>
+</body>
+</html>
