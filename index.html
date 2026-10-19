@@ -946,13 +946,39 @@ async function deleteManageQuestion(q){
   }
 }
 
-$('manageSubject').innerHTML=
-  '<option value="">Barcha fanlar</option>'+
-  Array.from($('qSubject').options)
-    .filter(o=>o.value)
-    .map(o=>'<option value="'+o.value.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'">'+
-      o.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
-      '</option>').join('');
+
+async function loadManageSubjects(){
+  const select = $('manageSubject');
+  const { data, error } = await db
+    .from('mm_questions')
+    .select('subject')
+    .not('subject', 'is', null)
+    .limit(10000);
+
+  if (error) {
+    console.error('Fanlarni yuklash xatosi:', error);
+    return;
+  }
+
+  const subjects = [...new Set(
+    (data || [])
+      .map(q => q.subject?.trim())
+      .filter(Boolean)
+  )].sort((a, b) => a.localeCompare(b, 'uz'));
+
+  const previous = select.value;
+
+  select.replaceChildren(new Option('Barcha fanlar', ''));
+
+  subjects.forEach(subject => {
+    select.add(new Option(subject, subject));
+  });
+
+  if (subjects.includes(previous)) {
+    select.value = previous;
+  }
+}
+
 
 $('manageSubject').onchange=loadManageQuestions;
 $('manageGrade').onchange=loadManageQuestions;
