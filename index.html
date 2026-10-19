@@ -696,6 +696,7 @@ $('uploadCsv').onclick=async()=>{
         D: r.option_d
       })[correct]
     });
+  });
 
   if(errors.length){
     $('csvStatus').innerHTML=`Tekshiruvdan o‘tmadi (${errors.length} xato). Hech narsa yuklanmadi.<br>${errors.slice(0,8).map(esc).join('<br>')}`;
