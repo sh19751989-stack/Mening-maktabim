@@ -220,6 +220,32 @@
   <div class="card">
     <div id="adminStats" class="muted">Yuklanmoqda…</div>
   </div>
+  <div class="card" style="margin-top:15px">
+  <h3>Savollarni boshqarish</h3>
+  <div class="field">
+    <label>Fan bo‘yicha qidirish</label>
+    <select id="manageSubject">
+      <option value="">Barcha fanlar</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Sinf bo‘yicha qidirish</label>
+    <select id="manageGrade">
+      <option value="">Barcha sinflar</option>
+      <option value="6">6-sinf</option>
+      <option value="7">7-sinf</option>
+      <option value="8">8-sinf</option>
+      <option value="9">9-sinf</option>
+      <option value="10">10-sinf</option>
+      <option value="11">11-sinf</option>
+    </select>
+  </div>
+  <div id="manageQuestionsList"></div>
+  <button id="deleteAllQuestions"
+    style="background:#dc2626;color:white;margin-top:15px">
+    Barcha savollarni o‘chirish
+  </button>
+</div>
 </section>
 </main><footer class="foot">© <span id="year"></span> Mening Maktabim · Bilim sari — kelajak sari</footer></div>
 <script>
@@ -755,6 +781,213 @@ for (let i = 0; i < clean.length; i += 10) {
 };
   async function loadAdminStats(){if(profile?.role!=='admin')return;let [q,n,u]=await Promise.all([db.from('mm_questions').select('id',{count:'exact',head:true}),db.from('mm_news').select('id',{count:'exact',head:true}),db.from('mm_profiles').select('id',{count:'exact',head:true})]);$('adminStats').innerHTML=[['Savollar',q.count,q.error],['Yangiliklar',n.count,n.error],['Foydalanuvchilar',u.count,u.error]].map(([label,count,error])=>`<div class="inline" style="padding:10px 0;border-bottom:1px solid var(--line)"><span>${label}</span><strong>${error?'Xatolik':count??0}</strong></div>`).join('')+(q.error||n.error||u.error?'<p class="muted small">Ayrim hisoblarni olishda ruxsat yoki ulanish xatosi bor.</p>':'')}
 $('refreshAdmin').onclick=loadAdminStats;
+  
+async function loadManageQuestions(){
+  if(profile?.role!=='admin')
+    return toast('Admin ruxsati kerak.','error');
+
+  const box=$('manageQuestionsList');
+  box.textContent='Savollar yuklanmoqda...';
+
+  try{
+    let query=db.from('mm_questions')
+      .select('id,subject,grade,level,number,question,option_a,option_b,option_c,option_d,options,correct_option,correct_answer')
+      .order('number',{ascending:false})
+      .limit(100);
+
+    const subject=$('manageSubject').value;
+    const grade=$('manageGrade').value;
+
+    if(subject) query=query.eq('subject',subject);
+    if(grade) query=query.eq('grade',Number(grade));
+
+    const {data,error}=await query;
+    if(error) throw error;
+
+    if(!data?.length){
+      box.textContent='Savollar topilmadi.';
+      return;
+    }
+
+    box.replaceChildren();
+
+    data.forEach(q=>{
+      const card=document.createElement('div');
+      card.className='card';
+      card.style.marginTop='12px';
+
+      const title=document.createElement('h4');
+      title.textContent=(q.number!=null?'#'+q.number+' — ':'')+
+        (q.subject||'Fan ko‘rsatilmagan')+
+        (q.grade?' · '+q.grade+'-sinf':'');
+      card.appendChild(title);
+
+      const question=document.createElement('p');
+      question.textContent=q.question||'';
+      card.appendChild(question);
+
+      const opts=q.options||{};
+      ['A','B','C','D'].forEach(letter=>{
+        const p=document.createElement('p');
+        const key='option_'+letter.toLowerCase();
+        p.textContent=letter+'. '+(q[key]??opts[letter]??'');
+        p.style.margin='4px 0';
+        card.appendChild(p);
+      });
+
+      const answer=document.createElement('p');
+      answer.className='muted small';
+      answer.textContent='To‘g‘ri javob: '+
+        (q.correct_option||q.correct_answer||'—');
+      card.appendChild(answer);
+
+      const actions=document.createElement('div');
+      actions.className='inline';
+      actions.style.gap='8px';
+
+      const edit=document.createElement('button');
+      edit.textContent='✏️ Tahrirlash';
+      edit.onclick=()=>editManageQuestion(q);
+
+      const del=document.createElement('button');
+      del.textContent='🗑️ O‘chirish';
+      del.style.background='#dc2626';
+      del.style.color='white';
+      del.onclick=()=>deleteManageQuestion(q);
+
+      actions.append(edit,del);
+      card.appendChild(actions);
+      box.appendChild(card);
+    });
+
+    const note=document.createElement('p');
+    note.className='muted small';
+    note.textContent='Eng ko‘pi bilan 100 ta savol ko‘rsatiladi. Fan yoki sinfni tanlab qidiring.';
+    box.appendChild(note);
+
+  }catch(e){
+    box.textContent='Savollarni yuklab bo‘lmadi: '+(e.message||e);
+  }
+}
+
+async function editManageQuestion(q){
+  if(profile?.role!=='admin')
+    return toast('Admin ruxsati kerak.','error');
+
+  const question=prompt('Savol matni:',q.question||'');
+  if(question===null) return;
+  if(!question.trim())
+    return toast('Savol bo‘sh bo‘lishi mumkin emas.','error');
+
+  const a=prompt('A varianti:',q.option_a??q.options?.A??'');
+  if(a===null) return;
+  const b=prompt('B varianti:',q.option_b??q.options?.B??'');
+  if(b===null) return;
+  const c=prompt('C varianti:',q.option_c??q.options?.C??'');
+  if(c===null) return;
+  const d=prompt('D varianti:',q.option_d??q.options?.D??'');
+  if(d===null) return;
+
+  if(!a.trim()||!b.trim()||!c.trim()||!d.trim())
+    return toast('Barcha variantlarni to‘ldiring.','error');
+
+  const oldCorrect=q.correct_option||q.correct_answer||'A';
+  const correct=prompt('To‘g‘ri javobni kiriting: A, B, C yoki D',oldCorrect);
+  if(correct===null) return;
+
+  const normalized=correct.trim().toUpperCase();
+  if(!['A','B','C','D'].includes(normalized))
+    return toast('To‘g‘ri javob A, B, C yoki D bo‘lishi kerak.','error');
+
+  if(!confirm('Ushbu savol o‘zgarishlarini saqlaysizmi?')) return;
+
+  try{
+    const {error}=await db.from('mm_questions').update({
+      question:question.trim(),
+      option_a:a.trim(),
+      option_b:b.trim(),
+      option_c:c.trim(),
+      option_d:d.trim(),
+      options:{A:a.trim(),B:b.trim(),C:c.trim(),D:d.trim()},
+      correct_option:normalized,
+      correct_answer:normalized
+    }).eq('id',q.id);
+
+    if(error) throw error;
+
+    toast('Savol yangilandi.','good');
+    await loadManageQuestions();
+    await loadCounts();
+    await loadAdminStats();
+  }catch(e){
+    toast('Tahrirlash xatosi: '+(e.message||e),'error');
+  }
+}
+
+async function deleteManageQuestion(q){
+  if(profile?.role!=='admin')
+    return toast('Admin ruxsati kerak.','error');
+
+  if(!confirm('Faqat shu savol o‘chirilsinmi?\n\n'+q.question))
+    return;
+
+  try{
+    const {error}=await db.from('mm_questions')
+      .delete().eq('id',q.id);
+
+    if(error) throw error;
+
+    toast('Savol o‘chirildi.','good');
+    await loadManageQuestions();
+    await loadCounts();
+    await loadAdminStats();
+  }catch(e){
+    toast('O‘chirish xatosi: '+(e.message||e),'error');
+  }
+}
+
+$('manageSubject').innerHTML=
+  '<option value="">Barcha fanlar</option>'+
+  Array.from($('qSubject').options)
+    .filter(o=>o.value)
+    .map(o=>'<option value="'+o.value.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'">'+
+      o.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
+      '</option>').join('');
+
+$('manageSubject').onchange=loadManageQuestions;
+$('manageGrade').onchange=loadManageQuestions;
+
+$('deleteAllQuestions').onclick=async()=>{
+  if(profile?.role!=='admin')
+    return toast('Admin ruxsati kerak.','error');
+
+  if(!confirm('DIQQAT! Barcha fan va sinflardagi savollar o‘chiriladi. Davom etasizmi?'))
+    return;
+
+  if(prompt('Tasdiqlash uchun OCHIRISH deb yozing:')!=='OCHIRISH')
+    return toast('Amal bekor qilindi.','error');
+
+  try{
+    const {error}=await db.from('mm_questions')
+      .delete().not('id','is',null);
+
+    if(error) throw error;
+
+    toast('Barcha savollar o‘chirildi.','good');
+    await loadManageQuestions();
+    await loadCounts();
+    await loadAdminStats();
+  }catch(e){
+    toast('O‘chirish xatosi: '+(e.message||e),'error');
+  }
+};
+
+const originalLoadAdminStats=loadAdminStats;
+loadAdminStats=async()=>{
+  await originalLoadAdminStats();
+  if(profile?.role==='admin') await loadManageQuestions();
+};
+
 db.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){currentUser=null;profile=null;showAuth()}});
 $('year').textContent=new Date().getFullYear();setAuthMode('signup');
 (async()=>{let {data:{session}}=await db.auth.getSession();if(session)await initApp();else showAuth()})();
