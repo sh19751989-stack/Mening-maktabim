@@ -545,22 +545,21 @@ $('addNews').onclick = async () => {
   if (status) status.textContent = 'Yuklanmoqda...';
 
   try {
-    async function uploadMedia(file, folder) {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      const path = `${currentUser.id}/news/${folder}-${Date.now()}-${safeName}`;
+    
+async function uploadMedia(file, folder) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const path = `${currentUser.id}/news/${folder}-${Date.now()}-${safeName}`;
 
-      const { error: uploadError } = await db.storage
-        .from('mm-media')
-        .upload(path, file, { contentType: file.type });
+  const { error: uploadError } = await db.storage
+    .from('school-news-media')
+    .upload(path, file, { contentType: file.type });
 
-      if (uploadError) throw uploadError;
+  if (uploadError) throw uploadError;
 
-      return db.storage.from('mm-media').getPublicUrl(path).data.publicUrl;
-    }
-
-    if (imageFile) {
-      image = await uploadMedia(imageFile, 'image');
-    }
+  return db.storage
+    .from('school-news-media')
+    .getPublicUrl(path).data.publicUrl;
+}
 
     let videoUrl = youtube || '';
 
