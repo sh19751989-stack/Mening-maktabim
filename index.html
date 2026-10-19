@@ -982,6 +982,7 @@ async function loadManageSubjects(){
 
 $('manageSubject').onchange=loadManageQuestions;
 $('manageGrade').onchange=loadManageQuestions;
+  loadManageSubjects();
 
 $('deleteAllQuestions').onclick=async()=>{
   if(profile?.role!=='admin')
