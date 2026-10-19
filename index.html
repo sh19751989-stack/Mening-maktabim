@@ -529,9 +529,8 @@ $('saveProfile').onclick = async () => {
         .upload(path, file, { contentType: file.type });
 
       if (uploadError) throw uploadError;
-
-      avatar = db.storage.from('mm-media')
-        .getPublicUrl(path).data.publicUrl;
+avatar = db.storage.from('avatars')
+    .getPublicUrl(path).data.publicUrl;
     }
 
     const { data, error } = await db.from('mm_profiles')
