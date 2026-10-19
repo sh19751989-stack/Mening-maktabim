@@ -561,17 +561,24 @@ async function uploadMedia(file, folder) {
     .getPublicUrl(path).data.publicUrl;
 }
 
-    let videoUrl = youtube || '';
+  
+let imageUrl = image || '';
+let videoUrl = youtube || '';
 
-    if (videoFile) {
-      videoUrl = await uploadMedia(videoFile, 'video');
-    }
+if (imageFile) {
+  imageUrl = await uploadMedia(imageFile, 'image');
+}
+
+if (videoFile) {
+  videoUrl = await uploadMedia(videoFile, 'video');
+}
+
 
     const { error } = await db.from('mm_news').insert({
       title,
       body,
-      image_url: image || null,
-      youtube_url: videoUrl || null,
+      image_url: imageUrl || null,
+youtube_url: videoUrl || null,
       author_id: currentUser.id
     });
 
