@@ -677,7 +677,12 @@ $('uploadCsv').onclick=async()=>{
       grade,
       level,
       number:Number(r.number||r.__line),
-      question:r.question,
+            question:r.question,
+      option_a:r.option_a,
+      option_b:r.option_b,
+      option_c:r.option_c,
+      option_d:r.option_d,
+      options:{
       options:{
         A:r.option_a,
         B:r.option_b,
