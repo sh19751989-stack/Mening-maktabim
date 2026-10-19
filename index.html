@@ -524,13 +524,17 @@ $('saveProfile').onclick = async () => {
 
       const path = `${currentUser.id}/avatar/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
-      const { error: uploadError } = await db.storage
-        .from('mm-media')
-        .upload(path, file, { contentType: file.type });
+     
+const { error: uploadError } = await db.storage
+    .from('avatars')
+    .upload(path, file, { contentType: file.type });
 
-      if (uploadError) throw uploadError;
-avatar = db.storage.from('avatars')
+if (uploadError) throw uploadError;
+
+avatar = db.storage
+    .from('avatars')
     .getPublicUrl(path).data.publicUrl;
+
     }
 
     const { data, error } = await db.from('mm_profiles')
