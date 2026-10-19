@@ -500,7 +500,9 @@ $('saveProfile').onclick = async () => {
   $('addQuestion').onclick=async()=>{
   if(profile?.role!=='admin')return toast('Admin ruxsati kerak.','error');
   const subject=$('qSubject').value;
-  const grade=$('qGrade').value?Number($('qGrade').value):null;
+  const grade=Number($('qGrade').value);
+if(!Number.isInteger(grade)||grade<6||grade>11)
+  return toast('Iltimos, 6–11-sinflardan birini tanlang.','error');
   const level=$('qLevel').value;
   const question=$('qText').value.trim();
   const a=$('qA').value.trim(),b=$('qB').value.trim(),c=$('qC').value.trim(),d=$('qD').value.trim();
