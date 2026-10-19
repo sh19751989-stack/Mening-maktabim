@@ -672,32 +672,30 @@ $('uploadCsv').onclick=async()=>{
       return;
     }
 
-    clean.push({
-      subject:r.subject,
+        clean.push({
+      subject: r.subject,
       grade,
       level,
-      number:Number(r.number||r.__line),
-            question:r.question,
-      option_a:r.option_a,
-      option_b:r.option_b,
-      option_c:r.option_c,
-      option_d:r.option_d,
-      options:{
-      options:{
-        A:r.option_a,
-        B:r.option_b,
-        C:r.option_c,
-        D:r.option_d
+      number: Number(r.number || r.__line),
+      question: r.question,
+      option_a: r.option_a,
+      option_b: r.option_b,
+      option_c: r.option_c,
+      option_d: r.option_d,
+      options: {
+        A: r.option_a,
+        B: r.option_b,
+        C: r.option_c,
+        D: r.option_d
       },
-           correct_option:correct,
-      correct_answer:({
-        A:r.option_a,
-        B:r.option_b,
-        C:r.option_c,
-        D:r.option_d
+      correct_option: correct,
+      correct_answer: ({
+        A: r.option_a,
+        B: r.option_b,
+        C: r.option_c,
+        D: r.option_d
       })[correct]
     });
-  });
 
   if(errors.length){
     $('csvStatus').innerHTML=`Tekshiruvdan o‘tmadi (${errors.length} xato). Hech narsa yuklanmadi.<br>${errors.slice(0,8).map(esc).join('<br>')}`;
