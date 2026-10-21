@@ -518,10 +518,9 @@ $('saveProfile').onclick = async () => {
         throw new Error('Rasm faylini tanlang.');
       }
 
-      if (file.size > 10 * 1024 * 1024) {
-        throw new Error('Rasm 10 MB dan kichik bo‘lishi kerak.');
-      }
-
+     if (file.size > 700 * 1024 * 1024) {
+  throw new Error('Rasm 700 MB dan oshmasligi kerak.');
+}
       const path = `${currentUser.id}/avatar/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
      
