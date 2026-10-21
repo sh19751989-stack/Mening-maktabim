@@ -620,8 +620,10 @@ $('addNews').onclick = async () => {
     return toast('Iltimos, rasm faylini tanlang.', 'error');
   }
 
-  if (imageFile && imageFile.size > 10 * 1024 * 1024) {
-    return toast('Rasm hajmi 10 MB dan oshmasin.', 'error');
+if (videoFile && videoFile.size > 45 * 1024 * 1024) {
+  return toast('Video hajmi 45 MB dan oshmasin.', 'error');
+}
+}
   }
 
   if (videoFile &&
