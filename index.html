@@ -423,13 +423,25 @@ async function loadNews() {
     </article>`;
   }).join('');
 
-  document.querySelectorAll('[data-delete-news]').forEach(button => {
-    button.onclick = () => {
-      const news = data.find(n => String(n.id) === button.dataset.deleteNews);
-      if (news) deleteNews(news.id, news.title);
-    };
-  });
-}
+
+document.querySelectorAll('[data-delete-news]').forEach(button => {
+  button.onclick = () => {
+    alert('1. O‘chirish tugmasi bosildi');
+
+    const news = data.find(
+      n => String(n.id) === button.dataset.deleteNews
+    );
+
+    if (!news) {
+      alert('2. Yangilik ma’lumoti topilmadi');
+      return;
+    }
+
+    alert('3. Yangilik topildi: ' + news.title);
+    deleteNews(news.id, news.title);
+  };
+});
+
 
 async function deleteNews(id, title) {
   if (profile?.role !== 'admin') {
