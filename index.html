@@ -461,10 +461,16 @@ async function deleteNews(id, title) {
     toast('Yangilik o‘chirildi.', 'good');
     await loadNews();
     await loadAdminStats();
-  } catch (e) {
-    toast('Yangilik o‘chirilmadi: ' + (e.message || e), 'error');
-  }
+
+} catch (e) {
+  console.error('Yangilikni o‘chirish xatosi:', e);
+  alert(
+    'Yangilik o‘chirilmadi!\n' +
+    'Xato: ' + (e.message || String(e)) +
+    '\nKod: ' + (e.code || 'noma’lum')
+  );
 }
+
 async function loadResults(){if(!currentUser)return;let {data,error}=await db.from('mm_results').select('id,subject,level,total,correct,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(10);if(error){$('resultsList').innerHTML=`<div class="notice error">Natijalar: ${esc(error.message)}</div>`;return}$('statResults').textContent=data?.length||0;if(!data?.length){$('resultsList').innerHTML='<p class="muted">Hali natija yo‘q. Birinchi testingizni boshlang!</p>';return}$('resultsList').innerHTML='<div class="table-wrap"><table><thead><tr><th>Fan</th><th>Daraja</th><th>Natija</th><th>Sana</th></tr></thead><tbody>'+data.map(r=>`<tr><td>${esc(r.subject)}</td><td>${esc(r.level)}</td><td>${r.correct}/${r.total} (${r.total?Math.round(r.correct/r.total*100):0}%)</td><td>${new Date(r.created_at).toLocaleDateString('uz-UZ')}</td></tr>`).join('')+'</tbody></table></div>'}
 $('startTest').onclick=async()=>{if(!currentUser)return;testSubject=$('testSubject').value;testLevel=$('testLevel').value;testGrade=$('testGrade').value?Number($('testGrade').value):null;let count=Number($('testCount').value)||10;$('testArea').classList.remove('hidden');$('testArea').innerHTML='<p class="muted">Savollar yuklanmoqda…</p>';let {data,error}=await db.rpc('mm_get_questions',{p_subject:testSubject,p_level:testLevel,p_grade:testGrade,p_count:count});if(error){$('testArea').innerHTML=`<div class="notice error">${esc(error.message)}<br>SQL sozlash faylini to‘liq ishga tushirganingizni tekshiring.</div>`;return}if(!data?.length){$('testArea').innerHTML='<h3>Bu tanlovda savollar topilmadi</h3><p class="muted">Admin paneldan shu fan va daraja uchun savol qo‘shing yoki CSV yuklang.</p>';return}testQuestions=data;testIndex=0;testCorrect=0;renderQuestion()};
 
