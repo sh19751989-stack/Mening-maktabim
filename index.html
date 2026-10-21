@@ -630,9 +630,9 @@ $('addNews').onclick = async () => {
     return toast('Video MP4, WEBM yoki MOV formatida bo‘lishi kerak.', 'error');
   }
 
-  if (videoFile && videoFile.size > 50 * 1024 * 1024) {
-    return toast('Video hajmi 50 MB dan oshmasin.', 'error');
-  }
+if (videoFile && videoFile.size > 5 * 1024 * 1024 * 1024) {
+  return toast('Video hajmi 5 GB dan oshmasin.', 'error');
+}
 
   if (imageFile && image) {
     return toast('Rasm uchun URL yoki fayldan bittasini tanlang.', 'error');
