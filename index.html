@@ -518,9 +518,10 @@ $('saveProfile').onclick = async () => {
         throw new Error('Rasm faylini tanlang.');
       }
 
-     if (file.size > 700 * 1024 * 1024) {
-  throw new Error('Rasm 700 MB dan oshmasligi kerak.');
-}
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('Rasm 10 MB dan kichik bo‘lishi kerak.');
+      }
+
       const path = `${currentUser.id}/avatar/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
 
      
@@ -620,10 +621,8 @@ $('addNews').onclick = async () => {
     return toast('Iltimos, rasm faylini tanlang.', 'error');
   }
 
-if (videoFile && videoFile.size > 45 * 1024 * 1024) {
-  return toast('Video hajmi 45 MB dan oshmasin.', 'error');
-}
-}
+  if (imageFile && imageFile.size > 10 * 1024 * 1024) {
+    return toast('Rasm hajmi 10 MB dan oshmasin.', 'error');
   }
 
   if (videoFile &&
